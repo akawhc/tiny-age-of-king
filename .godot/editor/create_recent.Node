@@ -1,0 +1,6 @@
+TileMapLayer
+Node2D
+AnimatedSprite2D
+Camera2D
+TextureRect
+Sprite2D

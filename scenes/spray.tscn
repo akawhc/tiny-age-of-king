@@ -1,0 +1,71 @@
+[gd_scene load_steps=11 format=3 uid="uid://b10k6pc3fq8i6"]
+
+[ext_resource type="Texture2D" uid="uid://bh0fnvo5hj0b7" path="res://sprites/Tiny Swords/Terrain/Water/Foam/Foam.png" id="1_45w2c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjrpr"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_34ywm"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pno0w"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_md01p"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q6n3s"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6s05r"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sbnfu"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wigq0"]
+atlas = ExtResource("1_45w2c")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kqihv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rjrpr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_34ywm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pno0w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_md01p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q6n3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6s05r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sbnfu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wigq0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="spray" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_kqihv")
+frame_progress = 0.0658413
