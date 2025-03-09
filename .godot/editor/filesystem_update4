@@ -1,3 +1,8 @@
 res://scenes/homeland.tscn
 res://scenes/knight.tscn
 res://scenes/tree.tscn
+res://scenes/wood.tscn
+res://scripts/tree.gd
+res://scripts/wood.gd
+res://scenes/spray.tscn
+res://scenes/player.tscn

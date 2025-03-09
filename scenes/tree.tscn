@@ -1,10 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://duye4vrhbdk2b"]
+[gd_scene load_steps=11 format=3 uid="uid://duye4vrhbdk2b"]
 
 [ext_resource type="Texture2D" uid="uid://6fro2i1iwd6h" path="res://sprites/Tiny Swords/Resources/Trees/Tree.png" id="1_oyyrv"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1f8uh"]
-atlas = ExtResource("1_oyyrv")
-region = Rect2(0, 0, 192, 192)
+[ext_resource type="Script" path="res://scripts/tree.gd" id="2_n4k3p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8qu03"]
 atlas = ExtResource("1_oyyrv")
@@ -26,12 +23,17 @@ region = Rect2(0, 192, 192, 192)
 atlas = ExtResource("1_oyyrv")
 region = Rect2(192, 192, 192, 192)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1f8uh"]
+atlas = ExtResource("1_oyyrv")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stump"]
+atlas = ExtResource("1_oyyrv")
+region = Rect2(384, 192, 192, 192)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_7rqmq"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1f8uh")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8qu03")
 }, {
@@ -48,11 +50,26 @@ animations = [{
 "texture": SubResource("AtlasTexture_cpg7o")
 }],
 "loop": true,
+"name": &"chop",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1f8uh")
+}],
+"loop": true,
 "name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stump")
+}],
+"loop": false,
+"name": &"stump",
 "speed": 5.0
 }]
 
 [node name="tree" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_7rqmq")
-autoplay = "default"
-frame_progress = 0.205066
+script = ExtResource("2_n4k3p")

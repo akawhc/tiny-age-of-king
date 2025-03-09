@@ -1,5 +1,5 @@
-TileMapLayer
 Node2D
+TileMapLayer
 AnimatedSprite2D
 Camera2D
 TextureRect

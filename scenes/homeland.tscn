@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=57 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/knight.tscn" id="1_qhu8i"]
 [ext_resource type="Texture2D" uid="uid://cgs77v1q2tlc8" path="res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png" id="2_bmjfy"]
@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://bn3cqqyuufssn" path="res://sprites/Tiny Swords/Deco/17.png" id="19_302ig"]
 [ext_resource type="Texture2D" uid="uid://dg0defvxnfeud" path="res://sprites/Tiny Swords/Deco/18.png" id="20_nlktd"]
 [ext_resource type="Texture2D" uid="uid://6fro2i1iwd6h" path="res://sprites/Tiny Swords/Resources/Trees/Tree.png" id="21_8fgpm"]
+[ext_resource type="PackedScene" uid="uid://duye4vrhbdk2b" path="res://scenes/tree.tscn" id="25_e0wlo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -587,10 +588,13 @@ texture = ExtResource("21_8fgpm")
 texture_region_size = Vector2i(64, 64)
 1:8/0 = 0
 0:0/size_in_atlas = Vector2i(3, 3)
+0:0/animation_columns = 4
 0:0/animation_frame_0/duration = 1.0
 0:0/animation_frame_1/duration = 1.0
 0:0/animation_frame_2/duration = 1.0
 0:0/animation_frame_3/duration = 1.0
+0:0/animation_frame_4/duration = 1.0
+0:0/animation_frame_5/duration = 1.0
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rxwg0"]
@@ -687,3 +691,11 @@ position = Vector2(-3672, 2729)
 
 [node name="Camera2D" type="Camera2D" parent="land1/knight"]
 position = Vector2(0, 3)
+
+[node name="trees" type="TileMapLayer" parent="land1"]
+
+[node name="tree" parent="land1/trees" instance=ExtResource("25_e0wlo")]
+position = Vector2(-3413, 2567)
+
+[node name="tree2" parent="land1/trees" instance=ExtResource("25_e0wlo")]
+position = Vector2(-3271, 2568)
