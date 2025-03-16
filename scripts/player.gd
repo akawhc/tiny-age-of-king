@@ -26,7 +26,7 @@ func _input(event: InputEvent) -> void:
 				$AnimatedSprite2D.play($AnimatedSprite2D.animation.replace("walk", "idle"))
 
 # 角色移动
-func player_movement(delta: float) -> void:
+func player_movement(_delta: float) -> void:
 	if Input.is_action_pressed("ui_right"):
 		velocity.x = speed
 		velocity.y = 0

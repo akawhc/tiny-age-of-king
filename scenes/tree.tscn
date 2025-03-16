@@ -72,4 +72,5 @@ animations = [{
 
 [node name="tree" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_7rqmq")
+animation = &"stump"
 script = ExtResource("2_n4k3p")

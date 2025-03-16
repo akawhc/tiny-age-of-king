@@ -17,7 +17,20 @@ const TREE_CONFIG = {
 		"shake_offset": Vector2(5, 0),  # 晃动偏移
 		"color_recovery_time": 0.2,  # 颜色恢复时间
 		"shake_time": 0.1  # 晃动时间
+	},
+	"respawn": {
+		"time": 300.0,  # 重生时间（秒）
+		"grow_duration": 0.5,  # 生长动画持续时间
+		"start_scale": Vector2(0.5, 0.5),  # 开始大小
+		"end_scale": Vector2(1.0, 1.0)  # 最终大小
 	}
+}
+
+# 在文件开头添加动画状态常量
+const TREE_ANIMATIONS = {
+	"DEFAULT": "default",  # 正常状态
+	"CHOP": "chop",       # 被砍状态
+	"STUMP": "stump"      # 树桩状态
 }
 
 @export var max_health: int = 100
@@ -25,6 +38,7 @@ var current_health: int = max_health
 var is_being_chopped: bool = false
 var chop_cooldown: bool = false
 var is_stump: bool = false  # 是否已经变成树桩
+var original_scale: Vector2  # 保存原始缩放值
 
 # 预加载木材资源场景
 @onready var wood_scene = preload("res://scenes/wood.tscn")
@@ -33,7 +47,9 @@ func _ready() -> void:
 	add_to_group("trees")
 	current_health = max_health
 	_setup_collision()
-	print("树木初始化完成")  # 调试信息
+	original_scale = scale
+	play(TREE_ANIMATIONS.DEFAULT)  # 使用常量
+	print("树木初始化完成")
 
 func _setup_collision() -> void:
 	# 设置碰撞区域
@@ -49,14 +65,14 @@ func _setup_collision() -> void:
 	area.body_exited.connect(_on_body_exited)
 
 func take_damage(damage: int) -> void:
-	if is_stump or chop_cooldown:  # 如果已经是树桩或在冷却中则不再受伤
+	if is_stump or chop_cooldown:
 		return
 
 	current_health -= damage
 	print("树木受到伤害：", damage, "，剩余生命：", current_health)
 
 	# 播放砍树动画
-	play("chop")
+	play(TREE_ANIMATIONS.CHOP)
 
 	# 添加视觉反馈
 	_play_damage_feedback()
@@ -69,7 +85,7 @@ func take_damage(damage: int) -> void:
 	await get_tree().create_timer(TREE_CONFIG.damage_cooldown).timeout
 	chop_cooldown = false
 	if not is_stump:
-		play("default")
+		play(TREE_ANIMATIONS.DEFAULT)
 
 func _play_damage_feedback() -> void:
 	# 颜色变化效果
@@ -101,8 +117,33 @@ func _play_damage_feedback() -> void:
 func _on_tree_destroyed() -> void:
 	spawn_wood()
 	is_stump = true
-	play("stump")
+	play(TREE_ANIMATIONS.STUMP)
 	emit_signal("tree_chopped", global_position)
+
+	# 启动重生计时器
+	await get_tree().create_timer(TREE_CONFIG.respawn.time).timeout
+	_respawn_tree()
+
+func _respawn_tree() -> void:
+	# 重置状态
+	is_stump = false
+	current_health = max_health
+	chop_cooldown = false
+
+	# 设置初始状态
+	scale = original_scale * TREE_CONFIG.respawn.start_scale
+	play(TREE_ANIMATIONS.DEFAULT)
+
+	# 创建生长动画
+	var grow_tween = create_tween()
+	grow_tween.tween_property(
+		self,
+		"scale",
+		original_scale * TREE_CONFIG.respawn.end_scale,
+		TREE_CONFIG.respawn.grow_duration
+	).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
+	print("树木重生完成")  # 调试信息
 
 func spawn_wood() -> void:
 	var wood_count = randi_range(
@@ -112,11 +153,11 @@ func spawn_wood() -> void:
 
 	for i in range(wood_count):
 		var wood = wood_scene.instantiate()
-		var offset = Vector2(
+		var spawn_offset = Vector2(
 			randf_range(-TREE_CONFIG.wood_spawn.spread_range, TREE_CONFIG.wood_spawn.spread_range),
 			randf_range(-TREE_CONFIG.wood_spawn.spread_range, TREE_CONFIG.wood_spawn.spread_range)
 		)
-		wood.global_position = global_position + offset
+		wood.global_position = global_position + spawn_offset
 		get_parent().add_child(wood)
 
 func _on_body_entered(body: Node2D) -> void:
