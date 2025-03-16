@@ -8,3 +8,4 @@ res://scripts/wood.gd
 res://scripts/player.gd
 res://scripts/knight.gd
 res://scenes/worker.tscn
+res://scripts/worker.gd

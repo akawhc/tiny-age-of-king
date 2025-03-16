@@ -37,7 +37,12 @@ func _play_drop_animation() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("players"):
 		emit_signal("collected")
-		_play_collect_animation()
+		if body.has_method("collect_wood"):
+			if body.name == "worker":  # 如果是工人，则等待工人收集
+				# 先通知工人收集木材
+				body.collect_wood(self)  # 传递木材实例给工人
+			else:  # 其他角色（如骑士）则播放消失动画
+				_play_collect_animation()
 
 func _play_collect_animation() -> void:
 	var tween = create_tween()
@@ -55,3 +60,7 @@ func _play_collect_animation() -> void:
 	)
 	await tween.finished
 	queue_free()
+
+# 被工人收集时调用此方法
+func collected_by_worker() -> void:
+	queue_free()  # 直接删除木材实例

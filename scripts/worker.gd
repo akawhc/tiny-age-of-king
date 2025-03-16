@@ -1,0 +1,336 @@
+extends CharacterBody2D
+
+# 移动相关常量
+const MOVE_SPEED = 120
+const ATTACK_RANGE = 60
+
+# 砍树相关常量
+const CHOP_CONFIG = {
+	"animation": "chop",
+	"damage": 20,
+	"hit_frame": 5,  # 在第5帧检测伤害
+	"arc_angle": 60.0,  # 攻击弧度角度（度）
+	"arc_distance": 70.0  # 攻击弧度距离
+}
+
+# 木材相关常量
+const WOOD_CONFIG = {
+	"drop_offset": Vector2(60, 60),  # 丢弃木材的偏移距离
+	"collect_animation": {
+		"duration": 0.5  # 收集动画持续时间
+	},
+	"max_carry": 3,  # 工人最多可以携带的木材数量
+	"animation": {
+		"bob_height": 2.0,       # 上下浮动高度
+		"bob_speed": 3.0,        # 上下浮动速度
+		"inertia_amount": 5.0,   # 惯性偏移量
+		"inertia_smoothing": 5.0 # 惯性平滑系数
+	}
+}
+
+# 动画状态
+const ANIMATION_STATES = {
+	"IDLE": "idle",
+	"RUN": "run",
+	"IDLE_LIFT": "lift",  # 携带物品时的待机动画
+	"RUN_LIFT": "lift_run",  # 携带物品时的跑步动画
+	"CHOP": "chop"  # 砍树动画
+}
+
+# 节点引用
+@onready var animated_sprite_2d = $AnimatedSprite2D
+@onready var carried_wood_sprite = $CarriedWood  # Node2D 节点
+@onready var wood_sprite_1 = $CarriedWood/Wood1  # 第一个木材精灵
+@onready var wood_sprite_2 = $CarriedWood/Wood2  # 第二个木材精灵
+@onready var wood_sprite_3 = $CarriedWood/Wood3  # 第三个木材精灵
+
+var wood_count = 0  # 木材数量
+var nearest_tree = null  # 最近的树
+var is_chopping = false  # 是否正在砍树
+var facing_direction = Vector2.RIGHT  # 角色朝向
+var has_hit = false  # 是否已经造成伤害
+var is_carrying = false  # 是否正在携带木材
+var current_wood = null  # 当前正在收集的木材
+
+# 木材动画相关变量
+var animation_time = 0.0          # 动画计时器
+var wood_offset = Vector2.ZERO    # 木材整体偏移量
+var last_velocity = Vector2.ZERO  # 上一帧的速度，用于计算惯性
+
+func _ready() -> void:
+	add_to_group("players")  # 添加到玩家组，用于树木和木材的交互
+
+	# 初始化动画和状态
+	is_carrying = false
+	is_chopping = false
+
+	# 确保木材一开始是隐藏的
+	if carried_wood_sprite:
+		carried_wood_sprite.hide()
+
+	# 设置初始动画状态
+	animated_sprite_2d.play(ANIMATION_STATES.IDLE)
+
+	# 连接信号
+	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
+	animated_sprite_2d.frame_changed.connect(_on_animation_frame_changed)
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("chop") and not is_chopping and not is_carrying:
+		start_chop()
+	elif event.is_action_pressed("drop") and is_carrying:
+		drop_wood()
+
+func _physics_process(delta: float) -> void:
+	if is_chopping:  # 如果正在砍树不处理移动
+		return
+
+	var direction = Vector2.ZERO
+	direction.x = Input.get_axis("ui_left", "ui_right")
+	direction.y = Input.get_axis("ui_up", "ui_down")
+
+	var old_velocity = velocity
+
+	if direction:
+		velocity = direction.normalized() * MOVE_SPEED
+		# 更新朝向
+		if direction.x != 0:
+			facing_direction = Vector2(sign(direction.x), 0)
+			if not is_chopping:  # 与骑士一致，只在非攻击状态更新翻转
+				animated_sprite_2d.flip_h = direction.x < 0
+	else:
+		velocity = Vector2.ZERO
+
+	# 更新动画
+	if not is_chopping:
+		set_animation_state()
+
+	# 更新木材动画
+	if is_carrying:
+		_update_wood_animation(delta, old_velocity)
+
+	move_and_slide()
+
+func _on_animation_frame_changed() -> void:
+	if is_chopping and not has_hit:
+		var current_frame = animated_sprite_2d.frame
+		if current_frame == CHOP_CONFIG["hit_frame"]:
+			check_tree_hit()
+			has_hit = true
+
+func _on_animation_finished() -> void:
+	if is_chopping and animated_sprite_2d.animation == CHOP_CONFIG["animation"]:
+		is_chopping = false
+		has_hit = false
+		set_animation_state()  # 砍树动画结束后，更新为正确的状态
+
+func start_chop() -> void:
+	if is_chopping or is_carrying:  # 如果已经在砍树或正在携带木材，不能砍树
+		return
+
+	is_chopping = true
+	has_hit = false
+
+	# 根据朝向设置动画翻转
+	animated_sprite_2d.flip_h = facing_direction.x < 0
+
+	# 播放砍树动画
+	animated_sprite_2d.play(CHOP_CONFIG["animation"])
+
+func set_animation_state() -> void:
+	# 如果正在砍树，保持砍树动画
+	if is_chopping:
+		return
+
+	# 根据是否携带木材和移动状态设置动画
+	if is_carrying:
+		carried_wood_sprite.show()  # 确保木材节点可见
+
+		# 根据wood_count显示对应数量的木材
+		if wood_sprite_1:
+			wood_sprite_1.visible = wood_count >= 1
+		if wood_sprite_2:
+			wood_sprite_2.visible = wood_count >= 2
+		if wood_sprite_3:
+			wood_sprite_3.visible = wood_count >= 3
+
+		if velocity.length() > 0:
+			animated_sprite_2d.play(ANIMATION_STATES.RUN_LIFT)
+		else:
+			animated_sprite_2d.play(ANIMATION_STATES.IDLE_LIFT)
+	else:
+		carried_wood_sprite.hide()  # 确保木材隐藏
+		if velocity.length() > 0:
+			animated_sprite_2d.play(ANIMATION_STATES.RUN)
+		else:
+			animated_sprite_2d.play(ANIMATION_STATES.IDLE)
+
+func check_tree_hit() -> void:
+	# 使用弧形区域检测来判断是否砍到树
+	var space_state = get_world_2d().direct_space_state
+	var attack_direction = Vector2.RIGHT if not animated_sprite_2d.flip_h else Vector2.LEFT
+
+	# 计算攻击弧度的参数
+	var arc_angle_rad = deg_to_rad(CHOP_CONFIG.arc_angle)  # 将角度转换为弧度
+	var arc_distance = CHOP_CONFIG.arc_distance
+	var hit_trees = []
+
+	# 在弧形区域内进行多次射线检测，模拟弧形区域
+	var num_rays = 5  # 使用5条射线来模拟弧形
+	var base_angle = attack_direction.angle()  # 基础角度
+	var start_angle = base_angle - arc_angle_rad / 2
+	var angle_step = arc_angle_rad / (num_rays - 1)
+
+	for i in range(num_rays):
+		var current_angle = start_angle + i * angle_step
+		var ray_direction = Vector2(cos(current_angle), sin(current_angle))
+
+		var query = PhysicsRayQueryParameters2D.create(
+			global_position,
+			global_position + ray_direction * arc_distance
+		)
+		query.collide_with_areas = true
+		var result = space_state.intersect_ray(query)
+
+		if result and "collider" in result:
+			var collider = result.collider
+			if collider.get_parent() is AnimatedSprite2D and collider.get_parent().is_in_group("trees"):
+				# 避免重复添加同一棵树
+				if not hit_trees.has(collider.get_parent()):
+					hit_trees.append(collider.get_parent())
+
+	# 对所有在弧形范围内的树造成伤害
+	for tree in hit_trees:
+		tree.take_damage(CHOP_CONFIG.damage)
+		print("命中树木！")
+
+	if hit_trees.is_empty():
+		print("没有砍到树！")
+
+	# 可视化攻击范围（仅在调试模式下）
+	# if OS.is_debug_build():
+	# 	_debug_draw_attack_arc()
+
+# 调试函数：绘制攻击弧形范围（仅在调试模式下使用）
+# func _debug_draw_attack_arc() -> void:
+# 	# 创建一个临时的Line2D节点来可视化攻击范围
+# 	var line = Line2D.new()
+# 	line.width = 2.0
+# 	line.default_color = Color(1, 0, 0, 0.5)  # 半透明红色
+
+# 	var attack_direction = Vector2.RIGHT if not animated_sprite_2d.flip_h else Vector2.LEFT
+# 	var arc_angle_rad = deg_to_rad(CHOP_CONFIG.arc_angle)
+# 	var arc_distance = CHOP_CONFIG.arc_distance
+# 	var base_angle = attack_direction.angle()
+# 	var start_angle = base_angle - arc_angle_rad / 2
+
+# 	# 创建弧形的点
+# 	var num_points = 12
+# 	var angle_step = arc_angle_rad / (num_points - 1)
+
+# 	for i in range(num_points):
+# 		var current_angle = start_angle + i * angle_step
+# 		var point = Vector2(cos(current_angle), sin(current_angle)) * arc_distance
+# 		line.add_point(point)
+
+# 	# 添加到场景中
+# 	add_child(line)
+
+# 	# 设置定时器在短时间后删除线条
+# 	var timer = get_tree().create_timer(0.3)
+# 	await timer.timeout
+# 	line.queue_free()
+
+# 丢弃木材
+func drop_wood() -> void:
+	if not is_carrying or wood_count <= 0:
+		return
+
+	# 创建木材实例
+	var wood_scene = preload("res://scenes/wood.tscn")
+	var wood = wood_scene.instantiate()
+
+	# 根据朝向设置木材位置
+	var drop_direction = Vector2.RIGHT if not animated_sprite_2d.flip_h else Vector2.LEFT
+	var random_offset = Vector2(randf_range(-10, 10), randf_range(-10, 10))
+	wood.global_position = global_position + drop_direction * WOOD_CONFIG.drop_offset + random_offset
+
+	# 将木材添加到场景中
+	get_parent().add_child(wood)
+
+	# 更新状态
+	wood_count -= 1
+	is_carrying = wood_count > 0
+	set_animation_state()  # 这会处理木材的显示/隐藏
+	print("工人丢弃木材！剩余数量：", wood_count, "/", WOOD_CONFIG.max_carry)
+
+# 设置最近的树
+func set_nearest_tree(tree) -> void:
+	nearest_tree = tree
+
+# 收集木材
+func collect_wood(wood = null) -> void:
+	# 如果已经在砍树，不能收集木材
+	if is_chopping:
+		return
+
+	# 如果已经达到最大携带数量，不能再收集
+	if wood_count >= WOOD_CONFIG.max_carry:
+		print("工人已经携带了最大数量的木材！")
+		return
+
+	# 如果传入了木材实例，说明是从场景中收集的
+	if wood != null:
+		current_wood = wood
+
+		# 创建收集动画
+		var tween = create_tween()
+		tween.tween_property(
+			current_wood,
+			"global_position",
+			global_position,
+			WOOD_CONFIG.collect_animation.duration
+		)
+
+		# 等待动画完成后处理木材
+		await tween.finished
+
+		# 木材被收集后消失
+		if current_wood:
+			current_wood.collected_by_worker()
+			current_wood = null
+
+			# 增加木材数量
+			wood_count += 1
+			is_carrying = true
+
+			# 更新动画状态
+			set_animation_state()
+			print("工人收集木材！剩余数量：", wood_count, "/", WOOD_CONFIG.max_carry)
+
+# 更新木材动画
+func _update_wood_animation(delta: float, old_velocity: Vector2) -> void:
+	animation_time += delta
+
+	# 计算惯性效果（速度变化的反方向）
+	var velocity_change = velocity - old_velocity
+	var target_offset = Vector2.ZERO
+
+	if velocity_change.length() > 0.1:
+		# 计算惯性方向（与速度变化相反）
+		target_offset = -velocity_change.normalized() * WOOD_CONFIG.animation.inertia_amount
+
+	# 平滑过渡到目标偏移
+	wood_offset = wood_offset.lerp(target_offset, delta * WOOD_CONFIG.animation.inertia_smoothing)
+
+	# 添加上下浮动效果（所有木材一起浮动）
+	var bob_offset = sin(animation_time * WOOD_CONFIG.animation.bob_speed) * WOOD_CONFIG.animation.bob_height
+
+	# 应用整体偏移到CarriedWood节点
+	carried_wood_sprite.position = Vector2(0, bob_offset) + wood_offset
+
+	# 确保木材可见性正确
+	var wood_sprites = [wood_sprite_1, wood_sprite_2, wood_sprite_3]
+	for i in range(wood_sprites.size()):
+		if wood_sprites[i]:
+			wood_sprites[i].visible = i < wood_count
