@@ -26,7 +26,7 @@ const TREE_CONFIG = {
 	}
 }
 
-# 在文件开头添加动画状态常量
+# 动画状态常量
 const TREE_ANIMATIONS = {
 	"DEFAULT": "default",  # 正常状态
 	"CHOP": "chop",       # 被砍状态
@@ -40,29 +40,24 @@ var chop_cooldown: bool = false
 var is_stump: bool = false  # 是否已经变成树桩
 var original_scale: Vector2  # 保存原始缩放值
 
+# 节点引用
+@onready var detection_area: Area2D = $DetectionArea
+@onready var collision_body: StaticBody2D = $CollisionBody
 # 预加载木材资源场景
 @onready var wood_scene = preload("res://scenes/wood.tscn")
 
 func _ready() -> void:
 	add_to_group("trees")
 	current_health = max_health
-	_setup_collision()
 	original_scale = scale
-	play(TREE_ANIMATIONS.DEFAULT)  # 使用常量
-	print("树木初始化完成")
+	play(TREE_ANIMATIONS.DEFAULT)
 
-func _setup_collision() -> void:
-	# 设置碰撞区域
-	var area = Area2D.new()
-	var collision = CollisionShape2D.new()
-	var shape = CircleShape2D.new()
-	shape.radius = TREE_CONFIG.detection_radius
-	collision.shape = shape
-	area.add_child(collision)
-	add_child(area)
 	# 连接信号
-	area.body_entered.connect(_on_body_entered)
-	area.body_exited.connect(_on_body_exited)
+	if detection_area:
+		detection_area.body_entered.connect(_on_body_entered)
+		detection_area.body_exited.connect(_on_body_exited)
+
+	print("树木初始化完成")
 
 func take_damage(damage: int) -> void:
 	if is_stump or chop_cooldown:

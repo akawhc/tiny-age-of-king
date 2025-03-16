@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://duye4vrhbdk2b"]
+[gd_scene load_steps=13 format=3 uid="uid://duye4vrhbdk2b"]
 
 [ext_resource type="Texture2D" uid="uid://6fro2i1iwd6h" path="res://sprites/Tiny Swords/Resources/Trees/Tree.png" id="1_oyyrv"]
 [ext_resource type="Script" path="res://scripts/tree.gd" id="2_n4k3p"]
@@ -70,7 +70,25 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_txphl"]
+radius = 59.9333
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ldy0b"]
+radius = 11.0
+
 [node name="tree" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_7rqmq")
-animation = &"stump"
+animation = &"chop"
 script = ExtResource("2_n4k3p")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(0, 22)
+shape = SubResource("CircleShape2D_txphl")
+
+[node name="CollisionBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="CollisionBody"]
+position = Vector2(0, 67)
+shape = SubResource("CircleShape2D_ldy0b")

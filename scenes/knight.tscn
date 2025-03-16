@@ -477,7 +477,8 @@ script = ExtResource("1_chi2w")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_e3q5e")
-animation = &"side_attack_slight"
+animation = &"idle"
+frame_progress = 0.703183
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-2, 1)
