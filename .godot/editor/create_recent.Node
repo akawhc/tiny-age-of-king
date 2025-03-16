@@ -1,9 +1,10 @@
 CollisionShape2D
+AnimatedSprite2D
+CharacterBody2D
 StaticBody2D
 Area2D
 Node2D
 TileMapLayer
-AnimatedSprite2D
 Camera2D
 TextureRect
 Sprite2D
