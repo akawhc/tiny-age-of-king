@@ -71,24 +71,32 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_txphl"]
-radius = 59.9333
+radius = 63.0317
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ldy0b"]
-radius = 11.0
+radius = 18.2483
 
 [node name="tree" type="AnimatedSprite2D"]
+position = Vector2(2, -4)
 sprite_frames = SubResource("SpriteFrames_7rqmq")
 animation = &"chop"
+offset = Vector2(0, -50)
 script = ExtResource("2_n4k3p")
 
 [node name="DetectionArea" type="Area2D" parent="."]
+visible = false
+position = Vector2(2, 66)
 
 [node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea"]
-position = Vector2(0, 22)
+visible = false
+position = Vector2(-1, -46)
 shape = SubResource("CircleShape2D_txphl")
 
 [node name="CollisionBody" type="StaticBody2D" parent="."]
+visible = false
+position = Vector2(5, -60)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="CollisionBody"]
-position = Vector2(0, 67)
+visible = false
+position = Vector2(-4, 123)
 shape = SubResource("CircleShape2D_ldy0b")

@@ -470,17 +470,21 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8okxs"]
-radius = 19.2354
+radius = 17.0294
 
 [node name="knight" type="CharacterBody2D"]
+y_sort_enabled = true
+position = Vector2(0, -10)
 script = ExtResource("1_chi2w")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+y_sort_enabled = true
+position = Vector2(0, -23)
 sprite_frames = SubResource("SpriteFrames_e3q5e")
 animation = &"idle"
-frame_progress = 0.703183
+frame_progress = 0.468971
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-2, 1)
+position = Vector2(-1, -6)
 shape = SubResource("CircleShape2D_8okxs")
 one_way_collision_margin = 0.0
