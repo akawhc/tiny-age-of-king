@@ -482,7 +482,7 @@ y_sort_enabled = true
 position = Vector2(0, -23)
 sprite_frames = SubResource("SpriteFrames_e3q5e")
 animation = &"idle"
-frame_progress = 0.468971
+frame_progress = 0.48608
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -6)

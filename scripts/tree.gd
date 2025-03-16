@@ -19,10 +19,11 @@ const TREE_CONFIG = {
 		"shake_time": 0.1  # 晃动时间
 	},
 	"respawn": {
-		"time": 300.0,  # 重生时间（秒）
+		"time": 10.0,  # 重生时间（秒）
 		"grow_duration": 0.5,  # 生长动画持续时间
 		"start_scale": Vector2(0.5, 0.5),  # 开始大小
-		"end_scale": Vector2(1.0, 1.0)  # 最终大小
+		"end_scale": Vector2(1.0, 1.0),  # 最终大小
+		"check_radius": 40  # 重生时检查范围
 	}
 }
 
@@ -113,6 +114,12 @@ func _on_tree_destroyed() -> void:
 	spawn_wood()
 	is_stump = true
 	play(TREE_ANIMATIONS.STUMP)
+
+	# 禁用碰撞体积
+	if collision_body:
+		collision_body.set_collision_layer_value(1, false)  # 禁用碰撞层
+		collision_body.set_collision_mask_value(1, false)   # 禁用碰撞掩码
+
 	emit_signal("tree_chopped", global_position)
 
 	# 启动重生计时器
@@ -120,10 +127,34 @@ func _on_tree_destroyed() -> void:
 	_respawn_tree()
 
 func _respawn_tree() -> void:
+	# 检查重生位置是否有角色
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsShapeQueryParameters2D.new()
+	var shape = CircleShape2D.new()
+	shape.radius = TREE_CONFIG.respawn.check_radius
+	query.shape = shape
+	query.transform = Transform2D(0, global_position)
+	query.collision_mask = 1  # 角色所在的碰撞层
+
+	var results = space_state.intersect_shape(query)
+
+	# 如果检测到角色，延迟重生
+	for result in results:
+		if result.collider.is_in_group("players"):
+			print("检测到角色，延迟重生")
+			await get_tree().create_timer(1.0).timeout  # 等待1秒后重试
+			_respawn_tree()
+			return
+
 	# 重置状态
 	is_stump = false
 	current_health = max_health
 	chop_cooldown = false
+
+	# 启用碰撞体积
+	if collision_body:
+		collision_body.set_collision_layer_value(1, true)  # 启用碰撞层
+		collision_body.set_collision_mask_value(1, true)   # 启用碰撞掩码
 
 	# 设置初始状态
 	scale = original_scale * TREE_CONFIG.respawn.start_scale
@@ -138,7 +169,7 @@ func _respawn_tree() -> void:
 		TREE_CONFIG.respawn.grow_duration
 	).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
-	print("树木重生完成")  # 调试信息
+	print("树木重生完成")
 
 func spawn_wood() -> void:
 	var wood_count = randi_range(
