@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://dmutufjourytk"]
+[gd_scene load_steps=48 format=3 uid="uid://dmutufjourytk"]
 
 [ext_resource type="Texture2D" uid="uid://dg5fmr4vbyib7" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png" id="1_bkb4p"]
 [ext_resource type="Script" path="res://scripts/worker.gd" id="1_yvxqw"]
@@ -27,6 +27,30 @@ region = Rect2(768, 576, 192, 192)
 [sub_resource type="AtlasTexture" id="AtlasTexture_vytih"]
 atlas = ExtResource("1_bkb4p")
 region = Rect2(960, 576, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m7a1x"]
+atlas = ExtResource("1_bkb4p")
+region = Rect2(0, 1152, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3xnwl"]
+atlas = ExtResource("1_bkb4p")
+region = Rect2(192, 1152, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kh8ut"]
+atlas = ExtResource("1_bkb4p")
+region = Rect2(384, 1152, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ghplm"]
+atlas = ExtResource("1_bkb4p")
+region = Rect2(576, 1152, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u1h3d"]
+atlas = ExtResource("1_bkb4p")
+region = Rect2(768, 1152, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmgjk"]
+atlas = ExtResource("1_bkb4p")
+region = Rect2(960, 1152, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nb251"]
 atlas = ExtResource("1_bkb4p")
@@ -175,6 +199,52 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_m7a1x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3xnwl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kh8ut")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ghplm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u1h3d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmgjk")
+}],
+"loop": true,
+"name": &"gold_lift",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m7a1x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3xnwl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kh8ut")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ghplm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u1h3d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmgjk")
+}],
+"loop": true,
+"name": &"gold_lift_run",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_nb251")
 }, {
 "duration": 1.0,
@@ -192,7 +262,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qc4mk")
 }],
-"loop": true,
+"loop": false,
 "name": &"hammer",
 "speed": 5.0
 }, {
@@ -299,7 +369,7 @@ script = ExtResource("1_yvxqw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_60ukm")
-animation = &"lift"
+animation = &"chop"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 5)
