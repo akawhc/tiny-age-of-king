@@ -1,6 +1,6 @@
 extends AnimatedSprite2D
 
-signal tree_chopped(position)
+# signal tree_chopped(position)
 
 # 树木相关常量
 const TREE_CONFIG = {

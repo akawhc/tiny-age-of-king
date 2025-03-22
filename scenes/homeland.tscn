@@ -694,12 +694,6 @@ tile_map_data = PackedByteArray("AADP/zcAAQABAAEAAADP/zgAAQABAAEAAADP/zkAAQABAAE
 tile_set = SubResource("TileSet_rd3fl")
 metadata/_edit_lock_ = true
 
-[node name="worker" parent="land1" instance=ExtResource("25_4wgfr")]
-position = Vector2(-3646, 2637)
-
-[node name="Camera2D" type="Camera2D" parent="land1/worker"]
-position = Vector2(-2, 6)
-
 [node name="trees" type="TileMapLayer" parent="land1"]
 y_sort_enabled = true
 
@@ -718,3 +712,8 @@ y_sort_enabled = true
 [node name="gold_mine" parent="land1/gold_mines" instance=ExtResource("27_6yuoh")]
 y_sort_enabled = true
 position = Vector2(-3467, 2747)
+
+[node name="worker" parent="." instance=ExtResource("25_4wgfr")]
+position = Vector2(-3809, 2644)
+
+[node name="Camera2D" type="Camera2D" parent="worker"]

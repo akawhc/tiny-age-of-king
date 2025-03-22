@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b8j6v3q4y8n0x"]
 
-[ext_resource type="Script" path="res://scripts/wood.gd" id="1_2d3yt"]
+[ext_resource type="Script" path="res://scripts/resource/wood.gd" id="1_2d3yt"]
 [ext_resource type="Texture2D" uid="uid://bcx2aybatvhhg" path="res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png" id="2_n4k3p"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]

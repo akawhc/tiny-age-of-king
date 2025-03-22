@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c0xcm8qq6vsh"]
 
 [ext_resource type="Texture2D" uid="uid://bk3mloqimw5wo" path="res://sprites/Tiny Swords/Resources/Gold Mine/GoldMine_Active.png" id="1_1jys3"]
-[ext_resource type="Script" path="res://scripts/gold_mine.gd" id="2_24hy5"]
+[ext_resource type="Script" path="res://scripts/resource/gold_mine.gd" id="2_24hy5"]
 
 [node name="gold_mine" type="Sprite2D"]
 position = Vector2(1, 11)
