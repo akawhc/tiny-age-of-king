@@ -721,8 +721,7 @@ position = Vector2(-3809, 2644)
 
 [node name="Camera2D" type="Camera2D" parent="worker"]
 
-[node name="workbench" parent="." instance=ExtResource("28_lqr1x")]
+[node name="WorkbenchUI" parent="." instance=ExtResource("28_lqr1x")]
 
 [node name="TestWorkbench" parent="." instance=ExtResource("29_7wl1c")]
-visible = false
-position = Vector2(-3765, 2483)
+position = Vector2(-3696, 2403)

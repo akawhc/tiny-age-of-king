@@ -9,7 +9,7 @@ extends Node2D
 var interaction_manager: Node = null
 
 # 使用工作台交互脚本中的交互类型枚举
-const InteractionType = preload("res://scripts/UI/workbench_interaction.gd").InteractionType
+const InteractionType = preload("res://scripts/UI/workbench/workbench_interaction.gd").InteractionType
 
 func _ready() -> void:
 	# 打印当前节点路径，帮助调试

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cl0qbkm0vgrdv"]
 
 [ext_resource type="Texture2D" uid="uid://cajebemmo8i6p" path="res://sprites/Tiny Swords/UI/Banners/Carved_9Slides.png" id="1_fm1kw"]
-[ext_resource type="Script" path="res://scripts/UI/workbench_controller.gd" id="1_xtmhi"]
+[ext_resource type="Script" path="res://scripts/UI/workbench/workbench_controller.gd" id="1_xtmhi"]
 
 [node name="WorkbenchUI" type="CanvasLayer"]
 layer = 5

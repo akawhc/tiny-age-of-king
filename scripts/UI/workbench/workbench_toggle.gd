@@ -1,21 +1,21 @@
 # file: workbench_toggle.gd
 # author: ponywu
-# date: 2025-03-23
-# description: 工作台切换脚本，按 B 键切换工作台的显示状态
+# date: 2024-03-24
+# description: 工作台显示/隐藏控制器
 
 extends Node
 
-# 工作台场景路径
+# 导出变量
 @export var workbench_scene: PackedScene
 
-# 工作台实例
+# 实例引用
 var workbench_instance = null
 var is_workbench_visible = false
 
 func _ready() -> void:
-	# 预载工作台场景，如果未设置
+	# 如果没有设置工作台场景，则加载默认场景
 	if not workbench_scene:
-		workbench_scene = load("res://scenes/workbench.tscn")
+		workbench_scene = load("res://scenes/UI/workbench/workbench.tscn")
 
 	# 连接输入处理
 	set_process_input(true)

@@ -6,7 +6,7 @@
 extends Node
 
 # 使用工作台交互脚本中的交互类型枚举
-const InteractionType = preload("res://scripts/UI/workbench_interaction.gd").InteractionType
+const InteractionType = preload("res://scripts/UI/workbench/workbench_interaction.gd").InteractionType
 
 # 交互类型名称映射
 const INTERACTION_TYPE_NAMES = {
