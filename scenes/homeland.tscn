@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=62 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/knight.tscn" id="1_qhu8i"]
 [ext_resource type="Texture2D" uid="uid://cgs77v1q2tlc8" path="res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png" id="2_bmjfy"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://c0xcm8qq6vsh" path="res://scenes/gold_mine.tscn" id="27_6yuoh"]
 [ext_resource type="PackedScene" uid="uid://cl0qbkm0vgrdv" path="res://scenes/workbench.tscn" id="28_lqr1x"]
 [ext_resource type="PackedScene" uid="uid://chkxk0btmsjpx" path="res://scenes/test_workbench.tscn" id="29_7wl1c"]
+[ext_resource type="PackedScene" uid="uid://chvan77gf468x" path="res://scenes/select_manager.tscn" id="30_qq1nu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -725,3 +726,6 @@ position = Vector2(-3809, 2644)
 
 [node name="TestWorkbench" parent="." instance=ExtResource("29_7wl1c")]
 position = Vector2(-3696, 2403)
+
+[node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
+position = Vector2(-4223, 2816)

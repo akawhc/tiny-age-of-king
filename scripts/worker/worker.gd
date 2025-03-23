@@ -1,18 +1,15 @@
 # @file: worker.gd
 # @brief: 工人主脚本
 # @author: ponywu
-# @date: 2025-03-22
+# @date: 2024-03-24
 
-extends CharacterBody2D
+extends "res://scripts/units/selectable_unit.gd"
 
 # 导入分离出的组件
 @onready var animation_manager = $AnimationManager
 @onready var wood_manager = $WoodManager
 @onready var mining_manager = $MiningManager
 @onready var chop_manager = $ChopManager
-
-# 基础常量
-const MOVE_SPEED = 120
 
 # 基础状态变量
 var facing_direction = Vector2.RIGHT
@@ -25,7 +22,7 @@ var is_mining = false
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
 func _ready() -> void:
-	add_to_group("players")
+	super._ready()  # 调用父类的 _ready
 	add_to_group("workers")
 
 	# 初始化组件
@@ -72,34 +69,48 @@ func _input(event: InputEvent) -> void:
 		wood_manager.drop_wood()
 
 func _physics_process(delta: float) -> void:
-	var direction = Vector2.ZERO
-
-	# 如果正在砍树或挖矿，暂时不允许移动
-	if not is_chopping and not is_mining:
-		direction.x = Input.get_axis("ui_left", "ui_right")
-		direction.y = Input.get_axis("ui_up", "ui_down")
-
-	var old_velocity = velocity
-
-	if direction:
-		velocity = direction.normalized() * MOVE_SPEED
-		# 更新朝向
-		if direction.x != 0:
-			facing_direction = Vector2(sign(direction.x), 0)
-			if not is_chopping and not is_mining:
-				animated_sprite_2d.flip_h = direction.x < 0
+	if is_moving:
+		super._physics_process(delta)  # 调用父类的移动处理
 	else:
-		velocity = Vector2.ZERO
+		var direction = Vector2.ZERO
 
-	# 更新动画
-	if not is_chopping and not is_mining:
-		animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+		# 如果正在砍树或挖矿，暂时不允许移动
+		if not is_chopping and not is_mining:
+			direction.x = Input.get_axis("ui_left", "ui_right")
+			direction.y = Input.get_axis("ui_up", "ui_down")
 
-	# 更新木材动画
-	if wood_manager.is_carrying:
-		wood_manager.update_animation(delta, old_velocity)
+		var old_velocity = velocity
 
-	move_and_slide()
+		if direction:
+			velocity = direction.normalized() * move_speed
+			# 更新朝向
+			if direction.x != 0:
+				facing_direction = Vector2(sign(direction.x), 0)
+				if not is_chopping and not is_mining:
+					animated_sprite_2d.flip_h = direction.x < 0
+		else:
+			velocity = Vector2.ZERO
+
+		# 更新动画
+		if not is_chopping and not is_mining:
+			animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+
+		# 更新木材动画
+		if wood_manager.is_carrying:
+			wood_manager.update_animation(delta, old_velocity)
+
+		move_and_slide()
+
+# 重写父类的动画更新方法
+func update_animation(direction: Vector2) -> void:
+	if direction.x != 0:
+		facing_direction = Vector2(sign(direction.x), 0)
+		animated_sprite_2d.flip_h = direction.x < 0
+	animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+
+# 重写父类的待机动画方法
+func play_idle_animation() -> void:
+	animation_manager.set_animation_state(Vector2.ZERO, wood_manager.is_carrying)
 
 func _on_animation_frame_changed() -> void:
 	if is_chopping:

@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4yvxqxvqxqxq"]
+
+[sub_resource type="GDScript" id="GDScript_1"]
+script/source = "extends Node2D
+
+var alpha = 1.0
+var fade_speed = 2.0
+
+func _ready():
+	# 设置初始透明度
+	modulate.a = alpha
+
+func _process(delta):
+	# 逐渐降低透明度
+	alpha -= fade_speed * delta
+	modulate.a = alpha
+
+	# 当完全透明时删除节点
+	if alpha <= 0:
+		queue_free()
+
+func _draw():
+	# 绘制椭圆形指示器
+	var radius = 16  # 基础半径
+	var points = PackedVector2Array()
+	var num_points = 32
+
+	# 绘制外部椭圆
+	for i in range(num_points + 1):
+		var angle = i * TAU / num_points
+		var point = Vector2(
+			cos(angle) * radius,
+			sin(angle) * radius * 0.32  # Y轴压缩为0.32倍，与选择指示器保持一致
+		)
+		points.push_back(point)
+
+	# 绘制填充
+	draw_colored_polygon(points, Color(0.2, 0.4, 0.8, 0.3))  # 半透明的蓝色填充
+
+	# 绘制边框
+	draw_polyline(points, Color(0.2, 0.4, 0.8, 0.8), 2.0)  # 更深的蓝色边框
+"
+
+[node name="ground_indicator" type="Node2D"]
+script = SubResource("GDScript_1")

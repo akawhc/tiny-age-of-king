@@ -1,2 +1,14 @@
 res://scenes/homeland.tscn
-res://scripts/movement/movement_manager.gd
+res://scenes/test_workbench.tscn
+res://scenes/select_manager.tscn
+res://scripts/worker/wood_manager.gd
+res://scripts/worker/mining_manager.gd
+res://scripts/UI/interaction_manager.gd
+res://scripts/player.gd
+res://scripts/UI/workbench/test_workbench.gd
+res://scripts/UI/workbench/workbench_toggle.gd
+res://scripts/UI/selection_box.gd
+res://scripts/UI/unit_selection_manager.gd
+res://scripts/units/selectable_unit.gd
+res://scripts/tree.gd
+res://scripts/resource/tree.gd

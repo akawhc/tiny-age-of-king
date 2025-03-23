@@ -1,4 +1,9 @@
-extends CharacterBody2D
+# file: knight.gd
+# author: ponywu
+# date: 2024-03-24
+# description: 骑士单位脚本
+
+extends "res://scripts/units/selectable_unit.gd"
 
 # 移动相关常量
 const MOVE_SPEED = 150
@@ -34,7 +39,7 @@ var current_attack = "slight"  # 当前攻击类型
 var has_hit = false  # 是否已经造成伤害
 
 func _ready() -> void:
-	add_to_group("players")  # 添加到玩家组，用于树木和木材的交互
+	super._ready()  # 调用父类的 _ready
 	animated_sprite_2d.play(ANIMATION_STATES.IDLE)  # 初始状态为待机
 	animated_sprite_2d.frame_changed.connect(_on_animation_frame_changed)
 
@@ -42,26 +47,40 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("chop") and not is_attacking:
 		start_attack()
 
-func _physics_process(_delta: float) -> void:
-	var direction = Vector2.ZERO
-	direction.x = Input.get_axis("ui_left", "ui_right")
-	direction.y = Input.get_axis("ui_up", "ui_down")
-
-	if direction:
-		velocity = direction.normalized() * MOVE_SPEED
-		# 更新朝向
-		if direction.x != 0:
-			facing_direction = Vector2(sign(direction.x), 0)
-			if not is_attacking:
-				animated_sprite_2d.flip_h = direction.x < 0
+func _physics_process(delta: float) -> void:
+	if is_moving:
+		super._physics_process(delta)  # 调用父类的移动处理
 	else:
-		velocity = Vector2.ZERO
+		var direction = Vector2.ZERO
+		direction.x = Input.get_axis("ui_left", "ui_right")
+		direction.y = Input.get_axis("ui_up", "ui_down")
 
-	# 更新动画
-	if not is_attacking:
-		set_animation_state()
+		if direction:
+			velocity = direction.normalized() * move_speed
+			# 更新朝向
+			if direction.x != 0:
+				facing_direction = Vector2(sign(direction.x), 0)
+				if not is_attacking:
+					animated_sprite_2d.flip_h = direction.x < 0
+		else:
+			velocity = Vector2.ZERO
 
-	move_and_slide()
+		# 更新动画
+		if not is_attacking:
+			set_animation_state()
+
+		move_and_slide()
+
+# 重写父类的动画更新方法
+func update_animation(direction: Vector2) -> void:
+	if direction.x != 0:
+		facing_direction = Vector2(sign(direction.x), 0)
+		animated_sprite_2d.flip_h = direction.x < 0
+	animated_sprite_2d.play(ANIMATION_STATES.RUN)
+
+# 重写父类的待机动画方法
+func play_idle_animation() -> void:
+	animated_sprite_2d.play(ANIMATION_STATES.IDLE)
 
 func _on_animation_frame_changed() -> void:
 	if is_attacking and not has_hit:
