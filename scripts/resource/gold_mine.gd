@@ -1,9 +1,10 @@
 extends Sprite2D
 
-signal mine_depleted(position)
+# signal mine_depleted(position)
 
 # 金矿相关常量
 const MINE_CONFIG = {
+	"max_health": 100,
 	"detection_radius": 64,  # 检测范围
 	"damage_cooldown": 0.2,  # 挖掘冷却时间
 	"gold_spawn": {
@@ -15,7 +16,7 @@ const MINE_CONFIG = {
 		"worker_damage": 5,  # 工人单次挖矿伤害
 		"mining_rate": 1.0,  # 工人挖矿速率（秒/次）
 		"efficiency_multiplier": 1.0  # 效率倍率
-	}
+	},
 }
 
 # 金矿状态纹理路径
@@ -28,7 +29,7 @@ const MINE_TEXTURES = {
 var texture_active: Texture2D
 var texture_destroyed: Texture2D
 
-@export var max_health: int = 1000
+var max_health: int = MINE_CONFIG.max_health
 var current_health: int = max_health
 var is_being_mined: bool = false
 var mine_cooldown: bool = false
@@ -103,6 +104,6 @@ func deplete_mine() -> void:
 	texture = texture_destroyed
 
 	# 发出信号通知金矿已被挖空
-	emit_signal("mine_depleted", global_position)
+	# emit_signal("mine_depleted", global_position)
 
 	print("金矿已被完全挖空！")

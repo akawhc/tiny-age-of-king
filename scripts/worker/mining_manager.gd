@@ -11,7 +11,7 @@ const MINING_CONFIG = {
 	"damage": 20,
 	"hit_frame": 5,  # 在第5帧检测伤害
 	"efficiency": 1.0,  # 基础挖矿效率
-	"arc_distance": 150.0,  # 攻击弧度距离
+	"arc_distance": 120.0,  # 攻击弧度距离
 }
 
 # 引用

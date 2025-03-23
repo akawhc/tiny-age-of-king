@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://chkxk0btmsjpx"]
+
+[ext_resource type="PackedScene" uid="uid://cl0qbkm0vgrdv" path="res://scenes/workbench.tscn" id="1_pvdmj"]
+[ext_resource type="Script" path="res://scripts/UI/test_workbench.gd" id="1_vhgkv"]
+[ext_resource type="PackedScene" uid="uid://t77rjwtieev4" path="res://scenes/interaction_manager.tscn" id="2_4ey2b"]
+
+[node name="TestWorkbench" type="Node2D"]
+position = Vector2(341, -198)
+script = ExtResource("1_vhgkv")
+
+[node name="WorkbenchUI" parent="." instance=ExtResource("1_pvdmj")]
+
+[node name="InteractionManager" parent="." instance=ExtResource("2_4ey2b")]
+
+[node name="TestButtons" type="VBoxContainer" parent="."]
+offset_left = 25.0
+offset_top = 25.0
+offset_right = 225.0
+offset_bottom = 300.0
+
+[node name="TestWorkerButton" type="Button" parent="TestButtons"]
+layout_mode = 2
+text = "测试工人交互"
+
+[node name="TestBuildingButton" type="Button" parent="TestButtons"]
+layout_mode = 2
+text = "测试建筑交互"
+
+[node name="TestTreeButton" type="Button" parent="TestButtons"]
+layout_mode = 2
+text = "测试树木交互"
+
+[node name="TestGoldMineButton" type="Button" parent="TestButtons"]
+layout_mode = 2
+text = "测试金矿交互"
+
+[node name="ClearButton" type="Button" parent="TestButtons"]
+layout_mode = 2
+text = "清除交互"

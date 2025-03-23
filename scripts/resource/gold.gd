@@ -1,6 +1,6 @@
 extends Area2D
 
-signal collected
+# signal collected
 
 # 金币相关常量
 const GOLD_CONFIG = {
@@ -36,7 +36,7 @@ func _play_drop_animation() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("players"):
-		emit_signal("collected")
+		# emit_signal("collected")
 		if body.has_method("collect_gold"):
 			if body.name == "worker":  # 如果是工人，则等待工人收集
 				# 先通知工人收集金币

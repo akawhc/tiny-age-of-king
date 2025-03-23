@@ -1,30 +1,32 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1742653932
+::res://::1742721315
 icon.png::CompressedTexture2D::132046232669005677::1740314011::1740321106::1::::<><>::
 README.md::TextFile::-1::1740321045::0::1::::<><>::
-::res://scenes/::1742653877
-gold.tscn::PackedScene::7296904472962658579::1742646338::0::1::::<><>::res://scripts/gold.gd<>uid://c8k1dbn7w6nrn::::res://sprites/Tiny Swords/Resources/Resources/G_Idle_(NoShadow).png
-gold_mine.tscn::PackedScene::193387875557336567::1742653877::0::1::::<><>::uid://bk3mloqimw5wo::::res://sprites/Tiny Swords/Resources/Gold Mine/GoldMine_Active.png<>res://scripts/gold_mine.gd
-homeland.tscn::PackedScene::1963767027427043210::1742653877::0::1::::<><>::uid://6rwkugbcxppt::::res://scenes/knight.tscn<>uid://cgs77v1q2tlc8::::res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png<>uid://dmgthr8fe6fvl::::res://sprites/Tiny Swords/Terrain/Water/Water.png<>uid://beq70lexnu3sy::::res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Flat.png<>uid://b21nla88obsly::::res://sprites/Tiny Swords/Terrain/Ground/Shadows.png<>uid://bsovbc6fxwjim::::res://sprites/Tiny Swords/Deco/01.png<>uid://1bndsyl3ua31::::res://sprites/Tiny Swords/Deco/02.png<>uid://7l5u0xuk8vga::::res://sprites/Tiny Swords/Deco/03.png<>uid://cw82nnkgi0ekn::::res://sprites/Tiny Swords/Deco/04.png<>uid://b7ob4h1rcl61j::::res://sprites/Tiny Swords/Deco/07.png<>uid://cydblbpffu4wf::::res://sprites/Tiny Swords/Deco/05.png<>uid://t1e8cpeyasoc::::res://sprites/Tiny Swords/Deco/06.png<>uid://bodow25l8c3xu::::res://sprites/Tiny Swords/Deco/08.png<>uid://c8wqt17covo24::::res://sprites/Tiny Swords/Deco/09.png<>uid://coappmkamic2d::::res://sprites/Tiny Swords/Deco/10.png<>uid://bhik7q402ta7c::::res://sprites/Tiny Swords/Deco/11.png<>uid://b7d6si2xycexc::::res://sprites/Tiny Swords/Deco/12.png<>uid://cc7aoowq8yrw5::::res://sprites/Tiny Swords/Deco/13.png<>uid://eepysfq252dv::::res://sprites/Tiny Swords/Deco/14.png<>uid://lfa8yd3io31g::::res://sprites/Tiny Swords/Deco/15.png<>uid://du2w2mrwow4dr::::res://sprites/Tiny Swords/Deco/16.png<>uid://bn3cqqyuufssn::::res://sprites/Tiny Swords/Deco/17.png<>uid://dg0defvxnfeud::::res://sprites/Tiny Swords/Deco/18.png<>uid://6fro2i1iwd6h::::res://sprites/Tiny Swords/Resources/Trees/Tree.png<>uid://dmutufjourytk::::res://scenes/worker.tscn<>uid://duye4vrhbdk2b::::res://scenes/tree.tscn<>uid://c0xcm8qq6vsh::::res://scenes/gold_mine.tscn
+::res://scenes/::1742721315
+gold.tscn::PackedScene::7296904472962658579::1742654671::0::1::::<><>::res://scripts/resource/gold.gd<>uid://c8k1dbn7w6nrn::::res://sprites/Tiny Swords/Resources/Resources/G_Idle_(NoShadow).png
+gold_mine.tscn::PackedScene::193387875557336567::1742655570::0::1::::<><>::uid://bk3mloqimw5wo::::res://sprites/Tiny Swords/Resources/Gold Mine/GoldMine_Active.png<>res://scripts/resource/gold_mine.gd
+homeland.tscn::PackedScene::1963767027427043210::1742655570::0::1::::<><>::uid://6rwkugbcxppt::::res://scenes/knight.tscn<>uid://cgs77v1q2tlc8::::res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png<>uid://dmgthr8fe6fvl::::res://sprites/Tiny Swords/Terrain/Water/Water.png<>uid://beq70lexnu3sy::::res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Flat.png<>uid://b21nla88obsly::::res://sprites/Tiny Swords/Terrain/Ground/Shadows.png<>uid://bsovbc6fxwjim::::res://sprites/Tiny Swords/Deco/01.png<>uid://1bndsyl3ua31::::res://sprites/Tiny Swords/Deco/02.png<>uid://7l5u0xuk8vga::::res://sprites/Tiny Swords/Deco/03.png<>uid://cw82nnkgi0ekn::::res://sprites/Tiny Swords/Deco/04.png<>uid://b7ob4h1rcl61j::::res://sprites/Tiny Swords/Deco/07.png<>uid://cydblbpffu4wf::::res://sprites/Tiny Swords/Deco/05.png<>uid://t1e8cpeyasoc::::res://sprites/Tiny Swords/Deco/06.png<>uid://bodow25l8c3xu::::res://sprites/Tiny Swords/Deco/08.png<>uid://c8wqt17covo24::::res://sprites/Tiny Swords/Deco/09.png<>uid://coappmkamic2d::::res://sprites/Tiny Swords/Deco/10.png<>uid://bhik7q402ta7c::::res://sprites/Tiny Swords/Deco/11.png<>uid://b7d6si2xycexc::::res://sprites/Tiny Swords/Deco/12.png<>uid://cc7aoowq8yrw5::::res://sprites/Tiny Swords/Deco/13.png<>uid://eepysfq252dv::::res://sprites/Tiny Swords/Deco/14.png<>uid://lfa8yd3io31g::::res://sprites/Tiny Swords/Deco/15.png<>uid://du2w2mrwow4dr::::res://sprites/Tiny Swords/Deco/16.png<>uid://bn3cqqyuufssn::::res://sprites/Tiny Swords/Deco/17.png<>uid://dg0defvxnfeud::::res://sprites/Tiny Swords/Deco/18.png<>uid://6fro2i1iwd6h::::res://sprites/Tiny Swords/Resources/Trees/Tree.png<>uid://dmutufjourytk::::res://scenes/worker.tscn<>uid://duye4vrhbdk2b::::res://scenes/tree.tscn<>uid://c0xcm8qq6vsh::::res://scenes/gold_mine.tscn
 knight.tscn::PackedScene::2212303266162790597::1742134414::0::1::::<><>::res://scripts/knight.gd<>uid://ymilw7312e7p::::res://sprites/Tiny Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png<>uid://c7bd1xbfdjkvy::::res://sprites/Tiny Swords/Factions/Knights/Troops/Dead/Dead.png
 player.tscn::PackedScene::1956082797167144694::1741527778::0::1::::<><>::res://scripts/player.gd<>uid://djg8uelxd11hg::::res://sprites/Mystic Wood/characters/player.png
 spray.tscn::PackedScene::4263603383891555715::1742134414::0::1::::<><>::uid://bh0fnvo5hj0b7::::res://sprites/Tiny Swords/Terrain/Water/Foam/Foam.png
-tree.tscn::PackedScene::8612879775503236103::1742646338::0::1::::<><>::uid://6fro2i1iwd6h::::res://sprites/Tiny Swords/Resources/Trees/Tree.png<>res://scripts/tree.gd
-wood.tscn::PackedScene::4723153148704157893::1742646338::0::1::::<><>::res://scripts/wood.gd<>uid://bcx2aybatvhhg::::res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png
-worker.tscn::PackedScene::8044005345741057720::1742653877::0::1::::<><>::uid://dg5fmr4vbyib7::::res://sprites/Tiny Swords/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png<>res://scripts/worker/worker.gd<>uid://bcx2aybatvhhg::::res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png<>res://scripts/worker/animation_manager.gd<>res://scripts/worker/wood_manager.gd<>res://scripts/worker/chop_manager.gd<>res://scripts/worker/mining_manager.gd
-::res://scripts/::1742653630
-gold.gd::GDScript::-1::1742653458::0::1::::<>Area2D<>::
-gold_mine.gd::GDScript::-1::1742651304::0::1::::<>Sprite2D<>::
+tmp.tscn::PackedScene::5597501893869579743::1742721283::0::1::::<><>::uid://cajebemmo8i6p::::res://sprites/Tiny Swords/UI/Banners/Carved_9Slides.png<>uid://cf1d5qh24bktj::::res://sprites/Tiny Swords/UI/Buttons/Button_Disable_9Slides.png
+tree.tscn::PackedScene::8612879775503236103::1742654571::0::1::::<><>::uid://6fro2i1iwd6h::::res://sprites/Tiny Swords/Resources/Trees/Tree.png<>res://scripts/resource/tree.gd
+wood.tscn::PackedScene::4723153148704157893::1742654589::0::1::::<><>::res://scripts/resource/wood.gd<>uid://bcx2aybatvhhg::::res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png
+worker.tscn::PackedScene::8044005345741057720::1742655570::0::1::::<><>::uid://dg5fmr4vbyib7::::res://sprites/Tiny Swords/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png<>res://scripts/worker/worker.gd<>uid://bcx2aybatvhhg::::res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png<>res://scripts/worker/animation_manager.gd<>res://scripts/worker/wood_manager.gd<>res://scripts/worker/chop_manager.gd<>res://scripts/worker/mining_manager.gd
+::res://scripts/::1742654511
 knight.gd::GDScript::-1::1741529574::0::1::::<>CharacterBody2D<>::
 player.gd::GDScript::-1::1742120079::0::1::::<>CharacterBody2D<>::
-tree.gd::GDScript::-1::1742127234::0::1::::<>AnimatedSprite2D<>::
-wood.gd::GDScript::-1::1742653630::0::1::::<>Area2D<>::
+::res://scripts/resource/::1742654511
+gold.gd::GDScript::-1::1742655629::0::1::::<>Area2D<>::
+gold_mine.gd::GDScript::-1::1742655594::0::1::::<>Sprite2D<>::
+tree.gd::GDScript::-1::1742654421::0::1::::<>AnimatedSprite2D<>::
+wood.gd::GDScript::-1::1742654431::0::1::::<>Area2D<>::
 ::res://scripts/worker/::1742653877
 animation_manager.gd::GDScript::-1::1742653733::0::1::::<>Node<>::
-chop_manager.gd::GDScript::-1::1742653739::0::1::::<>Node<>::
-mining_manager.gd::GDScript::-1::1742653744::0::1::::<>Node<>::
-wood_manager.gd::GDScript::-1::1742653910::0::1::::<>Node<>::
-worker.gd::GDScript::-1::1742653759::0::1::::<>CharacterBody2D<>::
+chop_manager.gd::GDScript::-1::1742654168::0::1::::<>Node<>::
+mining_manager.gd::GDScript::-1::1742655405::0::1::::<>Node<>::
+wood_manager.gd::GDScript::-1::1742654636::0::1::::<>Node<>::
+worker.gd::GDScript::-1::1742655169::0::1::::<>CharacterBody2D<>::
 ::res://sprites/::1740910130
 ::res://sprites/Mystic Wood/::1740312924
 ::res://sprites/Mystic Wood/characters/::1740321106
