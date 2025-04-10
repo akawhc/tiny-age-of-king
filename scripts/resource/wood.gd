@@ -35,13 +35,14 @@ func _play_drop_animation() -> void:
 	)
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("players"):
+	if body.is_in_group("workers"):
 		if body.has_method("collect_wood"):
 			if body.name == "worker":  # 如果是工人，则等待工人收集
 				# 先通知工人收集木材
 				body.collect_wood(self)  # 传递木材实例给工人
-			else:  # 其他角色（如骑士）则播放消失动画
-				_play_collect_animation()
+	else:
+		# 其他玩家就直接让木材消失
+		_play_collect_animation()
 
 func _play_collect_animation() -> void:
 	var tween = create_tween()

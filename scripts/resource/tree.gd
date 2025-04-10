@@ -120,7 +120,7 @@ func _on_tree_destroyed() -> void:
 		collision_body.set_collision_layer_value(1, false)  # 禁用碰撞层
 		collision_body.set_collision_mask_value(1, false)   # 禁用碰撞掩码
 
-	emit_signal("tree_chopped", global_position)
+	# emit_signal("tree_chopped", global_position)
 
 	# 启动重生计时器
 	await get_tree().create_timer(TREE_CONFIG.respawn.time).timeout
