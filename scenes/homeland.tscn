@@ -27,7 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://dmutufjourytk" path="res://scenes/worker.tscn" id="25_4wgfr"]
 [ext_resource type="PackedScene" uid="uid://duye4vrhbdk2b" path="res://scenes/tree.tscn" id="25_e0wlo"]
 [ext_resource type="PackedScene" uid="uid://c0xcm8qq6vsh" path="res://scenes/gold_mine.tscn" id="27_6yuoh"]
-[ext_resource type="PackedScene" uid="uid://chkxk0btmsjpx" path="res://scenes/test_workbench.tscn" id="29_7wl1c"]
+[ext_resource type="PackedScene" uid="uid://b8m6m10ueofb1" path="res://scenes/workbench.tscn" id="29_e5q1t"]
 [ext_resource type="PackedScene" uid="uid://chvan77gf468x" path="res://scenes/select_manager.tscn" id="30_qq1nu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
@@ -721,9 +721,7 @@ position = Vector2(-3809, 2644)
 
 [node name="Camera2D" type="Camera2D" parent="worker"]
 
-[node name="TestWorkbench" parent="." instance=ExtResource("29_7wl1c")]
-visible = false
-position = Vector2(-3696, 2403)
-
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-4223, 2816)
+
+[node name="Workbench" parent="." instance=ExtResource("29_e5q1t")]

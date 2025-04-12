@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://chvan77gf468x"]
 
-[ext_resource type="Script" path="res://scripts/UI/unit_selection_manager.gd" id="1_kocel"]
+[ext_resource type="Script" path="res://scripts/units/unit_selection_manager.gd" id="1_kocel"]
 
 [node name="select_manager" type="Node2D"]
 script = ExtResource("1_kocel")

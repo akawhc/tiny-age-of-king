@@ -15,7 +15,7 @@ func _ready() -> void:
 
 	# 创建选择框节点
 	var selection_box = Node2D.new()
-	selection_box.set_script(load("res://scripts/UI/selection_box.gd"))
+	selection_box.set_script(load("res://scripts/units/selection_box.gd"))
 	add_child(selection_box)
 	print("选择框节点已创建")
 

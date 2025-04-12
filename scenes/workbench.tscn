@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cl0qbkm0vgrdv"]
+[gd_scene load_steps=3 format=3 uid="uid://b8m6m10ueofb1"]
 
 [ext_resource type="Texture2D" uid="uid://cajebemmo8i6p" path="res://sprites/Tiny Swords/UI/Banners/Carved_9Slides.png" id="1_fm1kw"]
-[ext_resource type="Script" path="res://scripts/UI/workbench/workbench_controller.gd" id="1_xtmhi"]
+[ext_resource type="Script" path="res://scripts/workbench/core/workbench_controller.gd" id="2_8w4gd"]
 
-[node name="WorkbenchUI" type="CanvasLayer"]
+[node name="Workbench" type="CanvasLayer"]
 layer = 5
 
 [node name="workbench" type="Node2D" parent="."]
-script = ExtResource("1_xtmhi")
+script = ExtResource("2_8w4gd")
 
 [node name="background" type="Sprite2D" parent="workbench"]
 scale = Vector2(1.96224, 1.9145)
