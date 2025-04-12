@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b8m6m10ueofb1"]
 
 [ext_resource type="Texture2D" uid="uid://cajebemmo8i6p" path="res://sprites/Tiny Swords/UI/Banners/Carved_9Slides.png" id="1_fm1kw"]
-[ext_resource type="Script" path="res://scripts/workbench/core/workbench_controller.gd" id="2_8w4gd"]
+[ext_resource type="Script" path="res://scripts/workbench/workbench_controller.gd" id="2_8w4gd"]
 
 [node name="Workbench" type="CanvasLayer"]
 layer = 5
@@ -10,13 +10,14 @@ layer = 5
 script = ExtResource("2_8w4gd")
 
 [node name="background" type="Sprite2D" parent="workbench"]
+visible = false
 scale = Vector2(1.96224, 1.9145)
 texture = ExtResource("1_fm1kw")
 
 [node name="ActionButtons" type="VBoxContainer" parent="workbench"]
 custom_minimum_size = Vector2(180, 0)
 offset_left = -90.0
-offset_top = -140.0
+offset_top = -120.0
 offset_right = 90.0
 offset_bottom = 140.0
 theme_override_constants/separation = 10

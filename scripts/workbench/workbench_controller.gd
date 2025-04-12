@@ -8,7 +8,6 @@ class_name WorkbenchController
 
 # 信号定义
 signal button_clicked(action_id: String)
-signal workbench_visibility_changed(is_visible: bool)
 signal interaction_changed(interaction_type: String)
 
 # 导出变量
@@ -16,20 +15,16 @@ signal interaction_changed(interaction_type: String)
 
 # 私有变量
 var _interaction_type: String = "NONE"
-var _is_workbench_visible: bool = true
 var _buttons_container: VBoxContainer
-var _background: Sprite2D
 var _active_buttons: Array[Button] = []
 var _last_screen_size: Vector2
+var _selection_manager: Node
+var _selected_units: Array = []  # 存储选中的单位
+var _building_manager: BuildingManager  # 建筑管理器单例
 
 func _ready() -> void:
 	config = WorkbenchConfig.new()
-	_background = $background
 	_buttons_container = $ActionButtons
-
-	if not _background:
-		push_error("WorkbenchController: Background 节点未找到")
-		return
 
 	if not _buttons_container:
 		push_error("WorkbenchController: ButtonsContainer 节点未找到")
@@ -45,6 +40,15 @@ func _ready() -> void:
 	# 连接窗口大小变化信号
 	get_tree().root.size_changed.connect(_on_window_size_changed)
 
+	# 获取选择管理器并连接信号
+	_selection_manager = get_tree().get_first_node_in_group("selection_manager")
+	if _selection_manager:
+		_selection_manager.selection_type_changed.connect(_on_selection_type_changed)
+		print("已连接选择管理器信号")
+
+	# 获取建筑管理器实例
+	_building_manager = BuildingManager.get_instance()
+
 func _on_window_size_changed() -> void:
 	var current_screen_size = get_viewport_rect().size
 	if current_screen_size != _last_screen_size:
@@ -52,17 +56,15 @@ func _on_window_size_changed() -> void:
 		_update_position()
 
 func _setup_workbench() -> void:
-	# 设置背景缩放
-	_background.scale = config.layout.scale
+	_buttons_container.scale = config.layout.scale
 
 	# 设置按钮容器
-	_buttons_container.custom_minimum_size = Vector2(180, 0)
 	_buttons_container.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_buttons_container.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-
-	# 设置按钮容器的样式
 	_buttons_container.add_theme_constant_override("separation", 10)
-	_buttons_container.alignment = BoxContainer.ALIGNMENT_CENTER
+
+	# 设置容器的锚点为左下角
+	_buttons_container.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 
 	# 设置初始位置
 	_update_position()
@@ -76,27 +78,19 @@ func _update_position() -> void:
 	var margin_bottom = config.layout.margin_bottom
 	var position_offset = config.layout.position_offset
 
-	# 获取缩放后背景实际尺寸
-	var background_size = _get_workbench_size()
-
-	# 设置背景位置（左下角对齐）
-	_background.position = Vector2.ZERO
-
-	# 设置按钮容器位置（与背景对齐）
-	_buttons_container.position = Vector2.ZERO
+	var button_container_size = get_button_container_size()
 
 	# 设置整个控制器的位置
 	position = Vector2(
-		margin_left + background_size.x / 2,
-		screen_size.y - background_size.y / 2 - margin_bottom
+		margin_left + button_container_size.x / 2,
+		screen_size.y - margin_bottom - button_container_size.y / 2
 	) + position_offset
 
-
-func _get_workbench_size() -> Vector2:
-	# 获取背景尺寸（考虑缩放）
-	var width = _background.texture.get_width() * _background.scale.x
-	var height = _background.texture.get_height() * _background.scale.y
-	return Vector2(width, height)
+func get_button_container_size() -> Vector2:
+	var container_size = _buttons_container.get_rect().size
+	container_size *= _buttons_container.scale
+	print("按钮容器大小：", container_size)
+	return container_size
 
 func _update_buttons() -> void:
 	# 清除现有按钮
@@ -120,7 +114,7 @@ func _update_buttons() -> void:
 		var font_size = config.button_style.font_size
 		var margin = config.button_style.margin
 
-		button.custom_minimum_size = Vector2(0, min_height)
+		button.custom_minimum_size = Vector2(150, min_height)  # 设置固定最小宽度
 		button.add_theme_font_size_override("font_size", font_size)
 		button.add_theme_constant_override("h_separation", margin.left)
 		button.add_theme_constant_override("content_margin_left", margin.left)
@@ -136,6 +130,13 @@ func _update_buttons() -> void:
 		_active_buttons.append(button)
 
 func _on_button_pressed(action_id: String) -> void:
+	# 获取选中的工人
+	var workers = get_selected_workers()
+
+	# 将建造请求由建筑管理器管理
+	if action_id.begins_with("build_") or action_id == "repair":
+		_building_manager.handle_build_request(action_id, workers)
+
 	button_clicked.emit(action_id)
 
 # 公共接口
@@ -145,17 +146,19 @@ func set_interaction_type(type: String) -> void:
 		_update_buttons()
 		interaction_changed.emit(type)
 
-func set_workbench_visible(is_workbench_visible: bool) -> void:
-	if _is_workbench_visible != is_workbench_visible:
-		_is_workbench_visible = is_workbench_visible
-		is_workbench_visible = is_workbench_visible
-		workbench_visibility_changed.emit(is_workbench_visible)
-
-func toggle_visibility() -> void:
-	set_workbench_visible(!_is_workbench_visible)
-
 func get_interaction_type() -> String:
 	return _interaction_type
 
-func workbench_visible() -> bool:
-	return _is_workbench_visible
+# 处理选择类型变化
+func _on_selection_type_changed(type: String, units: Array) -> void:
+	print("工作台收到选择类型变化：", type)
+	_selected_units = units  # 存储选中的单位
+	set_interaction_type(type)
+
+# 获取当前选中的单位
+func get_selected_units() -> Array:
+	return _selected_units
+
+# 获取选中的工人单位
+func get_selected_workers() -> Array:
+	return _selected_units.filter(func(unit): return unit.is_in_group("workers"))

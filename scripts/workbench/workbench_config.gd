@@ -8,9 +8,9 @@ class_name WorkbenchConfig
 
 # 布局配置
 @export var layout: Dictionary = {
-	"margin_left": 0,       # 距离屏幕左边的边距
+	"margin_left": 40,       # 距离屏幕左边的边距
 	"margin_bottom": 0,     # 距离屏幕底部的边距
-	"scale": Vector2(0.6, 0.6), # 工作台的缩放比例
+	"scale": Vector2(0.8, 0.8), # 工作台的缩放比例
 	"default_visible": true,     # 默认是否可见
 	"position_offset": Vector2(0, 0), # 工作台相对于屏幕左下角的偏移
 }
@@ -29,11 +29,12 @@ class_name WorkbenchConfig
 
 # 按钮配置
 @export var button_configs: Dictionary = {
-	"NONE": [],
+	"NONE": [], # 没有选中目标时不显示按钮
 	"WORKER": [
-		{"id": "build", "text": "建造", "action": "build"},
-		{"id": "repair", "text": "修理", "action": "repair"},
-		{"id": "exit", "text": "退出", "action": "exit"}
+		{"id": "build_house", "text": "建造房屋", "action": "build_house"},
+		{"id": "build_tower", "text": "建造箭塔", "action": "build_tower"},
+		{"id": "build_gate", "text": "建造城堡", "action": "build_castle"},
+		{"id": "repair", "text": "修复", "action": "repair"},
 	],
 	"BUILDING": [
 		{"id": "upgrade", "text": "升级", "action": "upgrade"},

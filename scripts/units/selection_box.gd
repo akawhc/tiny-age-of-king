@@ -17,6 +17,12 @@ func _ready() -> void:
 	print("选择框系统已初始化")
 
 func _input(event: InputEvent) -> void:
+	# 如果点击在 UI 元素上，不处理选择
+	if event is InputEventMouseButton:
+		var viewport = get_viewport()
+		if viewport.gui_get_focus_owner():
+			return
+
 	if event.is_action_pressed("select_unit"):
 		# 开始选择
 		start_pos = get_global_mouse_position()
@@ -25,6 +31,10 @@ func _input(event: InputEvent) -> void:
 		print("开始选择，起始位置：", start_pos)
 		queue_redraw()
 	elif event.is_action_released("select_unit"):
+		# 如果没有开始选择，不处理释放事件
+		if not is_selecting:
+			return
+
 		# 结束选择
 		is_selecting = false
 		print("结束选择，结束位置：", current_pos)

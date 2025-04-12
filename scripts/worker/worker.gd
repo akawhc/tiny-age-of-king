@@ -172,7 +172,6 @@ func set_nearest_tree(tree) -> void:
 func set_nearest_mine(mine) -> void:
 	nearest_mine = mine
 
-
 # 收集木材
 func collect_wood(wood = null) -> void:
 	# 如果已经在砍树或挖矿，不能收集木材
@@ -186,3 +185,13 @@ func collect_gold(gold = null) -> void:
 	if gold and gold.has_method("collected_by_worker"):
 		gold.collected_by_worker()
 		print("工人收集了1枚金币")
+
+# 建造城堡
+func build_castle() -> void:
+	print("工人开始建造城堡")
+	# 由 build_manager 管理具体的建造过程
+
+# 建造房屋
+func build_house() -> void:
+	print("工人开始建造房屋")
+	# 由 build_manager 管理具体的建造过程

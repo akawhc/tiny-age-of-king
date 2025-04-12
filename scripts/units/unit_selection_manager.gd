@@ -10,8 +10,13 @@ const GROUND_INDICATOR = preload("res://scenes/ground_indicator.tscn")
 var selected_units: Array = []
 var is_moving = false
 
+signal selection_type_changed(type: String)
+
 func _ready() -> void:
 	print("单位选择管理器初始化")
+
+	# 将自己添加到选择管理器组
+	add_to_group("selection_manager")
 
 	# 创建选择框节点
 	var selection_box = Node2D.new()
@@ -43,6 +48,17 @@ func update_selection(units: Array) -> void:
 		print("设置单位选中状态：", unit.name)
 		unit.set_selected(true)
 
+	# 发送选择类型变化信号
+	if not selected_units.is_empty():
+		if selected_units[0].is_in_group("workers"):
+			print("发送工人选择类型变化信号")
+			selection_type_changed.emit("WORKER", selected_units)
+		else:
+			print("发送空选择类型变化信号")
+			selection_type_changed.emit("NONE", [])
+	else:
+		selection_type_changed.emit("NONE", [])
+
 	print("选择更新完成，当前选中 ", selected_units.size(), " 个单位")
 
 # 清除所有单位的选中状态
@@ -52,6 +68,7 @@ func clear_selection() -> void:
 			print("取消单位选中状态：", unit.name)
 			unit.set_selected(false)
 	selected_units.clear()
+	selection_type_changed.emit("NONE", [])  # 发送清除选择信号
 
 # 移动单位到目标位置
 func move_units_to(target_pos: Vector2) -> void:
