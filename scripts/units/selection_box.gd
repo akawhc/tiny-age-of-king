@@ -18,13 +18,16 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	# 如果点击在 UI 元素上，不处理选择
-	if event is InputEventMouseButton:
-		var viewport = get_viewport()
-		if viewport.gui_get_focus_owner():
-			return
+	var workbench = get_tree().get_first_node_in_group("workbench")
+	if workbench:
+		var buttons_container = workbench.get_node("ActionButtons")
+		if buttons_container:
+			var local_pos = buttons_container.get_local_mouse_position()
+			if buttons_container.get_rect().has_point(local_pos):
+				print("点击了工作台按钮，不处理选择")
+				return
 
 	if event.is_action_pressed("select_unit"):
-		# 开始选择
 		start_pos = get_global_mouse_position()
 		current_pos = start_pos
 		is_selecting = true
@@ -67,7 +70,6 @@ func get_selection_rect() -> Rect2:
 		abs(current_pos.y - start_pos.y)
 	)
 	return Rect2(top_left, size)
-
 func emit_selection_box() -> void:
 	# 获取选择框内的所有单位
 	var selection_rect = get_selection_rect()
