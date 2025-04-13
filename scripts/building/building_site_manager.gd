@@ -131,7 +131,7 @@ func get_construction_texture_path(building_type: String) -> String:
 		"Tower":
 			return BASE_RESOURCE_PATH + "Tower/Tower_Construction.png"
 		_:
-			return BASE_RESOURCE_PATH + "Castle/Castle_Construction.png"  # 默认返回城堡
+			return BASE_RESOURCE_PATH + "Castle/Castle_Construction.png"
 
 # 工人对建筑进行贡献（增加建筑血量）
 func contribute_to_building(site_id: String, amount: float) -> bool:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://dmutufjourytk"]
+[gd_scene load_steps=53 format=3 uid="uid://dmutufjourytk"]
 
 [ext_resource type="Texture2D" uid="uid://dg5fmr4vbyib7" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png" id="1_bkb4p"]
 [ext_resource type="Script" path="res://scripts/worker/worker.gd" id="1_yvxqw"]
@@ -374,7 +374,7 @@ script = ExtResource("1_yvxqw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_60ukm")
-animation = &"idle"
+animation = &"hammer"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 5)

@@ -18,6 +18,7 @@ var nearest_tree = null
 var nearest_mine = null
 var is_chopping = false
 var is_mining = false
+var is_building = false  # 统一的建造状态标志
 
 # 节点引用
 @onready var animated_sprite_2d = $AnimatedSprite2D
@@ -53,7 +54,7 @@ func _init_components() -> void:
 
 func _input(event: InputEvent) -> void:
 	# 如果正在建造，跳过其他输入处理
-	if build_manager.is_building:
+	if is_building:
 		return
 
 	if event.is_action_pressed("chop"):
@@ -83,7 +84,7 @@ func _physics_process(delta: float) -> void:
 		var direction = Vector2.ZERO
 
 		# 如果正在砍树、挖矿或建造，暂时不允许移动
-		if not is_chopping and not is_mining and not build_manager.is_building:
+		if not is_chopping and not is_mining and not is_building:
 			direction.x = Input.get_axis("ui_left", "ui_right")
 			direction.y = Input.get_axis("ui_up", "ui_down")
 
@@ -94,13 +95,13 @@ func _physics_process(delta: float) -> void:
 			# 更新朝向
 			if direction.x != 0:
 				facing_direction = Vector2(sign(direction.x), 0)
-				if not is_chopping and not is_mining and not build_manager.is_building:
+				if not is_chopping and not is_mining and not is_building:
 					animated_sprite_2d.flip_h = direction.x < 0
 		else:
 			velocity = Vector2.ZERO
 
 		# 更新动画
-		if not is_chopping and not is_mining and not build_manager.is_building:
+		if not is_chopping and not is_mining and not is_building:
 			animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
 
 		# 更新木材动画
@@ -110,7 +111,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 
 	# 更新建造进度
-	if build_manager.is_building:
+	if is_building:
 		build_manager.update_building(delta)
 
 # 重写父类的动画更新方法
@@ -125,28 +126,39 @@ func play_idle_animation() -> void:
 	animation_manager.set_animation_state(Vector2.ZERO, wood_manager.is_carrying)
 
 func _on_animation_frame_changed() -> void:
+	# 获取当前帧
+	var current_frame = animated_sprite_2d.frame
+
 	if is_chopping:
+		# 处理砍树动画帧变化
 		chop_manager.check_frame_change(animated_sprite_2d)
 	elif is_mining:
+		# 处理挖矿动画帧变化
 		mining_manager.check_frame_change(animated_sprite_2d, nearest_mine)
+	elif is_building:
+		# 处理建造动画帧变化 - 完全独立的逻辑
+		build_manager.on_build_animation_frame_changed(current_frame)
 
 func _on_animation_finished() -> void:
+	print("动画完成: ", animated_sprite_2d.animation, ", is_chopping=", is_chopping, ", is_mining=", is_mining, ", is_building=", is_building)
+
 	if is_chopping:
 		is_chopping = false
 		chop_manager.finish_animation()
 		animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
 		print("砍树动作完成，可以再次按空格键执行新的动作")
 	elif is_mining:
+		# 重置挖矿状态
 		is_mining = false
 		mining_manager.finish_animation()
+		animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+		print("挖矿动作完成，可以再次按空格键执行新的动作")
+	elif is_building:
+		# 建造动画完成 - 调用独立的建造处理
+		build_manager.on_build_animation_finished()
+		print("建造动作完成，准备下一次建造")
 
-		# 检查是否在建造中
-		if build_manager.is_building:
-			# 如果正在建造，不显示待机动画，后续会在 update_building 中再次触发建造动画
-			print("建造动作完成，准备下一次建造")
-		else:
-			animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
-			print("挖矿动作完成，可以再次按空格键执行新的动作")
+	print("动画完成后: is_chopping=", is_chopping, ", is_mining=", is_mining, ", is_building=", is_building)
 
 func start_chop() -> void:
 	if is_chopping or is_mining:

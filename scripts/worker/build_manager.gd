@@ -11,12 +11,10 @@ var current_building_target = null  # 当前正在建造的建筑对象
 
 # 建造参数
 const BUILD_DISTANCE = 50.0  # 工人与建筑中心的距离
-const BUILD_SPEED = 0.1  # 每次敲击增加的建造进度
-const BUILD_INTERVAL = 1.0  # 建造动作间隔(秒)
+const BUILD_SPEED = 1  # 每次敲击增加的建造进度
 
 # 建造目标信息
 var target_position = Vector2.ZERO  # 工人的目标位置
-var last_build_time = 0.0
 
 # 父节点引用
 var worker = null
@@ -46,6 +44,18 @@ func can_build() -> bool:
 
 	return true
 
+# 建造城堡
+func build_castle(pos: Vector2) -> void:
+	start_building(pos, "Castle")
+
+# 建造房屋
+func build_house(pos: Vector2) -> void:
+	start_building(pos, "House")
+
+# 建造箭塔
+func build_tower(pos: Vector2) -> void:
+	start_building(pos, "Tower")
+
 # 开始建造
 func start_building(pos: Vector2, building_type: String) -> void:
 	if not can_build():
@@ -62,6 +72,7 @@ func start_building(pos: Vector2, building_type: String) -> void:
 
 	# 设置建造状态
 	is_building = true
+	worker.is_building = true  # 设置工人的建造状态
 
 	# 获取或创建建筑目标
 	var site_manager = get_site_manager()
@@ -72,6 +83,8 @@ func start_building(pos: Vector2, building_type: String) -> void:
 # 更新建造进度
 func update_building(_delta: float) -> void:
 	if not is_building or not current_building_target:
+		if is_building:
+			print("工人无法建造: 当前建造目标丢失")
 		return
 
 	# 检查是否到达建造位置
@@ -79,34 +92,48 @@ func update_building(_delta: float) -> void:
 	if distance_to_target > 5.0:  # 还没到达目标位置
 		return
 
-	# 已经到达建造位置，开始建造
-
 	# 确保工人面向建筑
 	var direction_to_building = (current_building_target.position - worker.global_position).normalized()
 	if direction_to_building.x != 0:
 		worker.animated_sprite_2d.flip_h = direction_to_building.x < 0
 
-	# 检查是否可以执行新的建造动作
-	var current_time = Time.get_ticks_msec() / 1000.0
-	if current_time - last_build_time < BUILD_INTERVAL:
-		return
+	# 如果工人没有在执行其他动画，开始新的建造动作
+	if not worker.is_chopping and not worker.is_mining:
+		# 开始播放建造动画
+		start_build_animation(direction_to_building)
 
-	# 如果工人没有在进行挖矿或砍树动画，开始新的建造动作
-	if not worker.is_mining and not worker.is_chopping:
-		# 执行建造动作（使用挖矿动画）
-		worker.mining_manager.start_mine(direction_to_building, null)
-		worker.is_mining = true  # 设置为挖矿状态，复用挖矿动画
+# 开始建造动画
+func start_build_animation(facing_direction: Vector2) -> void:
+	# 根据朝向设置动画翻转
+	worker.animated_sprite_2d.flip_h = facing_direction.x < 0
 
+	# 播放hammer动画
+	worker.animated_sprite_2d.play("hammer")
+
+# 建造动画帧变化的处理（在worker.gd中会被调用）
+func on_build_animation_frame_changed(frame: int) -> void:
+	# 检查是否到了造成建造效果的关键帧
+	if frame == 5:
 		# 增加建筑血量
 		var site_manager = get_site_manager()
 		var completed = site_manager.contribute_to_building(current_building_target.id, BUILD_SPEED)
 
-		# 更新最后建造时间
-		last_build_time = current_time
-
 		# 如果建造完成
 		if completed:
+			print("建筑完成，结束建造流程")
 			finish_building()
+
+		# 播放建造特效
+		play_build_effect()
+
+# 建造动画完成的处理
+func on_build_animation_finished() -> void:
+	print("建造动作完成，准备下一次建造")
+
+# 播放建造特效
+func play_build_effect() -> void:
+	# 这里可以添加建造特效，如粒子效果等
+	pass
 
 # 结束建造
 func finish_building() -> void:
@@ -120,6 +147,7 @@ func finish_building() -> void:
 
 	# 重置状态
 	is_building = false
+	worker.is_building = false
 	current_building_target = null
 
 # 获取建筑工地管理器
@@ -131,18 +159,6 @@ func get_site_manager() -> BuildingSiteManager:
 		get_tree().root.call_deferred("add_child", site_manager)
 		print("创建了新的 BuildingSiteManager 实例")
 	return site_manager
-
-# 建造城堡
-func build_castle(pos: Vector2) -> void:
-	start_building(pos, "Castle")
-
-# 建造房屋
-func build_house(pos: Vector2) -> void:
-	start_building(pos, "House")
-
-# 建造箭塔
-func build_tower(pos: Vector2) -> void:
-	start_building(pos, "Tower")
 
 # 取消建造
 func cancel_building() -> void:
@@ -158,10 +174,10 @@ func cancel_building() -> void:
 
 	# 重置状态
 	is_building = false
+	worker.is_building = false
 	current_building_target = null
 
 	# 恢复工人状态
-	worker.is_mining = false
 	worker.animation_manager.set_animation_state(Vector2.ZERO, worker.wood_manager.is_carrying)
 
 # 修理建筑
