@@ -26,7 +26,7 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	# 如果点击在 UI 元素上，不处理移动
-	if event.is_action_pressed("move_unit"):
+	if event.is_action_pressed("mouse_right"):
 		var workbench = get_tree().get_first_node_in_group("workbench")
 		if workbench:
 			var buttons_container = workbench.get_node("ActionButtons")

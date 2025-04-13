@@ -89,12 +89,12 @@ func _input(event: InputEvent) -> void:
 			# 不可建造时使用红色
 			_current_preview.preview_sprite.modulate = invalid_color
 
-	elif event.is_action_pressed("select_unit"):  # 左键确认
+	elif event.is_action_pressed("mouse_left"):  # 左键确认
 		var build_pos = get_global_mouse_position()
 		if can_build_at_position(build_pos):
 			confirm_build(build_pos)
 
-	elif event.is_action_pressed("cancel_action"):  # 右键取消
+	elif event.is_action_pressed("mouse_right"):  # 右键取消
 		cancel_build()
 
 # 创建建筑预览

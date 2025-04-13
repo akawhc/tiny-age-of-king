@@ -18,7 +18,7 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	# 检查是否是点击或释放事件
-	if event.is_action_pressed("select_unit") or event.is_action_released("select_unit"):
+	if event.is_action_pressed("mouse_left") or event.is_action_released("mouse_left"):
 		# 如果点击在 UI 元素上，不处理选择事件
 		var workbench = get_tree().get_first_node_in_group("workbench")
 		if workbench:
@@ -36,13 +36,13 @@ func _input(event: InputEvent) -> void:
 					return
 
 	# 正常的选择逻辑处理
-	if event.is_action_pressed("select_unit"):
+	if event.is_action_pressed("mouse_left"):
 		start_pos = get_global_mouse_position()
 		current_pos = start_pos
 		is_selecting = true
 		print("开始选择，起始位置：", start_pos)
 		queue_redraw()
-	elif event.is_action_released("select_unit"):
+	elif event.is_action_released("mouse_left"):
 		# 如果没有开始选择，不处理释放事件
 		if not is_selecting:
 			return

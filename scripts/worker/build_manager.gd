@@ -184,3 +184,18 @@ func cancel_building() -> void:
 func repair() -> void:
 	print("工人开始修理建筑")
 	# TODO: 实现修理逻辑
+
+# 停止建造（可能是因为建筑完成或其他原因）
+func stop_building() -> void:
+	if not is_building:
+		return
+
+	print("工人停止建造")
+
+	# 重置状态
+	is_building = false
+	worker.is_building = false
+	current_building_target = null
+
+	# 恢复工人状态
+	worker.animation_manager.set_animation_state(Vector2.ZERO, worker.wood_manager.is_carrying)
