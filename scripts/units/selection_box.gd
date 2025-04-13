@@ -17,16 +17,25 @@ func _ready() -> void:
 	print("选择框系统已初始化")
 
 func _input(event: InputEvent) -> void:
-	# 如果点击在 UI 元素上，不处理选择
-	var workbench = get_tree().get_first_node_in_group("workbench")
-	if workbench:
-		var buttons_container = workbench.get_node("ActionButtons")
-		if buttons_container:
-			var local_pos = buttons_container.get_local_mouse_position()
-			if buttons_container.get_rect().has_point(local_pos):
-				print("点击了工作台按钮，不处理选择")
-				return
+	# 检查是否是点击或释放事件
+	if event.is_action_pressed("select_unit") or event.is_action_released("select_unit"):
+		# 如果点击在 UI 元素上，不处理选择事件
+		var workbench = get_tree().get_first_node_in_group("workbench")
+		if workbench:
+			var buttons_container = workbench.get_node("ActionButtons")
+			if buttons_container and is_instance_valid(buttons_container):
+				# 转换鼠标位置到按钮容器的本地坐标
+				var buttons_container_global_rect = Rect2(
+					buttons_container.global_position,
+					buttons_container.size * buttons_container.scale
+				)
 
+				# 检查点击是否在按钮容器内
+				if buttons_container_global_rect.has_point(get_global_mouse_position()):
+					get_viewport().set_input_as_handled()
+					return
+
+	# 正常的选择逻辑处理
 	if event.is_action_pressed("select_unit"):
 		start_pos = get_global_mouse_position()
 		current_pos = start_pos

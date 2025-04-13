@@ -25,7 +25,23 @@ func _ready() -> void:
 	print("选择框节点已创建")
 
 func _input(event: InputEvent) -> void:
+	# 如果点击在 UI 元素上，不处理移动
 	if event.is_action_pressed("move_unit"):
+		var workbench = get_tree().get_first_node_in_group("workbench")
+		if workbench:
+			var buttons_container = workbench.get_node("ActionButtons")
+			if buttons_container and is_instance_valid(buttons_container):
+				# 检查点击是否在按钮容器内
+				var buttons_container_global_rect = Rect2(
+					buttons_container.global_position,
+					buttons_container.size * buttons_container.scale
+				)
+
+				if buttons_container_global_rect.has_point(get_global_mouse_position()):
+					print("点击了UI元素，不处理移动")
+					get_viewport().set_input_as_handled()
+					return
+
 		if not selected_units.is_empty():
 			# 获取目标位置（转换为全局坐标）
 			var target_pos = get_viewport().get_mouse_position()

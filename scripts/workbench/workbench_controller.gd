@@ -63,6 +63,9 @@ func _setup_workbench() -> void:
 	_buttons_container.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_buttons_container.add_theme_constant_override("separation", 10)
 
+	# 确保按钮容器拦截所有鼠标事件
+	_buttons_container.mouse_filter = Control.MOUSE_FILTER_STOP
+
 	# 设置容器的锚点为左下角
 	_buttons_container.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 
@@ -130,13 +133,27 @@ func _update_buttons() -> void:
 		_active_buttons.append(button)
 
 func _on_button_pressed(action_id: String) -> void:
-	# 获取选中的工人
-	var workers = get_selected_workers()
+	# 阻止事件传播
+	get_viewport().set_input_as_handled()
 
-	# 将建造请求由建筑管理器管理
-	if action_id.begins_with("build_") or action_id == "repair":
-		_building_manager.handle_build_request(action_id, workers)
+	# 首先检查选中的单位是否仍然有效
+	var valid_units = []
+	for unit in _selected_units:
+		if is_instance_valid(unit):
+			valid_units.append(unit)
 
+	_selected_units = valid_units
+
+	# 获取当前选中的工人
+	var selected_workers = get_selected_workers()
+	if selected_workers.is_empty():
+		print("没有工人被选中，无法开始建造")
+		return
+
+	print("按钮点击：", action_id, "，选中 ", selected_workers.size(), " 个工人")
+
+	# 处理建造预览请求
+	_building_manager.handle_preview_request(action_id, selected_workers)
 	button_clicked.emit(action_id)
 
 # 公共接口
@@ -152,6 +169,17 @@ func get_interaction_type() -> String:
 # 处理选择类型变化
 func _on_selection_type_changed(type: String, units: Array) -> void:
 	print("工作台收到选择类型变化：", type)
+
+	# 如果数组为空且类型为 NONE，可能是因为点击 UI 导致的
+	# 忽略这种情况，保留现有选择
+	if type == "NONE" and units.is_empty() and not _selected_units.is_empty():
+		print("忽略空选择变化，保留当前选中的单位")
+		# 检查是否是由于点击工作台按钮导致的
+		var focus_owner = get_viewport().gui_get_focus_owner()
+		if focus_owner is Button and _buttons_container.is_ancestor_of(focus_owner):
+			print("忽略由按钮点击引起的选择变化")
+			return
+
 	_selected_units = units  # 存储选中的单位
 	set_interaction_type(type)
 

@@ -10,6 +10,7 @@ extends "res://scripts/units/selectable_unit.gd"
 @onready var wood_manager = $WoodManager
 @onready var mining_manager = $MiningManager
 @onready var chop_manager = $ChopManager
+@onready var build_manager = $BuildManager
 
 # 基础状态变量
 var facing_direction = Vector2.RIGHT
@@ -43,11 +44,18 @@ func _init_components() -> void:
 	# 初始化砍树管理器
 	chop_manager.init(self, animated_sprite_2d)
 
+	# 初始化建造管理器
+	build_manager.init(self, animated_sprite_2d)
+
 	# 连接必要的信号
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
 	animated_sprite_2d.frame_changed.connect(_on_animation_frame_changed)
 
 func _input(event: InputEvent) -> void:
+	# 如果正在建造，跳过其他输入处理
+	if build_manager.is_building:
+		return
+
 	if event.is_action_pressed("chop"):
 		# 如果已经在执行动画，不再开始新的动作
 		if is_chopping or is_mining:
@@ -74,8 +82,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		var direction = Vector2.ZERO
 
-		# 如果正在砍树或挖矿，暂时不允许移动
-		if not is_chopping and not is_mining:
+		# 如果正在砍树、挖矿或建造，暂时不允许移动
+		if not is_chopping and not is_mining and not build_manager.is_building:
 			direction.x = Input.get_axis("ui_left", "ui_right")
 			direction.y = Input.get_axis("ui_up", "ui_down")
 
@@ -86,13 +94,13 @@ func _physics_process(delta: float) -> void:
 			# 更新朝向
 			if direction.x != 0:
 				facing_direction = Vector2(sign(direction.x), 0)
-				if not is_chopping and not is_mining:
+				if not is_chopping and not is_mining and not build_manager.is_building:
 					animated_sprite_2d.flip_h = direction.x < 0
 		else:
 			velocity = Vector2.ZERO
 
 		# 更新动画
-		if not is_chopping and not is_mining:
+		if not is_chopping and not is_mining and not build_manager.is_building:
 			animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
 
 		# 更新木材动画
@@ -100,6 +108,10 @@ func _physics_process(delta: float) -> void:
 			wood_manager.update_animation(delta, old_velocity)
 
 		move_and_slide()
+
+	# 更新建造进度
+	if build_manager.is_building:
+		build_manager.update_building(delta)
 
 # 重写父类的动画更新方法
 func update_animation(direction: Vector2) -> void:
@@ -127,8 +139,14 @@ func _on_animation_finished() -> void:
 	elif is_mining:
 		is_mining = false
 		mining_manager.finish_animation()
-		animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
-		print("挖矿动作完成，可以再次按空格键执行新的动作")
+
+		# 检查是否在建造中
+		if build_manager.is_building:
+			# 如果正在建造，不显示待机动画，后续会在 update_building 中再次触发建造动画
+			print("建造动作完成，准备下一次建造")
+		else:
+			animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+			print("挖矿动作完成，可以再次按空格键执行新的动作")
 
 func start_chop() -> void:
 	if is_chopping or is_mining:
@@ -187,11 +205,21 @@ func collect_gold(gold = null) -> void:
 		print("工人收集了1枚金币")
 
 # 建造城堡
-func build_castle() -> void:
+func build_castle(pos: Vector2) -> void:
 	print("工人开始建造城堡")
-	# 由 build_manager 管理具体的建造过程
+	build_manager.build_castle(pos)
 
 # 建造房屋
-func build_house() -> void:
+func build_house(pos: Vector2) -> void:
 	print("工人开始建造房屋")
-	# 由 build_manager 管理具体的建造过程
+	build_manager.build_house(pos)
+
+# 建造箭塔
+func build_tower(pos: Vector2) -> void:
+	print("工人开始建造箭塔")
+	build_manager.build_tower(pos)
+
+# 修理建筑
+func repair() -> void:
+	print("工人开始修理建筑")
+	build_manager.repair()

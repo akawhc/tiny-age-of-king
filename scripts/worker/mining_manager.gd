@@ -28,7 +28,7 @@ func init(parent_node: Node2D, sprite: AnimatedSprite2D) -> void:
 	mining_efficiency = MINING_CONFIG.efficiency
 
 # 开始挖矿动作
-func start_mine(facing_direction: Vector2, _neare_mine) -> void:
+func start_mine(facing_direction: Vector2, _nearest_mine) -> void:
 	has_hit = false
 
 	# 根据朝向设置动画翻转
