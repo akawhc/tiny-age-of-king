@@ -243,57 +243,35 @@ func start_repair(workers: Array) -> void:
 func spawn_building(building_type: String, pos: Vector2) -> void:
 	print("在位置 ", pos, " 实例化完整建筑: ", building_type)
 
-	# 创建静态物体作为建筑主体
-	var building = StaticBody2D.new()
-	building.z_index = 5  # 确保显示在地形上方
-
-	# 创建精灵
-	var sprite = Sprite2D.new()
-	sprite.centered = true
-	building.add_child(sprite)
-
-	# 根据建筑类型加载相应的纹理
-	var texture_path = ""
-	var collision_radius = 30  # 默认碰撞半径
+	# 根据建筑类型加载对应的场景
+	var scene_path = ""
 
 	match building_type:
 		"Castle":
-			texture_path = resource_path + "Castle/Castle_Blue.png"
-			collision_radius = 50  # 城堡碰撞半径更大
+			scene_path = "res://scenes/buildings/castle.tscn"
 		"House":
-			texture_path = resource_path + "House/House_Blue.png"
-			collision_radius = 30
+			scene_path = "res://scenes/buildings/house.tscn"
 		"Tower":
-			texture_path = resource_path + "Tower/Tower_Blue.png"
-			collision_radius = 25
+			scene_path = "res://scenes/buildings/tower.tscn"
+		_:
+			push_error("未知的建筑类型: " + building_type)
+			return
 
-	if texture_path:
-		var texture = load(texture_path)
-		if texture:
-			sprite.texture = texture
+	# 加载场景
+	var building_scene = load(scene_path)
+	if building_scene:
+		# 实例化场景
+		var building_instance = building_scene.instantiate()
 
-			# 添加到场景树
-			get_tree().current_scene.add_child(building)
-			building.global_position = pos
+		# 添加到场景树
+		get_tree().current_scene.add_child(building_instance)
+		building_instance.global_position = pos
 
-			# 添加碰撞形状
-			var collision = CollisionShape2D.new()
-			var shape = CircleShape2D.new()
-			shape.radius = collision_radius
-			collision.shape = shape
-			building.add_child(collision)
+		# 设置建筑名称
+		building_instance.name = building_type + "_" + str(int(pos.x)) + "_" + str(int(pos.y))
 
-			# 根据建筑类型添加到特定组
-			building.add_to_group("buildings")
-			building.add_to_group(building_type.to_lower() + "s")  # 例如 "castles"
-
-			# 设置建筑名称
-			building.name = building_type + "_" + str(int(pos.x)) + "_" + str(int(pos.y))
-
-			# 发出建筑完成信号
-			building_completed.emit(building_type, pos)
-			print("建筑 ", building_type, " 已创建完成")
-		else:
-			push_error("无法加载建筑纹理: " + texture_path)
+		# 发出建筑完成信号
+		building_completed.emit(building_type, pos)
+		print("建筑 ", building_type, " 已创建完成")
 	else:
-		push_error("无法确定建筑类型对应的纹理路径: " + building_type)
+		push_error("无法加载建筑场景: " + scene_path)

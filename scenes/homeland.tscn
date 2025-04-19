@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=64 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/knight.tscn" id="1_qhu8i"]
 [ext_resource type="Texture2D" uid="uid://cgs77v1q2tlc8" path="res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png" id="2_bmjfy"]
@@ -29,6 +29,9 @@
 [ext_resource type="PackedScene" uid="uid://c0xcm8qq6vsh" path="res://scenes/gold_mine.tscn" id="27_6yuoh"]
 [ext_resource type="PackedScene" uid="uid://b8m6m10ueofb1" path="res://scenes/workbench.tscn" id="29_e5q1t"]
 [ext_resource type="PackedScene" uid="uid://chvan77gf468x" path="res://scenes/select_manager.tscn" id="30_qq1nu"]
+[ext_resource type="PackedScene" uid="uid://bojoy2f2why45" path="res://scenes/buildings/castle.tscn" id="30_slcjp"]
+[ext_resource type="PackedScene" uid="uid://ivpv71jis1qq" path="res://scenes/buildings/house.tscn" id="31_cdcu6"]
+[ext_resource type="PackedScene" uid="uid://crorj12p8p3ov" path="res://scenes/buildings/tower.tscn" id="32_4v5cv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -716,8 +719,18 @@ y_sort_enabled = true
 y_sort_enabled = true
 position = Vector2(-3467, 2747)
 
+[node name="Castle" parent="." instance=ExtResource("30_slcjp")]
+position = Vector2(-3108, 3008)
+
+[node name="House" parent="." instance=ExtResource("31_cdcu6")]
+position = Vector2(-3103, 3238)
+
+[node name="Tower" parent="." instance=ExtResource("32_4v5cv")]
+position = Vector2(-3434, 3222)
+
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
-position = Vector2(-3809, 2644)
+z_index = 5
+position = Vector2(-3537, 3258)
 
 [node name="Camera2D" type="Camera2D" parent="worker"]
 

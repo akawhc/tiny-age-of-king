@@ -1,10 +1,21 @@
 [gd_scene load_steps=3 format=3 uid="uid://bojoy2f2why45"]
 
 [ext_resource type="Texture2D" uid="uid://bl80xrtjqk4os" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Castle/Castle_Blue.png" id="1_4juos"]
-[ext_resource type="Script" path="res://scripts/building/castle.gd" id="1_xu1g0"]
 
-[node name="castle" type="Node2D"]
-script = ExtResource("1_xu1g0")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwqf"]
+size = Vector2(254.25, 99.1875)
 
-[node name="body" type="Sprite2D" parent="."]
+[node name="Castle" type="StaticBody2D" groups=["buildings", "castles"]]
+z_index = 5
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(4, -34)
 texture = ExtResource("1_4juos")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(5, 23.5938)
+shape = SubResource("RectangleShape2D_tlwqf")
+
+[node name="YSortPosition" type="Marker2D" parent="."]
+position = Vector2(0, 73)

@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://crorj12p8p3ov"]
+
+[ext_resource type="Texture2D" uid="uid://bmfsohngo5hea" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_leybc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_auf6o"]
+size = Vector2(104, 59.375)
+
+[node name="Tower" type="StaticBody2D" groups=["buildings", "towers"]]
+z_index = 5
+y_sort_enabled = true
+position = Vector2(2, 63)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1, -51)
+texture = ExtResource("1_leybc")
+offset = Vector2(0, -100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, -90.6875)
+shape = SubResource("RectangleShape2D_auf6o")
