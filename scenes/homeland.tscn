@@ -689,7 +689,6 @@ y_sort_enabled = true
 position = Vector2(-2, 0)
 
 [node name="knight" parent="item" instance=ExtResource("1_qhu8i")]
-visible = false
 position = Vector2(-3830, 2208)
 
 [node name="beach" type="TileMapLayer" parent="item"]
@@ -722,16 +721,19 @@ y_sort_enabled = true
 position = Vector2(-3467, 2747)
 
 [node name="Castle" parent="." instance=ExtResource("30_slcjp")]
+z_index = 0
 position = Vector2(-3108, 3008)
 
 [node name="House" parent="." instance=ExtResource("31_cdcu6")]
+z_index = 0
 position = Vector2(-3103, 3238)
 
 [node name="Tower" parent="." instance=ExtResource("32_4v5cv")]
+z_index = 0
 position = Vector2(-3434, 3222)
 
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
-position = Vector2(-3624, 2763)
+position = Vector2(-3587, 2785)
 
 [node name="Camera2D" type="Camera2D" parent="worker"]
 
@@ -741,6 +743,7 @@ position = Vector2(-4223, 2816)
 [node name="Workbench" parent="." instance=ExtResource("29_e5q1t")]
 
 [node name="Gold" parent="." instance=ExtResource("33_fph12")]
+y_sort_enabled = true
 position = Vector2(-3765, 2651)
 
 [node name="Wood" parent="." instance=ExtResource("34_lcbja")]
