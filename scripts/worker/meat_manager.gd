@@ -66,9 +66,28 @@ func _update_meat_visual() -> void:
 		for sprite in resource_sprites:
 			sprite.modulate = Color(1, 1, 1)  # 正常颜色
 
-# 提供特定API
+# 提供向后兼容API，使用基类的丢弃方法并保留腐烂状态传递功能
 func drop_meat() -> void:
+	if not is_carrying or resource_count <= 0:
+		return
+
+	# 记录当前腐烂状态
+	var was_fresh = is_fresh
+
+	# 调用基类的丢弃方法
 	drop_resource()
+
+	# 如果已经丢弃了肉类，且肉类是腐烂的，尝试设置资源的腐烂状态
+	# 注：由于drop_resource会修改resource_count和is_carrying，需要在调用后立即检查
+	var just_dropped = resource_count < config.max_carry
+	if just_dropped and not was_fresh:
+		# 寻找刚刚丢弃的肉类资源
+		var dropped_resources = get_tree().get_nodes_in_group("resources")
+		for resource in dropped_resources:
+			if resource.scene_file_path == config.scene_path and resource.has_method("set_freshness"):
+				# 只检查最近的一个资源
+				resource.set_freshness(false)
+				break
 
 func collect_meat(meat = null) -> void:
 	collect_resource(meat)

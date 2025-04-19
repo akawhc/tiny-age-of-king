@@ -22,6 +22,8 @@ const WOOD_CONFIG = {
 }
 
 func _ready() -> void:
+	super._ready()  # 调用父类的_ready方法
+	add_to_group("resources")  # 将木材资源添加到resources组
 	_play_drop_animation()
 	body_entered.connect(_on_body_entered)
 

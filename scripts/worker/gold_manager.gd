@@ -34,7 +34,7 @@ func prepare_config() -> void:
 func init(parent_node: Node2D, gold_container: Node2D, gold_sprites: Array) -> void:
 	super.init(parent_node, gold_container, gold_sprites)
 
-# 提供特定API
+# 使用基类的丢弃方法
 func drop_gold() -> void:
 	drop_resource()
 

@@ -45,9 +45,10 @@ func init(parent_node: Node2D, wood_container: Node2D, sprite1 = null, sprite2 =
 
 	super.init(parent_node, wood_container, sprites)
 
-# 提供向后兼容的API
+# 提供向后兼容的API，使用基类的丢弃方法
 func drop_wood() -> void:
 	drop_resource()
 
+# 提供向后兼容的API
 func collect_wood(wood = null) -> void:
 	collect_resource(wood)

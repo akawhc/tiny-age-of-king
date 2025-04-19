@@ -89,7 +89,7 @@ func update_resource_sprites_visibility() -> void:
 		if i < resource_sprites.size():
 			resource_sprites[i].visible = i < resource_count
 
-# 丢弃资源
+# 抛物线丢弃效果
 func drop_resource() -> void:
 	if not is_carrying or resource_count <= 0:
 		return
@@ -102,10 +102,16 @@ func drop_resource() -> void:
 
 	var resource = resource_scene.instantiate()
 
-	# 根据朝向设置资源位置
-	var drop_direction = Vector2.RIGHT if not parent.animated_sprite_2d.flip_h else Vector2.LEFT
-	var random_offset = Vector2(randf_range(-10, 10), randf_range(-10, 10))
-	resource.global_position = parent.global_position + drop_direction * config.drop_offset + random_offset
+	# 向前投掷并有一定弧度
+	var drop_direction = parent.facing_direction
+
+	# 增加一些垂直偏移，模拟抛物线效果
+	var vertical_offset = -20  # 资源会先向上抛起一点
+	var throw_offset = drop_direction * config.drop_offset
+
+	# 加入少量随机性，不同资源落点略有不同
+	var random_offset = Vector2(0, 0)
+	resource.global_position = parent.global_position + throw_offset + Vector2(0, vertical_offset) + random_offset
 
 	# 将资源添加到场景中
 	parent.get_parent().add_child(resource)

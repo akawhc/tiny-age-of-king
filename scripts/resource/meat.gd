@@ -34,7 +34,8 @@ func _prepare_config() -> void:
 
 # 扩展_ready方法初始化腐烂计时器
 func _ready() -> void:
-	super._ready()  # 调用基类的_ready方法
+	super._ready()  # 调用父类的_ready方法
+	add_to_group("resources")  # 将肉类资源添加到resources组
 	is_fresh = true
 	decay_timer = 0.0
 
@@ -59,3 +60,11 @@ func collected_by_worker() -> void:
 		print("收集了腐烂的肉类！")
 
 	queue_free()  # 删除肉类实例
+
+# 添加设置新鲜度状态的方法
+func set_freshness(fresh: bool) -> void:
+	if fresh:
+		modulate = Color(1, 1, 1)  # 新鲜状态为正常颜色
+	else:
+		modulate = Color(0.7, 0.6, 0.6, 1.0)  # 腐烂状态为灰暗色调
+		print("这块肉已经腐烂了！")
