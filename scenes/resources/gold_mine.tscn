@@ -4,8 +4,11 @@
 [ext_resource type="Script" path="res://scripts/resource/gold_mine.gd" id="2_24hy5"]
 
 [node name="gold_mine" type="Sprite2D"]
+z_index = 5
+y_sort_enabled = true
 position = Vector2(1, 11)
 texture = ExtResource("1_1jys3")
+offset = Vector2(0, -20)
 script = ExtResource("2_24hy5")
 
 [node name="DetectionArea" type="Area2D" parent="."]
@@ -19,5 +22,5 @@ polygon = PackedVector2Array(-28, 32, -97, 12, -96, -34, -75, -59, 78, -60, 104,
 position = Vector2(1, -35)
 
 [node name="CollisionShape" type="CollisionPolygon2D" parent="CollisionBody"]
-position = Vector2(-2, 53)
+position = Vector2(-4, 35)
 polygon = PackedVector2Array(-19, 25, -38, 23, -58, 20, -85, 5, -73, -39, 72, -37, 86, 6, 73, 15, 46, 23, 23, 26, 1, 28)
