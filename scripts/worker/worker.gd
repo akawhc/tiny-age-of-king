@@ -22,7 +22,6 @@ var nearest_animal = null
 var is_chopping = false
 var is_mining = false
 var is_building = false
-var is_hunting = false
 
 # 节点引用
 @onready var animated_sprite_2d = $AnimatedSprite2D
@@ -69,7 +68,7 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("chop"):
 		# 如果已经在执行动画，不再开始新的动作
-		if is_chopping or is_mining or is_hunting:
+		if is_chopping or is_mining:
 			return
 
 		# 如果携带着资源，不能进行攻击动作
@@ -81,9 +80,6 @@ func _input(event: InputEvent) -> void:
 		if nearest_mine and not nearest_mine.is_depleted:
 			# 如果附近有金矿，执行挖矿动作
 			start_mine()
-		elif nearest_animal and not nearest_animal.is_dead:
-			# 如果附近有动物，执行狩猎动作
-			start_hunt()
 		else:
 			# 否则执行砍树动作
 			start_chop()
@@ -97,7 +93,7 @@ func _physics_process(delta: float) -> void:
 		var direction = Vector2.ZERO
 
 		# 如果正在砍树、挖矿、狩猎或建造，暂时不允许移动
-		if not is_chopping and not is_mining and not is_building and not is_hunting:
+		if not is_chopping and not is_mining and not is_building:
 			direction.x = Input.get_axis("ui_left", "ui_right")
 			direction.y = Input.get_axis("ui_up", "ui_down")
 
@@ -108,13 +104,13 @@ func _physics_process(delta: float) -> void:
 			# 更新朝向
 			if direction.x != 0:
 				facing_direction = Vector2(sign(direction.x), 0)
-				if not is_chopping and not is_mining and not is_building and not is_hunting:
+				if not is_chopping and not is_mining and not is_building:
 					animated_sprite_2d.flip_h = direction.x < 0
 		else:
 			velocity = Vector2.ZERO
 
 		# 更新动画
-		if not is_chopping and not is_mining and not is_building and not is_hunting:
+		if not is_chopping and not is_mining and not is_building:
 			animation_manager.set_animation_state(velocity, is_carrying_any_resource())
 
 		# 更新资源动画
@@ -176,14 +172,10 @@ func _on_animation_finished() -> void:
 		# 建造动画完成
 		build_manager.on_build_animation_finished()
 		print("建造动作完成，准备下一次建造")
-	elif is_hunting:
-		# 重置狩猎状态
-		is_hunting = false
-		animation_manager.set_animation_state(velocity, is_carrying_any_resource())
-		print("狩猎动作完成，可以再次按空格键执行新的动作")
+
 
 func start_chop() -> void:
-	if is_chopping or is_mining or is_hunting:
+	if is_chopping or is_mining:
 		print("已经在执行动作，无法开始砍树")
 		return
 
@@ -196,7 +188,7 @@ func start_chop() -> void:
 	print("工人开始砍树一次！")
 
 func start_mine() -> void:
-	if is_chopping or is_mining or is_hunting:
+	if is_chopping or is_mining:
 		print("已经在执行动作，无法开始挖矿")
 		return
 
@@ -216,28 +208,6 @@ func start_mine() -> void:
 	mining_manager.start_mine(facing_direction, nearest_mine)
 	print("工人开始挖矿一次！")
 
-# 添加狩猎启动逻辑
-func start_hunt() -> void:
-	if is_chopping or is_mining or is_hunting:
-		print("已经在执行动作，无法开始狩猎")
-		return
-
-	if is_carrying_any_resource():
-		print("正在携带资源，无法狩猎")
-		return
-
-	if not nearest_animal:
-		print("附近没有猎物")
-		return
-
-	if nearest_animal.is_dead:
-		print("猎物已经死亡！")
-		return
-
-	is_hunting = true
-	# 这里将来添加狩猎管理器的调用
-	print("工人开始狩猎一次！")
-
 # 设置最近的树
 func set_nearest_tree(tree) -> void:
 	nearest_tree = tree
@@ -253,14 +223,14 @@ func set_nearest_animal(animal) -> void:
 # 收集木材
 func collect_wood(wood = null) -> void:
 	# 如果已经在砍树或挖矿，不能收集木材
-	if is_chopping or is_mining or is_hunting:
+	if is_chopping or is_mining:
 		return
 
 	wood_manager.collect_wood(wood)
 
 # 收集金币
 func collect_gold(gold = null) -> void:
-	if is_chopping or is_mining or is_hunting:
+	if is_chopping or is_mining:
 		return
 
 	if has_node("GoldManager"):
@@ -317,7 +287,7 @@ func drop_carried_resource() -> void:
 
 # 添加肉类收集逻辑
 func collect_meat(meat = null) -> void:
-	if is_chopping or is_mining or is_hunting:
+	if is_chopping or is_mining:
 		return
 
 	if has_node("MeatManager"):
