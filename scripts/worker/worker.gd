@@ -40,16 +40,14 @@ func _init_components() -> void:
 	# 初始化动画管理器
 	animation_manager.init(animated_sprite_2d)
 
-	# 初始化木材管理器
+	# 初始化木材采集管理器
 	wood_manager.init(self, $CarriedWood, $CarriedWood/Wood1, $CarriedWood/Wood2, $CarriedWood/Wood3)
 
-	# 初始化金币管理器（如果存在）
-	if has_node("GoldManager"):
-		gold_manager.init(self, $CarriedGold, [$CarriedGold/Gold1, $CarriedGold/Gold2, $CarriedGold/Gold3, $CarriedGold/Gold4, $CarriedGold/Gold5])
+	# 初始化金币采集管理器
+	gold_manager.init(self, $CarriedGold, [$CarriedGold/Gold1])
 
-	# 初始化肉类管理器（如果存在）
-	if has_node("MeatManager"):
-		meat_manager.init(self, $CarriedMeat, [$CarriedMeat/Meat1, $CarriedMeat/Meat2])
+	# 初始化肉类采集管理器
+	meat_manager.init(self, $CarriedMeat, [$CarriedMeat/Meat1])
 
 	# 初始化挖矿管理器
 	mining_manager.init(self, animated_sprite_2d)

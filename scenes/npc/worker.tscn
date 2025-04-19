@@ -1,13 +1,17 @@
-[gd_scene load_steps=53 format=3 uid="uid://dmutufjourytk"]
+[gd_scene load_steps=57 format=3 uid="uid://dmutufjourytk"]
 
 [ext_resource type="Texture2D" uid="uid://dg5fmr4vbyib7" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png" id="1_bkb4p"]
 [ext_resource type="Script" path="res://scripts/worker/worker.gd" id="1_yvxqw"]
 [ext_resource type="Texture2D" uid="uid://bcx2aybatvhhg" path="res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png" id="3_p02we"]
 [ext_resource type="Script" path="res://scripts/worker/animation_manager.gd" id="4_hn6ma"]
+[ext_resource type="Texture2D" uid="uid://blqbphjp0bxj8" path="res://sprites/Tiny Swords/Resources/Resources/M_Idle_(NoShadow).png" id="4_v1643"]
+[ext_resource type="Texture2D" uid="uid://c8k1dbn7w6nrn" path="res://sprites/Tiny Swords/Resources/Resources/G_Idle_(NoShadow).png" id="5_cwb74"]
 [ext_resource type="Script" path="res://scripts/worker/wood_manager.gd" id="5_xrwh2"]
 [ext_resource type="Script" path="res://scripts/worker/chop_manager.gd" id="6_5nkvm"]
 [ext_resource type="Script" path="res://scripts/worker/mining_manager.gd" id="7_q6s7p"]
 [ext_resource type="Script" path="res://scripts/worker/build_manager.gd" id="8_tkg67"]
+[ext_resource type="Script" path="res://scripts/worker/gold_manager.gd" id="9_kf5q4"]
+[ext_resource type="Script" path="res://scripts/worker/meat_manager.gd" id="10_n2dd5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7rivx"]
 atlas = ExtResource("1_bkb4p")
@@ -365,7 +369,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6kaag"]
-radius = 16.0312
+radius = 21.0
 
 [node name="worker" type="CharacterBody2D"]
 y_sort_enabled = true
@@ -374,10 +378,10 @@ script = ExtResource("1_yvxqw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_60ukm")
-animation = &"hammer"
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1, 5)
+position = Vector2(-3, 3)
 shape = SubResource("CircleShape2D_6kaag")
 
 [node name="CarriedWood" type="Node2D" parent="."]
@@ -400,6 +404,20 @@ rotation = 0.261799
 scale = Vector2(0.948953, 0.85434)
 texture = ExtResource("3_p02we")
 
+[node name="CarriedMeat" type="Node2D" parent="."]
+
+[node name="Meat1" type="Sprite2D" parent="CarriedMeat"]
+position = Vector2(-3.68751, -51.125)
+scale = Vector2(0.885742, 0.841797)
+texture = ExtResource("4_v1643")
+
+[node name="CarriedGold" type="Node2D" parent="."]
+
+[node name="Gold1" type="Sprite2D" parent="CarriedGold"]
+visible = false
+position = Vector2(-5, -56)
+texture = ExtResource("5_cwb74")
+
 [node name="AnimationManager" type="Node" parent="."]
 script = ExtResource("4_hn6ma")
 
@@ -414,3 +432,9 @@ script = ExtResource("7_q6s7p")
 
 [node name="BuildManager" type="Node" parent="."]
 script = ExtResource("8_tkg67")
+
+[node name="GoldManager" type="Node" parent="."]
+script = ExtResource("9_kf5q4")
+
+[node name="MeatManager" type="Node" parent="."]
+script = ExtResource("10_n2dd5")

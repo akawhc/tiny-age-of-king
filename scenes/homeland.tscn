@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=67 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
 [ext_resource type="Texture2D" uid="uid://cgs77v1q2tlc8" path="res://sprites/Tiny Swords/Terrain/Ground/Tilemap_Elevation.png" id="2_bmjfy"]
@@ -34,6 +34,7 @@
 [ext_resource type="PackedScene" uid="uid://crorj12p8p3ov" path="res://scenes/buildings/tower.tscn" id="32_4v5cv"]
 [ext_resource type="PackedScene" uid="uid://db7w7k4sofqnr" path="res://scenes/resources/gold.tscn" id="33_fph12"]
 [ext_resource type="PackedScene" uid="uid://b8j6v3q4y8n0x" path="res://scenes/resources/wood.tscn" id="34_lcbja"]
+[ext_resource type="PackedScene" uid="uid://bo6o26bl2gexf" path="res://scenes/resources/meat.tscn" id="35_jyqfj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -732,7 +733,7 @@ position = Vector2(-3434, 3222)
 
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
 z_index = 5
-position = Vector2(-3550, 2572)
+position = Vector2(-3550, 2574)
 
 [node name="Camera2D" type="Camera2D" parent="worker"]
 
@@ -746,3 +747,6 @@ position = Vector2(-3765, 2651)
 
 [node name="Wood" parent="." instance=ExtResource("34_lcbja")]
 position = Vector2(-3673, 2646)
+
+[node name="meat" parent="." instance=ExtResource("35_jyqfj")]
+position = Vector2(-3703, 2525)
