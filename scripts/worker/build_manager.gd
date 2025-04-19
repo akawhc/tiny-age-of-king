@@ -99,7 +99,6 @@ func update_building(_delta: float) -> void:
 
 	# 如果工人没有在执行其他动画，开始新的建造动作
 	if not worker.is_chopping and not worker.is_mining:
-		# 开始播放建造动画
 		start_build_animation(direction_to_building)
 
 # 开始建造动画
@@ -110,11 +109,21 @@ func start_build_animation(facing_direction: Vector2) -> void:
 	# 播放hammer动画
 	worker.animated_sprite_2d.play("hammer")
 
-# 建造动画帧变化的处理（在worker.gd中会被调用）
+# 动画帧变化的处理（在worker.gd中会被调用）
 func on_build_animation_frame_changed(frame: int) -> void:
+	# 首先检查是否有有效的建造目标
+	if not is_building or not current_building_target:
+		return
+
+	# 检查工人是否已经到达建造位置
+	var distance_to_target = worker.global_position.distance_to(target_position)
+	if distance_to_target > 5.0:
+		# 工人还没到达建造位置，不应该增加建造进度
+		return
+
 	# 检查是否到了造成建造效果的关键帧
 	if frame == 5:
-		# 增加建筑血量
+		# 获取建筑工地管理器
 		var site_manager = get_site_manager()
 		var completed = site_manager.contribute_to_building(current_building_target.id, BUILD_SPEED)
 

@@ -211,7 +211,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"chop",
-"speed": 7.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -385,9 +385,7 @@ script = ExtResource("1_yvxqw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_60ukm")
-animation = &"chop"
-frame = 6
-frame_progress = 1.0
+animation = &"hammer"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-3, 3)

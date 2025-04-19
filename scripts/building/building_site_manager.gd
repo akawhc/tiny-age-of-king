@@ -46,6 +46,9 @@ var active_building_sites = {}
 # 资源路径
 const BASE_RESOURCE_PATH = "res://sprites/Tiny Swords/Factions/Knights/Buildings/"
 
+# 创建互斥锁，用于控制对建筑站点的并发访问
+var _building_mutex = Mutex.new()
+
 func _ready():
 	# 确保添加到全局场景树中
 	name = "BuildingSiteManager"
@@ -135,14 +138,24 @@ func get_construction_texture_path(building_type: String) -> String:
 
 # 工人对建筑进行贡献（增加建筑血量）
 func contribute_to_building(site_id: String, amount: float) -> bool:
+	# 获取互斥锁，确保同一时刻只有一个工人修改特定建筑的状态
+	_building_mutex.lock()
+
+	# 初始化结果变量
+	var result = false
+	var site_completed = false
+
+	# 检查建筑工地是否存在
 	if not active_building_sites.has(site_id):
 		print("错误: 尝试贡献到不存在的建筑工地: ", site_id)
+		_building_mutex.unlock()
 		return false
 
 	var site = active_building_sites[site_id]
 
 	# 如果已经完成，不再接受贡献
 	if site.completed:
+		_building_mutex.unlock()
 		return true
 
 	# 增加建筑血量
@@ -159,10 +172,18 @@ func contribute_to_building(site_id: String, amount: float) -> bool:
 	# 检查是否完成
 	if site.current_health >= site.max_health:
 		site.completed = true
-		complete_building_site(site_id)
-		return true
+		site_completed = true
+		result = true
 
-	return false
+	# 解锁互斥锁
+	_building_mutex.unlock()
+
+	# 如果建筑完成，在锁外调用完成函数
+	if site_completed:
+		# 使用call_deferred以确保在主线程安全地完成建筑
+		call_deferred("complete_building_site", site_id)
+
+	return result
 
 # 更新地基进度显示
 func update_foundation_progress(site: BuildingSite, progress: float) -> void:

@@ -151,7 +151,7 @@ func _on_animation_frame_changed() -> void:
 		# 处理挖矿动画帧变化
 		mining_manager.check_frame_change(animated_sprite_2d, nearest_mine)
 	elif is_building:
-		# 处理建造动画帧变化 - 完全独立的逻辑
+		# 处理建造动画帧变化
 		build_manager.on_build_animation_frame_changed(current_frame)
 
 func _on_animation_finished() -> void:
@@ -172,7 +172,6 @@ func _on_animation_finished() -> void:
 		# 建造动画完成
 		build_manager.on_build_animation_finished()
 		print("建造动作完成，准备下一次建造")
-
 
 func start_chop() -> void:
 	if is_chopping or is_mining:
