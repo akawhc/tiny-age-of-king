@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bo6o26bl2gexf"]
+
+[ext_resource type="Script" path="res://scripts/resource/meat.gd" id="1_ym47f"]
+[ext_resource type="Texture2D" uid="uid://bpxfweiraj6ko" path="res://sprites/Tiny Swords/Resources/Resources/M_Idle.png" id="2_b6knv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yqoj3"]
+radius = 32.0624
+
+[node name="meat" type="Area2D"]
+script = ExtResource("1_ym47f")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-8, -5)
+texture = ExtResource("2_b6knv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-3, 8)
+shape = SubResource("CircleShape2D_yqoj3")

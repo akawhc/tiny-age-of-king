@@ -45,7 +45,7 @@ var original_scale: Vector2  # 保存原始缩放值
 @onready var detection_area: Area2D = $DetectionArea
 @onready var collision_body: StaticBody2D = $CollisionBody
 # 预加载木材资源场景
-@onready var wood_scene = preload("res://scenes/wood.tscn")
+@onready var wood_scene = preload("res://scenes/resources/wood.tscn")
 
 func _ready() -> void:
 	add_to_group("trees")

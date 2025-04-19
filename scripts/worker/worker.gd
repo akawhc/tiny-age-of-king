@@ -8,6 +8,8 @@ extends "res://scripts/units/selectable_unit.gd"
 # 导入分离出的组件
 @onready var animation_manager = $AnimationManager
 @onready var wood_manager = $WoodManager
+@onready var gold_manager = $GoldManager
+@onready var meat_manager = $MeatManager
 @onready var mining_manager = $MiningManager
 @onready var chop_manager = $ChopManager
 @onready var build_manager = $BuildManager
@@ -16,9 +18,11 @@ extends "res://scripts/units/selectable_unit.gd"
 var facing_direction = Vector2.RIGHT
 var nearest_tree = null
 var nearest_mine = null
+var nearest_animal = null
 var is_chopping = false
 var is_mining = false
-var is_building = false  # 统一的建造状态标志
+var is_building = false
+var is_hunting = false
 
 # 节点引用
 @onready var animated_sprite_2d = $AnimatedSprite2D
@@ -38,6 +42,14 @@ func _init_components() -> void:
 
 	# 初始化木材管理器
 	wood_manager.init(self, $CarriedWood, $CarriedWood/Wood1, $CarriedWood/Wood2, $CarriedWood/Wood3)
+
+	# 初始化金币管理器（如果存在）
+	if has_node("GoldManager"):
+		gold_manager.init(self, $CarriedGold, [$CarriedGold/Gold1, $CarriedGold/Gold2, $CarriedGold/Gold3, $CarriedGold/Gold4, $CarriedGold/Gold5])
+
+	# 初始化肉类管理器（如果存在）
+	if has_node("MeatManager"):
+		meat_manager.init(self, $CarriedMeat, [$CarriedMeat/Meat1, $CarriedMeat/Meat2])
 
 	# 初始化挖矿管理器
 	mining_manager.init(self, animated_sprite_2d)
@@ -59,23 +71,26 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("chop"):
 		# 如果已经在执行动画，不再开始新的动作
-		if is_chopping or is_mining:
+		if is_chopping or is_mining or is_hunting:
 			return
 
-		# 如果携带着木材，不能进行攻击动作
-		if wood_manager.is_carrying:
-			print("放下木材后才能进行攻击操作")
+		# 如果携带着资源，不能进行攻击动作
+		if is_carrying_any_resource():
+			print("放下资源后才能进行攻击操作")
 			return
 
 		# 根据附近对象决定执行的动作
 		if nearest_mine and not nearest_mine.is_depleted:
 			# 如果附近有金矿，执行挖矿动作
 			start_mine()
+		elif nearest_animal and not nearest_animal.is_dead:
+			# 如果附近有动物，执行狩猎动作
+			start_hunt()
 		else:
 			# 否则执行砍树动作
 			start_chop()
-	elif event.is_action_pressed("drop") and wood_manager.is_carrying:
-		wood_manager.drop_wood()
+	elif event.is_action_pressed("drop"):
+		drop_carried_resource()
 
 func _physics_process(delta: float) -> void:
 	if is_moving:
@@ -83,8 +98,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		var direction = Vector2.ZERO
 
-		# 如果正在砍树、挖矿或建造，暂时不允许移动
-		if not is_chopping and not is_mining and not is_building:
+		# 如果正在砍树、挖矿、狩猎或建造，暂时不允许移动
+		if not is_chopping and not is_mining and not is_building and not is_hunting:
 			direction.x = Input.get_axis("ui_left", "ui_right")
 			direction.y = Input.get_axis("ui_up", "ui_down")
 
@@ -95,18 +110,24 @@ func _physics_process(delta: float) -> void:
 			# 更新朝向
 			if direction.x != 0:
 				facing_direction = Vector2(sign(direction.x), 0)
-				if not is_chopping and not is_mining and not is_building:
+				if not is_chopping and not is_mining and not is_building and not is_hunting:
 					animated_sprite_2d.flip_h = direction.x < 0
 		else:
 			velocity = Vector2.ZERO
 
 		# 更新动画
-		if not is_chopping and not is_mining and not is_building:
-			animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+		if not is_chopping and not is_mining and not is_building and not is_hunting:
+			animation_manager.set_animation_state(velocity, is_carrying_any_resource())
 
-		# 更新木材动画
+		# 更新资源动画
 		if wood_manager.is_carrying:
 			wood_manager.update_animation(delta, old_velocity)
+
+		if has_node("GoldManager") and gold_manager.is_carrying:
+			gold_manager.update_animation(delta, old_velocity)
+
+		if has_node("MeatManager") and meat_manager.is_carrying:
+			meat_manager.update_animation(delta, old_velocity)
 
 		move_and_slide()
 
@@ -119,11 +140,11 @@ func update_animation(direction: Vector2) -> void:
 	if direction.x != 0:
 		facing_direction = Vector2(sign(direction.x), 0)
 		animated_sprite_2d.flip_h = direction.x < 0
-	animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+	animation_manager.set_animation_state(velocity, is_carrying_any_resource())
 
 # 重写父类的待机动画方法
 func play_idle_animation() -> void:
-	animation_manager.set_animation_state(Vector2.ZERO, wood_manager.is_carrying)
+	animation_manager.set_animation_state(Vector2.ZERO, is_carrying_any_resource())
 
 func _on_animation_frame_changed() -> void:
 	# 获取当前帧
@@ -140,33 +161,36 @@ func _on_animation_frame_changed() -> void:
 		build_manager.on_build_animation_frame_changed(current_frame)
 
 func _on_animation_finished() -> void:
-	print("动画完成: ", animated_sprite_2d.animation, ", is_chopping=", is_chopping, ", is_mining=", is_mining, ", is_building=", is_building)
+	print("动画完成: ", animated_sprite_2d.animation)
 
 	if is_chopping:
 		is_chopping = false
 		chop_manager.finish_animation()
-		animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+		animation_manager.set_animation_state(velocity, is_carrying_any_resource())
 		print("砍树动作完成，可以再次按空格键执行新的动作")
 	elif is_mining:
 		# 重置挖矿状态
 		is_mining = false
 		mining_manager.finish_animation()
-		animation_manager.set_animation_state(velocity, wood_manager.is_carrying)
+		animation_manager.set_animation_state(velocity, is_carrying_any_resource())
 		print("挖矿动作完成，可以再次按空格键执行新的动作")
 	elif is_building:
-		# 建造动画完成 - 调用独立的建造处理
+		# 建造动画完成
 		build_manager.on_build_animation_finished()
 		print("建造动作完成，准备下一次建造")
-
-	print("动画完成后: is_chopping=", is_chopping, ", is_mining=", is_mining, ", is_building=", is_building)
+	elif is_hunting:
+		# 重置狩猎状态
+		is_hunting = false
+		animation_manager.set_animation_state(velocity, is_carrying_any_resource())
+		print("狩猎动作完成，可以再次按空格键执行新的动作")
 
 func start_chop() -> void:
-	if is_chopping or is_mining:
+	if is_chopping or is_mining or is_hunting:
 		print("已经在执行动作，无法开始砍树")
 		return
 
-	if wood_manager.is_carrying:
-		print("正在携带木材，无法砍树")
+	if is_carrying_any_resource():
+		print("正在携带资源，无法砍树")
 		return
 
 	is_chopping = true
@@ -174,12 +198,12 @@ func start_chop() -> void:
 	print("工人开始砍树一次！")
 
 func start_mine() -> void:
-	if is_chopping or is_mining:
+	if is_chopping or is_mining or is_hunting:
 		print("已经在执行动作，无法开始挖矿")
 		return
 
-	if wood_manager.is_carrying:
-		print("正在携带木材，无法挖矿")
+	if is_carrying_any_resource():
+		print("正在携带资源，无法挖矿")
 		return
 
 	if not nearest_mine:
@@ -192,7 +216,29 @@ func start_mine() -> void:
 
 	is_mining = true
 	mining_manager.start_mine(facing_direction, nearest_mine)
-	print("工人开始挖矿一次！使用锤子动作")
+	print("工人开始挖矿一次！")
+
+# 添加狩猎启动逻辑
+func start_hunt() -> void:
+	if is_chopping or is_mining or is_hunting:
+		print("已经在执行动作，无法开始狩猎")
+		return
+
+	if is_carrying_any_resource():
+		print("正在携带资源，无法狩猎")
+		return
+
+	if not nearest_animal:
+		print("附近没有猎物")
+		return
+
+	if nearest_animal.is_dead:
+		print("猎物已经死亡！")
+		return
+
+	is_hunting = true
+	# 这里将来添加狩猎管理器的调用
+	print("工人开始狩猎一次！")
 
 # 设置最近的树
 func set_nearest_tree(tree) -> void:
@@ -202,19 +248,28 @@ func set_nearest_tree(tree) -> void:
 func set_nearest_mine(mine) -> void:
 	nearest_mine = mine
 
+# 设置最近的动物
+func set_nearest_animal(animal) -> void:
+	nearest_animal = animal
+
 # 收集木材
 func collect_wood(wood = null) -> void:
 	# 如果已经在砍树或挖矿，不能收集木材
-	if is_chopping or is_mining:
+	if is_chopping or is_mining or is_hunting:
 		return
 
 	wood_manager.collect_wood(wood)
 
 # 收集金币
 func collect_gold(gold = null) -> void:
-	if gold and gold.has_method("collected_by_worker"):
+	if is_chopping or is_mining or is_hunting:
+		return
+
+	if has_node("GoldManager"):
+		gold_manager.collect_gold(gold)
+	elif gold and gold.has_method("collected_by_worker"):
 		gold.collected_by_worker()
-		print("工人收集了1枚金币")
+		print("工人收集了1枚金币，但没有金币管理器来存储它")
 
 # 建造城堡
 func build_castle(pos: Vector2) -> void:
@@ -235,3 +290,40 @@ func build_tower(pos: Vector2) -> void:
 func repair() -> void:
 	print("工人开始修理建筑")
 	build_manager.repair()
+
+# 添加对各类资源的携带检查逻辑
+func is_carrying_any_resource() -> bool:
+	var carrying = false
+
+	if wood_manager.is_carrying:
+		carrying = true
+
+	if has_node("GoldManager") and gold_manager.is_carrying:
+		carrying = true
+
+	if has_node("MeatManager") and meat_manager.is_carrying:
+		carrying = true
+
+	return carrying
+
+# 添加统一的资源丢弃逻辑
+func drop_carried_resource() -> void:
+	if wood_manager.is_carrying:
+		wood_manager.drop_wood()
+
+	if has_node("GoldManager") and gold_manager.is_carrying:
+		gold_manager.drop_gold()
+
+	if has_node("MeatManager") and meat_manager.is_carrying:
+		meat_manager.drop_meat()
+
+# 添加肉类收集逻辑
+func collect_meat(meat = null) -> void:
+	if is_chopping or is_mining or is_hunting:
+		return
+
+	if has_node("MeatManager"):
+		meat_manager.collect_meat(meat)
+	elif meat and meat.has_method("collected_by_worker"):
+		meat.collected_by_worker()
+		print("工人收集了肉类，但没有肉类管理器来存储它")

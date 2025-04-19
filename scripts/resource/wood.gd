@@ -1,9 +1,15 @@
-extends Area2D
+# @file: wood.gd
+# @brief: 木材资源
+# @author: ponywu
+# @date: 2025-04-19
+
+extends CollectibleResource
 
 # signal collected
 
 # 木材相关常量
 const WOOD_CONFIG = {
+	"resource_name": "wood",
 	"drop_animation": {
 		"height": 20,  # 掉落高度
 		"up_time": 0.3,  # 上升时间
@@ -64,3 +70,7 @@ func _play_collect_animation() -> void:
 # 被工人收集时调用此方法
 func collected_by_worker() -> void:
 	queue_free()  # 直接删除木材实例
+
+# 重写准备配置方法
+func _prepare_config() -> void:
+	config = WOOD_CONFIG

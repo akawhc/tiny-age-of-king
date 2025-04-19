@@ -40,7 +40,7 @@ var miners = []  # 存储正在挖矿的工人
 @onready var detection_area: Area2D = $DetectionArea
 @onready var collision_body: StaticBody2D = $CollisionBody
 # 预加载金币资源场景
-@onready var gold_scene = preload("res://scenes/gold.tscn")
+@onready var gold_scene = preload("res://scenes/resources/gold.tscn")
 
 func _ready() -> void:
 	add_to_group("mines")

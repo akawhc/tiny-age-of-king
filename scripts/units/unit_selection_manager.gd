@@ -5,7 +5,7 @@
 
 extends Node2D
 
-const GROUND_INDICATOR = preload("res://scenes/ground_indicator.tscn")
+const GROUND_INDICATOR = preload("res://scenes/deco/ground_indicator.tscn")
 
 var selected_units: Array = []
 var is_moving = false
@@ -104,11 +104,11 @@ func move_units_to(target_pos: Vector2) -> void:
 	print("编队宽度：", formation_width)
 
 	for i in range(unit_count):
-		var row = i / formation_width
+		var row = i * 1.0 / formation_width
 		var col = i % formation_width
 		var offset = Vector2(
-			col * spacing - (formation_width - 1) * spacing / 2,
-			row * spacing - (ceil(unit_count / float(formation_width)) - 1) * spacing / 2
+			col * spacing - (formation_width - 1) * spacing / 2.0,
+			row * spacing - (ceil(unit_count / float(formation_width)) - 1) * spacing / 2.0
 		)
 		var unit_target = target_pos + offset
 
