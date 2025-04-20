@@ -24,14 +24,14 @@ var config = {
 	},
 	"keyboard": {
 		"enabled": true,                    # 是否启用键盘移动
-		"move_speed": 100.0                 # 键盘移动速度
+		"move_speed": 300.0                 # 键盘移动速度
 	},
 	"edge_scroll": {
 		"enabled": true,                    # 是否启用边缘滚动
 		"margin_percent": 0.02,             # 边缘滚动边距百分比（屏幕宽/高的百分比）- 降低为2%
 		"min_margin": 10.0,                 # 最小边缘滚动边距（像素）
 		"max_margin": 25.0,                 # 最大边缘滚动边距（像素）
-		"speed": 100.0,                     # 边缘滚动速度
+		"speed": 300.0,                     # 边缘滚动速度
 		"debug_draw": false                 # 是否显示边缘区域调试绘制
 	},
 	"zoom": {
