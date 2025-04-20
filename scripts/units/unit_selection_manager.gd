@@ -9,6 +9,7 @@ const GROUND_INDICATOR = preload("res://scenes/deco/ground_indicator.tscn")
 
 var selected_units: Array = []
 var is_moving = false
+var active_indicators: Array = []  # 用于跟踪活跃的地面指示器
 
 signal selection_type_changed(type: String)
 
@@ -56,6 +57,9 @@ func update_selection(units: Array) -> void:
 	print("\n开始更新单位选择")
 	print("当前选中的单位数量：", selected_units.size())
 
+	# 清除之前选中单位的状态
+	clear_selection()
+
 	# 更新选中的单位
 	selected_units = units
 
@@ -84,6 +88,10 @@ func clear_selection() -> void:
 			print("取消单位选中状态：", unit.name)
 			unit.set_selected(false)
 	selected_units.clear()
+
+	# 清除所有地面指示器
+	clear_ground_indicators()
+
 	selection_type_changed.emit("NONE", [])  # 发送清除选择信号
 
 # 移动单位到目标位置
@@ -121,3 +129,11 @@ func show_ground_indicator(_position: Vector2) -> void:
 	var indicator = GROUND_INDICATOR.instantiate()
 	add_child(indicator)
 	indicator.global_position = _position
+	active_indicators.append(indicator)
+
+# 清除所有地面指示器
+func clear_ground_indicators() -> void:
+	for indicator in active_indicators:
+		if is_instance_valid(indicator):
+			indicator.queue_free()
+	active_indicators.clear()

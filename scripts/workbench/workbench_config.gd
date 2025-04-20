@@ -50,6 +50,10 @@ class_name WorkbenchConfig
 		{"id": "mine", "text": "派工人采矿", "action": "mine_gold"},
 		{"id": "build_mine", "text": "建造采矿场", "action": "build_mine"},
 		{"id": "exit", "text": "退出", "action": "exit"}
+	],
+	"UNIT": [
+		{"id": "move", "text": "移动", "action": "move"},
+		{"id": "exit", "text": "退出", "action": "exit"}
 	]
 }
 

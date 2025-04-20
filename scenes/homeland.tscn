@@ -759,4 +759,5 @@ position = Vector2(-3703, 2525)
 position = Vector2(-3793, 2878)
 
 [node name="archer" parent="." instance=ExtResource("37_1bjhp")]
-position = Vector2(-3362, 2832)
+z_index = 1
+position = Vector2(-3519, 2800)

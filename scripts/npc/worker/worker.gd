@@ -91,8 +91,6 @@ func _input(event: InputEvent) -> void:
 			# 否则执行砍树动作
 			start_chop()
 	elif event.is_action_pressed("drop"):
-		# 阻止事件传递
-		get_viewport().set_input_as_handled()
 		drop_carried_resource()
 
 func _physics_process(delta: float) -> void:
