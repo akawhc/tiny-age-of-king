@@ -1,6 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://bjtvh77kr53uh"]
+[gd_scene load_steps=25 format=3 uid="uid://cduh6w1v71qce"]
 
 [ext_resource type="Texture2D" uid="uid://bh7s2d7f000fp" path="res://sprites/Tiny Swords/Factions/Goblins/Troops/Barrel/Red/Barrel_Red.png" id="1_32lq0"]
+[ext_resource type="Script" path="res://scripts/goblin/barrel.gd" id="1_k13v8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cflhm"]
 atlas = ExtResource("1_32lq0")
@@ -179,6 +180,7 @@ animations = [{
 radius = 24.1868
 
 [node name="barrel" type="CharacterBody2D"]
+script = ExtResource("1_k13v8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pi1b3")

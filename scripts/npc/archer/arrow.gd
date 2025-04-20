@@ -131,7 +131,6 @@ func update_rotation(delta: float) -> void:
 			rotation_amount_rad = rotation_direction * ((ARROW_CONFIG.max_rotation - (total_rotation - rotation_amount_deg)) * PI / 180)
 			total_rotation = ARROW_CONFIG.max_rotation
 
-		# 应用旋转
 		rotation += rotation_amount_rad
 
 # 箭矢落地

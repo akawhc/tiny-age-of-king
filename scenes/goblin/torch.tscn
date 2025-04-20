@@ -1,6 +1,7 @@
-[gd_scene load_steps=35 format=3 uid="uid://bjls0ix0opax8"]
+[gd_scene load_steps=36 format=3 uid="uid://0g32qp6mlxfh"]
 
 [ext_resource type="Texture2D" uid="uid://byfss37hflobh" path="res://sprites/Tiny Swords/Factions/Goblins/Troops/Torch/Red/Torch_Red.png" id="1_wwx27"]
+[ext_resource type="Script" path="res://scripts/goblin/torch.gd" id="1_y7j4h"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ed2u4"]
 atlas = ExtResource("1_wwx27")
@@ -251,6 +252,7 @@ animations = [{
 radius = 20.0
 
 [node name="torch" type="CharacterBody2D"]
+script = ExtResource("1_y7j4h")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_883wn")
