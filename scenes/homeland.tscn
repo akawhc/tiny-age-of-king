@@ -734,7 +734,7 @@ z_index = 0
 position = Vector2(-3434, 3222)
 
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
-position = Vector2(-3587, 2785)
+position = Vector2(-3585, 3147)
 
 [node name="Camera2D" type="Camera2D" parent="worker"]
 

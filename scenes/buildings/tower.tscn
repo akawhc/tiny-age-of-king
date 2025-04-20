@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bmfsohngo5hea" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_leybc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_auf6o"]
-size = Vector2(104, 59.375)
+size = Vector2(93, 48.6875)
 
 [node name="Tower" type="StaticBody2D" groups=["buildings", "towers"]]
 z_index = 5
@@ -11,10 +11,11 @@ y_sort_enabled = true
 position = Vector2(2, 63)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-1, -51)
+y_sort_enabled = true
+position = Vector2(2, -83)
 texture = ExtResource("1_leybc")
-offset = Vector2(0, -100)
+offset = Vector2(0, -20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-2, -90.6875)
+position = Vector2(3.5, -40.6562)
 shape = SubResource("RectangleShape2D_auf6o")

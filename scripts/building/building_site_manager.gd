@@ -39,9 +39,9 @@ class BuildingSite:
 var active_building_sites = {}
 
 # 信号
-#signal building_site_created(site_id, type, position)
-#signal building_site_progress(site_id, progress)
-#signal building_site_completed(site_id, type, position)
+signal building_site_created(site_id, type, position)
+signal building_site_progress(site_id, progress)
+signal building_site_completed(site_id, type, position)
 
 # 资源路径
 const BASE_RESOURCE_PATH = "res://sprites/Tiny Swords/Factions/Knights/Buildings/"
