@@ -56,7 +56,7 @@ func _ready() -> void:
 	if animated_sprite:
 		animated_sprite.animation_finished.connect(_on_animation_finished)
 
-	animated_sprite.play("idle")
+	play_idle_animation()
 
 func _process(delta: float) -> void:
 	# 更新攻击冷却
@@ -71,17 +71,37 @@ func _process(delta: float) -> void:
 
 # 覆盖父类的physics_process，添加自己的逻辑
 func _physics_process(delta: float) -> void:
-	# 调用父类方法处理移动
-	super._physics_process(delta)
+	# 处理键盘输入移动
+	var input_dir = Vector2.ZERO
+	input_dir.x = Input.get_axis("ui_left", "ui_right")
+	input_dir.y = Input.get_axis("ui_up", "ui_down")
+
+	if input_dir != Vector2.ZERO:
+		# 取消当前移动目标
+		is_moving = false
+		# 设置速度并正规化
+		input_dir = input_dir.normalized()
+		velocity = input_dir * move_speed
+		# 更新动画
+		update_animation(input_dir)
+		# 移动角色
+		move_and_slide()
+	elif !is_moving:
+		velocity = Vector2.ZERO
+		play_idle_animation()
+
+	# 调用父类方法处理目标点移动 (当没有键盘输入时)
+	if input_dir == Vector2.ZERO:
+		super._physics_process(delta)
 
 	# 在移动过程中如果发现敌人，优先攻击
-	if is_moving and target_enemy and can_attack:
+	if (is_moving or input_dir != Vector2.ZERO) and target_enemy and can_attack:
 		is_moving = false
 		velocity = Vector2.ZERO
 		_change_state(ArcherState.ATTACKING)
 
 # 处理攻击状态
-func _process_attacking(delta: float) -> void:
+func _process_attacking(_delta: float) -> void:
 	if !target_enemy or !is_instance_valid(target_enemy):
 		target_enemy = null
 		_change_state(ArcherState.IDLE)
@@ -242,14 +262,7 @@ func _play_animation(anim_name: String) -> void:
 
 # 实现父类的虚函数：更新移动动画
 func update_animation(direction: Vector2) -> void:
-	# 播放run动画
-	if animated_sprite.sprite_frames.has_animation("run"):
-		animated_sprite.play("run")
-	else:
-		# 尝试使用walk动画作为后备
-		if animated_sprite.sprite_frames.has_animation("walk"):
-			animated_sprite.play("walk")
-
+	animated_sprite.play("run")
 	# 设置水平方向
 	if abs(direction.x) > 0.1:
 		animated_sprite.flip_h = direction.x < 0
