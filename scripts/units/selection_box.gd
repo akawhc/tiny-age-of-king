@@ -40,7 +40,6 @@ func _input(event: InputEvent) -> void:
 		start_pos = get_global_mouse_position()
 		current_pos = start_pos
 		is_selecting = true
-		print("开始选择，起始位置：", start_pos)
 		queue_redraw()
 	elif event.is_action_released("mouse_left"):
 		# 如果没有开始选择，不处理释放事件
@@ -49,7 +48,6 @@ func _input(event: InputEvent) -> void:
 
 		# 结束选择
 		is_selecting = false
-		print("结束选择，结束位置：", current_pos)
 		# 发出选择完成信号
 		emit_selection_box()
 		queue_redraw()
@@ -85,16 +83,9 @@ func emit_selection_box() -> void:
 	var units = get_tree().get_nodes_in_group("selectable_units")
 	var selected_units = []
 
-	print("检测到 ", units.size(), " 个可选择单位")
-
 	for unit in units:
 		if selection_rect.has_point(unit.global_position):
 			selected_units.append(unit)
-			print("单位 ", unit.name, " 在选择框内，位置：", unit.global_position)
-		else:
-			print("单位 ", unit.name, " 在选择框外，位置：", unit.global_position)
-
-	print("选中了 ", selected_units.size(), " 个单位")
 
 	# 通知单位选择管理器
 	get_parent().update_selection(selected_units)

@@ -73,13 +73,10 @@ func _ready() -> void:
 		detection_area.collision_layer = 2  # 设置成与工人不同的层
 		detection_area.body_entered.connect(_on_body_entered)
 		detection_area.body_exited.connect(_on_body_exited)
-		print("绵羊的检测区域已设置")
 
 	# 初始状态设置
 	_change_state(SheepState.IDLE)
 	_pick_random_movement_time()
-
-	print("绵羊初始化完成，位置:", global_position, "生命值:", current_health)
 
 func _process(delta: float) -> void:
 	match current_state:
@@ -197,8 +194,6 @@ func take_damage(damage: int) -> void:
 		return
 
 	current_health -= damage
-	print("绵羊受到攻击，伤害: ", damage, " 剩余生命: ", current_health, "/", SHEEP_CONFIG.health.max)
-
 	_change_state(SheepState.HURT)
 
 	# 播放受击动画
@@ -208,7 +203,6 @@ func take_damage(damage: int) -> void:
 
 # 死亡处理
 func _die() -> void:
-	print("绵羊死亡")
 	is_dead = true  # 设置死亡标记
 	# 禁用碰撞
 	collision_shape.set_deferred("disabled", true)
@@ -241,18 +235,14 @@ func _drop_meat(count: int) -> void:
 		# 将肉添加到场景中
 		get_tree().get_root().add_child(meat_instance)
 
-	print("绵羊掉落了 ", count, " 块肉")
-
 # 当工人进入检测范围
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("workers"):
 		if body.has_method("set_nearest_animal"):
 			body.set_nearest_animal(self)
-			print("工人进入绵羊范围，按空格键攻击")
 
 # 当工人离开检测范围
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("workers"):
 		if body.has_method("set_nearest_animal") and body.nearest_animal == self:
 			body.set_nearest_animal(null)
-			print("工人离开绵羊范围")

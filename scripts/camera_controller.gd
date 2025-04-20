@@ -13,7 +13,7 @@ enum CameraMode {
 
 # 相机配置
 var config = {
-	"camera_mode": CameraMode.FOLLOW_MOUSE,  # 相机模式
+	"camera_mode": CameraMode.FIXED,  # 相机模式
 	"mouse_follow": {
 		"enabled": false,                   # 是否启用鼠标跟随 - 默认禁用，只使用边缘滚动
 		"offset": Vector2.ZERO,             # 鼠标跟随偏移量
@@ -23,11 +23,11 @@ var config = {
 		"follow_only_at_edge": true         # 是否只在鼠标靠近边缘时才跟随移动
 	},
 	"keyboard": {
-		"enabled": true,                    # 是否启用键盘移动
+		"enabled": false,                    # 是否启用键盘移动
 		"move_speed": 300.0                 # 键盘移动速度
 	},
 	"edge_scroll": {
-		"enabled": true,                    # 是否启用边缘滚动
+		"enabled": false,                    # 是否启用边缘滚动
 		"margin_percent": 0.02,             # 边缘滚动边距百分比（屏幕宽/高的百分比）- 降低为2%
 		"min_margin": 10.0,                 # 最小边缘滚动边距（像素）
 		"max_margin": 25.0,                 # 最大边缘滚动边距（像素）
@@ -41,10 +41,6 @@ var config = {
 		"step": 0.1,                        # 缩放步长
 		"target": Vector2(1, 1),            # 目标缩放
 		"lerp_speed": 10.0                  # 缩放平滑速度
-	},
-	"debug": {
-		"log_frequency": 60,                # 调试日志输出频率（帧数）
-		"enable_verbose_logging": true      # 是否启用详细日志
 	}
 }
 
@@ -84,11 +80,6 @@ func _process(delta: float) -> void:
 	# 如果需要显示调试绘制，则触发重绘
 	if config.edge_scroll.debug_draw:
 		queue_redraw()
-
-	# 定期输出调试信息
-	if config.debug.enable_verbose_logging and _frame_counter % config.debug.log_frequency == 0:
-		print("当前相机位置:", global_position)
-		print("当前缩放比例:", zoom)
 
 func _input(event: InputEvent) -> void:
 	# 处理鼠标滚轮缩放

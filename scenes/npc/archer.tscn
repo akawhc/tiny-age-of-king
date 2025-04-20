@@ -232,7 +232,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2ksk0")
 }],
-"loop": true,
+"loop": false,
 "name": &"idle",
 "speed": 5.0
 }, {
@@ -255,7 +255,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mxb40")
 }],
-"loop": true,
+"loop": false,
 "name": &"run",
 "speed": 5.0
 }, {
@@ -284,7 +284,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ev3ar")
 }],
-"loop": true,
+"loop": false,
 "name": &"shoot_down",
 "speed": 5.0
 }, {
@@ -313,7 +313,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0g2nr")
 }],
-"loop": true,
+"loop": false,
 "name": &"shoot_right_down",
 "speed": 5.0
 }, {
@@ -342,7 +342,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kbcbh")
 }],
-"loop": true,
+"loop": false,
 "name": &"shoot_right_normal",
 "speed": 5.0
 }, {
@@ -371,7 +371,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k5iyd")
 }],
-"loop": true,
+"loop": false,
 "name": &"shoot_right_up",
 "speed": 5.0
 }, {
@@ -400,8 +400,8 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6taby")
 }],
-"loop": true,
-"name": &"shoot_upwards",
+"loop": false,
+"name": &"shoot_up",
 "speed": 5.0
 }]
 
@@ -416,8 +416,7 @@ script = ExtResource("1_57uq7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_2ucio")
-animation = &"idle"
-frame_progress = 0.871455
+animation = &"shoot_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 8)

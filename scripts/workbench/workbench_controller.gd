@@ -44,7 +44,6 @@ func _ready() -> void:
 	_selection_manager = get_tree().get_first_node_in_group("selection_manager")
 	if _selection_manager:
 		_selection_manager.selection_type_changed.connect(_on_selection_type_changed)
-		print("已连接选择管理器信号")
 
 	# 获取建筑管理器实例
 	_building_manager = BuildingManager.get_instance()
@@ -101,7 +100,6 @@ func _update_position() -> void:
 func get_button_container_size() -> Vector2:
 	var container_size = _buttons_container.get_rect().size
 	container_size *= _buttons_container.scale
-	print("按钮容器大小：", container_size)
 	return container_size
 
 func _update_buttons() -> void:
@@ -163,8 +161,6 @@ func _on_button_pressed(action_id: String) -> void:
 		print("没有工人被选中，无法开始建造")
 		return
 
-	print("按钮点击：", action_id, "，选中 ", selected_workers.size(), " 个工人")
-
 	# 处理建造预览请求
 	_building_manager.handle_preview_request(action_id, selected_workers)
 	button_clicked.emit(action_id)
@@ -181,12 +177,9 @@ func get_interaction_type() -> String:
 
 # 处理选择类型变化
 func _on_selection_type_changed(type: String, units: Array) -> void:
-	print("工作台收到选择类型变化：", type)
-
 	# 如果数组为空且类型为 NONE，可能是因为点击 UI 导致的
-	# 忽略这种情况，保留现有选择
+	# 忽略空选择变化，保留当前选中的单位
 	if type == "NONE" and units.is_empty() and not _selected_units.is_empty():
-		print("忽略空选择变化，保留当前选中的单位")
 		# 检查是否是由于点击工作台按钮导致的
 		var focus_owner = get_viewport().gui_get_focus_owner()
 		if focus_owner is Button and _buttons_container.is_ancestor_of(focus_owner):
@@ -213,7 +206,6 @@ func _input(event: InputEvent) -> void:
 
 		# 如果当前焦点在按钮上，阻止空格键事件
 		if focus_owner is Button and _buttons_container.is_ancestor_of(focus_owner):
-			print("阻止空格键触发按钮")
 			get_viewport().set_input_as_handled()
 			# 移除按钮焦点，防止空格键触发
 			focus_owner.release_focus()

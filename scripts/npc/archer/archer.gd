@@ -1,5 +1,6 @@
 # @file: archer.gd
 # @brief: 弓箭手单位脚本
+# @date: 2025-04-20
 # @author: ponywu
 
 extends "res://scripts/units/selectable_unit.gd"
@@ -16,7 +17,8 @@ const ARCHER_CONFIG = {
 # 弓箭手状态
 enum ArcherState {
 	IDLE,
-	ATTACKING
+	ATTACKING,
+	MOVING
 }
 
 # 当前状态 (基本移动状态由父类处理)
@@ -26,6 +28,8 @@ var current_state: ArcherState = ArcherState.IDLE
 var target_enemy: Node2D = null
 var attack_cooldown_timer: float = 0.0
 var can_attack: bool = true
+var facing_direction = Vector2.RIGHT
+var auto_attack: bool = true  # 是否自动攻击，可以在UI中设置
 
 # 箭矢场景路径
 var arrow_scene_path: String = "res://scenes/projectiles/arrow.tscn"
@@ -38,6 +42,9 @@ var arrow_scene_path: String = "res://scenes/projectiles/arrow.tscn"
 func _ready() -> void:
 	super._ready()
 
+	# 添加到弓箭手组
+	add_to_group("archers")
+
 	# 覆盖父类的默认移动速度
 	move_speed = ARCHER_CONFIG.move_speed
 
@@ -47,217 +54,210 @@ func _ready() -> void:
 		var circle_shape = CircleShape2D.new()
 		circle_shape.radius = ARCHER_CONFIG.detection_radius
 		detection_shape.shape = circle_shape
-	else:
-		print("WARN: archer's DetectionArea has no CollisionShape2D child node")
 
-	# 连接信号
+	# 连接必要的信号
 	detection_area.body_entered.connect(_on_detection_area_body_entered)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
-
-	if animated_sprite:
-		animated_sprite.animation_finished.connect(_on_animation_finished)
+	animated_sprite.animation_finished.connect(_on_animation_finished)
 
 	play_idle_animation()
 
-func _process(delta: float) -> void:
-	# 更新攻击冷却
-	if !can_attack:
-		attack_cooldown_timer -= delta
-		if attack_cooldown_timer <= 0:
-			can_attack = true
-
-	# 处理攻击状态
-	if current_state == ArcherState.ATTACKING:
-		_process_attacking(delta)
-
-# 覆盖父类的physics_process，调整自己的攻击逻辑
-func _physics_process(delta: float) -> void:
-	# 调用父类方法处理移动和键盘输入
-	super._physics_process(delta)
-
-	# 在移动过程中如果发现敌人，优先攻击
-	if is_moving and target_enemy and can_attack:
-		is_moving = false
-		velocity = Vector2.ZERO
-		_change_state(ArcherState.ATTACKING)
-
-# 处理攻击状态
-func _process_attacking(_delta: float) -> void:
-	if !target_enemy or !is_instance_valid(target_enemy):
-		target_enemy = null
-		_change_state(ArcherState.IDLE)
-		return
-
-	# 面向敌人
-	_face_target(target_enemy.global_position)
-
-	# 如果可以攻击且没有在移动，发起攻击
-	if can_attack and !is_moving:
-		_play_shoot_animation()
-
-# 改变当前弓箭手状态
-func _change_state(new_state: ArcherState) -> void:
-	if current_state == new_state:
-		return
-
-	current_state = new_state
-
-	match new_state:
-		ArcherState.IDLE:
-			play_idle_animation()
-		ArcherState.ATTACKING:
-			pass # 攻击动画会在_play_shoot_animation中处理
-
-# 检测区域有单位进入
-func _on_detection_area_body_entered(body: Node2D) -> void:
-	# 检查是否是敌人
-	if body.is_in_group("enemies"):
-		# 设置为目标敌人
-		target_enemy = body
-
-		# 如果可以攻击并且不在移动，切换到攻击状态
-		if can_attack and !is_moving:
-			_change_state(ArcherState.ATTACKING)
-
-# 检测区域有单位离开
-func _on_detection_area_body_exited(body: Node2D) -> void:
-	# 如果离开的是当前目标敌人
-	if body == target_enemy:
-		target_enemy = null
-
-		# 返回空闲状态
-		if current_state == ArcherState.ATTACKING:
-			_change_state(ArcherState.IDLE)
-
-# 动画完成回调
-func _on_animation_finished() -> void:
-	var current_animation = animated_sprite.animation
-
-	# 处理射击动画完成
-	if current_animation.begins_with("shoot_"):
-		_on_shoot_animation_finished()
-
-		# 进入冷却
-		can_attack = false
-		attack_cooldown_timer = ARCHER_CONFIG.attack_cooldown
-
-		# 射击后返回空闲状态
-		_change_state(ArcherState.IDLE)
-
-# 射击动画完成回调
-func _on_shoot_animation_finished() -> void:
-	# 检查是否有有效目标和箭矢生成点
-	if !target_enemy or !arrow_spawn_point:
-		return
-
-	# 加载箭矢场景
-	var arrow_scene = load(arrow_scene_path)
-	if !arrow_scene:
-		print("错误：无法加载箭矢场景，请检查路径：", arrow_scene_path)
-		return
-
-	# 实例化箭矢
-	var arrow = arrow_scene.instantiate()
-	get_tree().current_scene.add_child(arrow)
-
-	# 设置箭矢位置和方向
-	arrow.global_position = arrow_spawn_point.global_position
-	var direction = (target_enemy.global_position - arrow.global_position).normalized()
-
-	# 初始化箭矢属性
-	arrow.initialize(
-		direction,
-		ARCHER_CONFIG.attack_damage,
-		ARCHER_CONFIG.arrow_speed,
-		self
-	)
-
-	print("弓箭手发射了一支箭！")
-
-# 播放射击动画
-func _play_shoot_animation() -> void:
-	if !target_enemy:
-		return
-
-	# 计算到目标的角度
-	var angle = global_position.angle_to_point(target_enemy.global_position)
-	# 将弧度转换为角度
-	var degrees = rad_to_deg(angle)
-
-	# 根据角度选择合适的射击动画
-	var is_flipped = false
-	var animation_name = ""
-
-	if degrees >= -22.5 and degrees < 22.5:
-		# 向右射击
-		animation_name = "shoot_right_normal"
-		is_flipped = false
-	elif degrees >= 22.5 and degrees < 67.5:
-		# 右下射击
-		animation_name = "shoot_right_down"
-		is_flipped = false
-	elif degrees >= 67.5 and degrees < 112.5:
-		# 向下射击
-		animation_name = "shoot_down"
-		is_flipped = false
-	elif degrees >= 112.5 and degrees < 157.5:
-		# 左下射击
-		animation_name = "shoot_right_down"
-		is_flipped = true
-	elif degrees >= 157.5 or degrees < -157.5:
-		# 向左射击
-		animation_name = "shoot_right_normal"
-		is_flipped = true
-	elif degrees >= -157.5 and degrees < -112.5:
-		# 左上射击
-		animation_name = "shoot_right_up"
-		is_flipped = true
-	elif degrees >= -112.5 and degrees < -67.5:
-		# 向上射击
-		animation_name = "shoot_upwards"
-		is_flipped = false
-	elif degrees >= -67.5 and degrees < -22.5:
-		# 右上射击
-		animation_name = "shoot_right_up"
-		is_flipped = false
-
-	# 设置翻转和播放动画
-	animated_sprite.flip_h = is_flipped
-	_play_animation(animation_name)
-
-# 面向目标
-func _face_target(target_pos: Vector2) -> void:
-	var direction = (target_pos - global_position).normalized()
-
-	# 如果有明显的水平分量，根据水平方向设置翻转
-	if abs(direction.x) > 0.1:
-		animated_sprite.flip_h = direction.x < 0
-
-# 播放动画的辅助函数
-func _play_animation(anim_name: String) -> void:
-	if animated_sprite and animated_sprite.sprite_frames.has_animation(anim_name):
-		if animated_sprite.animation != anim_name:
-			animated_sprite.play(anim_name)
-	else:
-		print("警告: 动画 ", anim_name, " 不存在")
-
-# 实现父类的虚函数：更新移动动画
-func update_animation(direction: Vector2) -> void:
-	animated_sprite.play("run")
-	# 设置水平方向
-	if abs(direction.x) > 0.1:
-		animated_sprite.flip_h = direction.x < 0
-
-# 实现父类的虚函数：播放待机动画
-func play_idle_animation() -> void:
-	if animated_sprite:
-		animated_sprite.play("idle")
-
-# 添加处理输入的方法
-func _input(_event: InputEvent) -> void:
-	# 只有被选中的单位才响应按键
+func _input(event: InputEvent) -> void:
+	# 只有被选中的单位才响应按键输入
 	if !is_selected:
 		return
 
-	# 这里可以添加弓箭手特有的按键处理
-	# 例如特殊射击模式、切换箭矢类型等
+	# 如果正在攻击，不处理攻击输入，但可以继续移动
+	if current_state == ArcherState.ATTACKING and event.is_action_pressed("chop"):
+		get_viewport().set_input_as_handled()
+		return
+
+	if event.is_action_pressed("chop"):  # 与工人共用砍树按键(空格)
+		get_viewport().set_input_as_handled()
+
+		if !can_attack:
+			print("弓箭手正在冷却中，无法攻击")
+			return
+
+		# 手动发起攻击
+		if target_enemy:
+			# 如果有目标，则攻击目标
+			start_attack()
+		else:
+			# 没有目标时，向面朝方向发射
+			manual_shoot()
+
+func _process(delta: float) -> void:
+	# 处理攻击冷却
+	if !can_attack:
+		attack_cooldown_timer += delta
+		if attack_cooldown_timer >= ARCHER_CONFIG.attack_cooldown:
+			can_attack = true
+			attack_cooldown_timer = 0.0
+
+	# 如果有敌人目标且可以攻击，则开始攻击
+	if target_enemy and can_attack and current_state != ArcherState.ATTACKING:
+		start_attack()
+
+# 覆盖父类的physics_process，调整自己的攻击逻辑
+func _physics_process(delta: float) -> void:
+	# 允许在攻击时也能移动，不再锁定速度
+	# 调用父类方法处理移动和键盘输入
+	super._physics_process(delta)
+
+	# 如果有移动，更新朝向
+	if velocity.length() > 0:
+		if velocity.x != 0:
+			facing_direction = Vector2(sign(velocity.x), 0)
+			animated_sprite.flip_h = velocity.x < 0
+
+		# 只有在不攻击时才更新状态和动画
+		if current_state != ArcherState.ATTACKING:
+			current_state = ArcherState.MOVING
+			animated_sprite.play("run")
+	else:
+		# 只有在不攻击时才更新状态和动画
+		if current_state != ArcherState.ATTACKING:
+			current_state = ArcherState.IDLE
+			play_idle_animation()
+
+func _on_detection_area_body_entered(body: Node2D) -> void:
+	# 检测进入范围的敌人
+	if body.is_in_group("enemies") and !target_enemy:
+		target_enemy = body
+		print("弓箭手发现敌人: ", body.name)
+
+func _on_detection_area_body_exited(body: Node2D) -> void:
+	# 敌人离开检测范围
+	if body == target_enemy:
+		target_enemy = null
+		print("敌人离开了弓箭手的射程")
+
+func start_attack() -> void:
+	if current_state == ArcherState.ATTACKING:
+		return
+
+	current_state = ArcherState.ATTACKING
+	can_attack = false
+
+	# 计算攻击方向并播放对应的射击动画
+	var attack_direction = (target_enemy.global_position - global_position).normalized()
+	play_attack_animation(attack_direction)
+
+# 手动射击
+func manual_shoot() -> void:
+	if current_state == ArcherState.ATTACKING:
+		return
+
+	current_state = ArcherState.ATTACKING
+	can_attack = false
+
+	# 使用当前朝向作为射击方向
+	var shoot_direction = facing_direction
+	if animated_sprite.flip_h:
+		shoot_direction = Vector2(-1, 0)  # 如果精灵翻转，则向左射击
+
+	play_attack_animation(shoot_direction)
+
+func play_attack_animation(direction: Vector2) -> void:
+	# 根据攻击方向选择合适的射击动画
+	var animation_name = "shoot_right_normal"
+
+	# 根据方向确定动画并设置朝向
+	if abs(direction.x) > abs(direction.y):
+		# 水平方向射击
+		animated_sprite.flip_h = direction.x < 0
+		animation_name = "shoot_right_normal"
+	else:
+		# 垂直方向射击
+		if direction.y > 0:
+			animation_name = "shoot_down"
+			animated_sprite.flip_h = false
+		else:
+			animation_name = "shoot_up"
+			animated_sprite.flip_h = false
+
+	# 对角线方向的处理
+	if abs(direction.x) > 0.3 and abs(direction.y) > 0.3:
+		if direction.x > 0:
+			animated_sprite.flip_h = false
+			if direction.y > 0:
+				animation_name = "shoot_right_down"
+			else:
+				animation_name = "shoot_right_up"
+		else:
+			animated_sprite.flip_h = true
+			if direction.y > 0:
+				animation_name = "shoot_right_down"
+			else:
+				animation_name = "shoot_right_up"
+
+	# 播放动画
+	animated_sprite.play(animation_name)
+
+func _on_animation_finished() -> void:
+	var animation_name = animated_sprite.animation
+
+	# 如果是射击动画完成，则生成箭矢并返回到IDLE状态
+	if animation_name.begins_with("shoot_"):
+		shoot_arrow()
+		current_state = ArcherState.IDLE
+
+		# 根据当前速度更新动画状态
+		if velocity.length() > 0:
+			animated_sprite.play("run")
+			current_state = ArcherState.MOVING
+		else:
+			play_idle_animation()
+
+func shoot_arrow() -> void:
+	# 计算射击方向
+	var shoot_direction
+
+	if target_enemy:
+		# 如果有目标，瞄准目标
+		shoot_direction = (target_enemy.global_position - global_position).normalized()
+	else:
+		# 如果没有目标，根据朝向射击
+		shoot_direction = facing_direction
+		if animated_sprite.flip_h:
+			shoot_direction = Vector2(-1, 0)
+
+	# 加载箭矢场景
+	var arrow_scene = load(arrow_scene_path)
+	if arrow_scene:
+		var arrow_instance = arrow_scene.instantiate()
+
+		# 设置箭矢参数
+		arrow_instance.global_position = arrow_spawn_point.global_position
+
+		# 使用箭矢的initialize方法初始化
+		arrow_instance.initialize(
+			shoot_direction,
+			ARCHER_CONFIG.attack_damage,
+			ARCHER_CONFIG.arrow_speed,
+			self
+		)
+
+		# 将箭矢添加到场景
+		get_tree().get_root().add_child(arrow_instance)
+	else:
+		print("ERROR: 无法加载箭矢场景!")
+
+func play_idle_animation() -> void:
+	if current_state != ArcherState.ATTACKING:
+		animated_sprite.play("idle")
+
+func update_animation(direction: Vector2) -> void:
+	# 如果正在攻击，不更新移动动画
+	if current_state == ArcherState.ATTACKING:
+		return
+
+	if direction.x != 0:
+		facing_direction = Vector2(sign(direction.x), 0)
+		animated_sprite.flip_h = direction.x < 0
+
+	if direction.length() > 0:
+		animated_sprite.play("run")
+	else:
+		play_idle_animation()

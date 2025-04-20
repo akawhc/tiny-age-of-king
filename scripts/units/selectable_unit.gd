@@ -19,8 +19,6 @@ var collision_shape: CollisionShape2D
 func _ready() -> void:
 	# 将单位添加到可选择单位组
 	add_to_group("selectable_units")
-	print(name, " 已添加到可选择单位组")
-
 	# 获取碰撞形状节点
 	collision_shape = $CollisionShape2D
 
@@ -32,19 +30,16 @@ func _physics_process(_delta: float) -> void:
 		input_dir.y = Input.get_axis("ui_up", "ui_down")
 
 		if input_dir != Vector2.ZERO:
-			# 取消当前的目标点移动
 			is_moving = false
 
 			# 根据键盘输入设置速度
 			input_dir = input_dir.normalized()
 			velocity = input_dir * move_speed
 
-			# 更新动画状态
 			update_animation(input_dir)
 
-			# 移动单位
 			move_and_slide()
-			return  # 使用键盘控制移动时，不执行下面的目标点移动逻辑
+			return
 		else:
 			# 当没有键盘输入但之前有输入时，停止移动并播放待机动画
 			if velocity != Vector2.ZERO and !is_moving:
@@ -72,16 +67,12 @@ func _physics_process(_delta: float) -> void:
 		else:
 			is_moving = false
 			velocity = Vector2.ZERO
-			print(name, " 到达目标位置")
-			# 播放待机动画
 			play_idle_animation()
 	elif velocity == Vector2.ZERO and !is_moving:
-		# 当单位静止时，确保播放待机动画
 		play_idle_animation()
 
 func set_selected(selected: bool) -> void:
 	is_selected = selected
-	print(name, " 选中状态改变：", is_selected)
 	queue_redraw()
 
 func move_to(pos: Vector2) -> void:
