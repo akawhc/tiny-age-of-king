@@ -255,7 +255,7 @@ radius = 20.0
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_883wn")
 animation = &"idle"
-frame_progress = 0.730022
+frame_progress = 0.63805
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(3, 9)

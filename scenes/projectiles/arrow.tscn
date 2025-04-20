@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://cqqsixqovphhr"]
+
+[ext_resource type="Script" path="res://scripts/archer/arrow.gd" id="1_okokj"]
+[ext_resource type="Texture2D" uid="uid://dvbf1wueuxupl" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Archer/Arrow/Arrow.png" id="2_nfhlh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkgt0"]
+atlas = ExtResource("2_nfhlh")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0t6i0"]
+atlas = ExtResource("2_nfhlh")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_txkoc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkgt0")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0t6i0")
+}],
+"loop": true,
+"name": &"shoot",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xmvja"]
+radius = 2.0
+height = 48.0
+
+[node name="Arrow" type="Area2D" groups=["projectiles"]]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_okokj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_txkoc")
+animation = &"shoot"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5, 3)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_xmvja")
