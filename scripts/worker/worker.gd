@@ -87,31 +87,21 @@ func _input(event: InputEvent) -> void:
 		drop_carried_resource()
 
 func _physics_process(delta: float) -> void:
-	if is_moving:
-		super._physics_process(delta)  # 调用父类的移动处理
+	# 如果正在砍树、挖矿或建造，则不允许移动
+	if is_chopping or is_mining or is_building:
+		velocity = Vector2.ZERO
 	else:
-		var direction = Vector2.ZERO
+		# 调用父类处理移动和键盘输入
+		super._physics_process(delta)
 
-		# 如果正在砍树、挖矿、狩猎或建造，暂时不允许移动
-		if not is_chopping and not is_mining and not is_building:
-			direction.x = Input.get_axis("ui_left", "ui_right")
-			direction.y = Input.get_axis("ui_up", "ui_down")
-
+		# 获取当前速度，用于更新资源动画
 		var old_velocity = velocity
 
-		if direction:
-			velocity = direction.normalized() * move_speed
-			# 更新朝向
-			if direction.x != 0:
-				facing_direction = Vector2(sign(direction.x), 0)
-				if not is_chopping and not is_mining and not is_building:
-					animated_sprite_2d.flip_h = direction.x < 0
-		else:
-			velocity = Vector2.ZERO
-
-		# 更新动画
-		if not is_chopping and not is_mining and not is_building:
-			animation_manager.set_animation_state(velocity, is_carrying_any_resource())
+		# 如果有移动，更新朝向
+		if velocity.length() > 0:
+			if velocity.x != 0:
+				facing_direction = Vector2(sign(velocity.x), 0)
+				animated_sprite_2d.flip_h = velocity.x < 0
 
 		# 更新资源动画
 		if wood_manager.is_carrying:
@@ -123,8 +113,6 @@ func _physics_process(delta: float) -> void:
 		if has_node("MeatManager") and meat_manager.is_carrying:
 			meat_manager.update_animation(delta, old_velocity)
 
-		move_and_slide()
-
 	# 更新建造进度
 	if is_building:
 		build_manager.update_building(delta)
@@ -134,11 +122,15 @@ func update_animation(direction: Vector2) -> void:
 	if direction.x != 0:
 		facing_direction = Vector2(sign(direction.x), 0)
 		animated_sprite_2d.flip_h = direction.x < 0
-	animation_manager.set_animation_state(velocity, is_carrying_any_resource())
+
+	# 使用动画管理器更新动画
+	if not is_chopping and not is_mining and not is_building:
+		animation_manager.set_animation_state(velocity, is_carrying_any_resource())
 
 # 重写父类的待机动画方法
 func play_idle_animation() -> void:
-	animation_manager.set_animation_state(Vector2.ZERO, is_carrying_any_resource())
+	if not is_chopping and not is_mining and not is_building:
+		animation_manager.set_animation_state(Vector2.ZERO, is_carrying_any_resource())
 
 func _on_animation_frame_changed() -> void:
 	# 获取当前帧

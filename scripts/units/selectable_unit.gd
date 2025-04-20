@@ -25,6 +25,33 @@ func _ready() -> void:
 	collision_shape = $CollisionShape2D
 
 func _physics_process(_delta: float) -> void:
+	# 只有被选中的单位才响应键盘输入
+	if is_selected:
+		var input_dir = Vector2.ZERO
+		input_dir.x = Input.get_axis("ui_left", "ui_right")
+		input_dir.y = Input.get_axis("ui_up", "ui_down")
+
+		if input_dir != Vector2.ZERO:
+			# 取消当前的目标点移动
+			is_moving = false
+
+			# 根据键盘输入设置速度
+			input_dir = input_dir.normalized()
+			velocity = input_dir * move_speed
+
+			# 更新动画状态
+			update_animation(input_dir)
+
+			# 移动单位
+			move_and_slide()
+			return  # 使用键盘控制移动时，不执行下面的目标点移动逻辑
+		else:
+			# 当没有键盘输入但之前有输入时，停止移动并播放待机动画
+			if velocity != Vector2.ZERO and !is_moving:
+				velocity = Vector2.ZERO
+				play_idle_animation()
+
+	# 处理目标点移动 (无键盘输入或未选中时)
 	if is_moving:
 		var direction = (target_position - global_position)  # 使用全局坐标计算方向
 		var distance = direction.length()
@@ -48,6 +75,9 @@ func _physics_process(_delta: float) -> void:
 			print(name, " 到达目标位置")
 			# 播放待机动画
 			play_idle_animation()
+	elif velocity == Vector2.ZERO and !is_moving:
+		# 当单位静止时，确保播放待机动画
+		play_idle_animation()
 
 func set_selected(selected: bool) -> void:
 	is_selected = selected

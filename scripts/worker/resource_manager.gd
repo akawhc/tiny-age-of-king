@@ -10,7 +10,7 @@ extends Node
 var config = {
 	"resource_name": "未知资源",  # 资源名称
 	"scene_path": "",             # 资源场景路径
-	"drop_offset": Vector2(60, 60),  # 丢弃资源的偏移距离
+	"drop_offset": Vector2(90, 90),  # 丢弃资源的偏移距离
 	"collect_animation": {
 		"duration": 0.5  # 收集动画持续时间
 	},

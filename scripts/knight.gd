@@ -48,39 +48,33 @@ func _input(event: InputEvent) -> void:
 		start_attack()
 
 func _physics_process(delta: float) -> void:
-	if is_moving:
-		super._physics_process(delta)  # 调用父类的移动处理
-	else:
-		var direction = Vector2.ZERO
-		direction.x = Input.get_axis("ui_left", "ui_right")
-		direction.y = Input.get_axis("ui_up", "ui_down")
+	# 调用父类方法处理移动和键盘输入
+	super._physics_process(delta)
 
-		if direction:
-			velocity = direction.normalized() * move_speed
-			# 更新朝向
-			if direction.x != 0:
-				facing_direction = Vector2(sign(direction.x), 0)
-				if not is_attacking:
-					animated_sprite_2d.flip_h = direction.x < 0
-		else:
-			velocity = Vector2.ZERO
+	# 如果正在攻击，处理攻击相关逻辑
+	if is_attacking:
+		# 攻击中暂停移动
+		velocity = Vector2.ZERO
 
-		# 更新动画
-		if not is_attacking:
-			set_animation_state()
+		# 可以在这里添加攻击相关的处理逻辑
+		# 例如检查攻击帧、更新攻击状态等
 
-		move_and_slide()
+	# 添加任何不被移动影响的逻辑
 
 # 重写父类的动画更新方法
 func update_animation(direction: Vector2) -> void:
 	if direction.x != 0:
 		facing_direction = Vector2(sign(direction.x), 0)
-		animated_sprite_2d.flip_h = direction.x < 0
-	animated_sprite_2d.play(ANIMATION_STATES.RUN)
+		if not is_attacking:
+			animated_sprite_2d.flip_h = direction.x < 0
+
+	if not is_attacking:
+		animated_sprite_2d.play(ANIMATION_STATES.RUN)
 
 # 重写父类的待机动画方法
 func play_idle_animation() -> void:
-	animated_sprite_2d.play(ANIMATION_STATES.IDLE)
+	if not is_attacking:
+		animated_sprite_2d.play(ANIMATION_STATES.IDLE)
 
 func _on_animation_frame_changed() -> void:
 	if is_attacking and not has_hit:

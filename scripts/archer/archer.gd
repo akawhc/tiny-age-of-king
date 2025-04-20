@@ -8,6 +8,7 @@ extends "res://scripts/units/selectable_unit.gd"
 const ARCHER_CONFIG = {
 	"detection_radius": 200.0,  # 检测半径
 	"attack_damage": 15,        # 攻击伤害
+	"move_speed": 75.0,         # 移动速度
 	"attack_cooldown": 2.0,     # 攻击冷却时间(秒)
 	"arrow_speed": 300.0,       # 箭矢速度
 }
@@ -37,8 +38,8 @@ var arrow_scene_path: String = "res://scenes/projectiles/arrow.tscn"
 func _ready() -> void:
 	super._ready()
 
-	# 设置移动速度（覆盖父类的默认值）
-	move_speed = 75.0
+	# 覆盖父类的默认移动速度
+	move_speed = ARCHER_CONFIG.move_speed
 
 	# 初始化检测区域
 	var detection_shape = detection_area.get_node_or_null("CollisionShape2D")
@@ -69,33 +70,13 @@ func _process(delta: float) -> void:
 	if current_state == ArcherState.ATTACKING:
 		_process_attacking(delta)
 
-# 覆盖父类的physics_process，添加自己的逻辑
+# 覆盖父类的physics_process，调整自己的攻击逻辑
 func _physics_process(delta: float) -> void:
-	# 处理键盘输入移动
-	var input_dir = Vector2.ZERO
-	input_dir.x = Input.get_axis("ui_left", "ui_right")
-	input_dir.y = Input.get_axis("ui_up", "ui_down")
-
-	if input_dir != Vector2.ZERO:
-		# 取消当前移动目标
-		is_moving = false
-		# 设置速度并正规化
-		input_dir = input_dir.normalized()
-		velocity = input_dir * move_speed
-		# 更新动画
-		update_animation(input_dir)
-		# 移动角色
-		move_and_slide()
-	elif !is_moving:
-		velocity = Vector2.ZERO
-		play_idle_animation()
-
-	# 调用父类方法处理目标点移动 (当没有键盘输入时)
-	if input_dir == Vector2.ZERO:
-		super._physics_process(delta)
+	# 调用父类方法处理移动和键盘输入
+	super._physics_process(delta)
 
 	# 在移动过程中如果发现敌人，优先攻击
-	if (is_moving or input_dir != Vector2.ZERO) and target_enemy and can_attack:
+	if is_moving and target_enemy and can_attack:
 		is_moving = false
 		velocity = Vector2.ZERO
 		_change_state(ArcherState.ATTACKING)
