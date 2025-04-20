@@ -91,8 +91,11 @@ func _input(event: InputEvent) -> void:
 		drop_carried_resource()
 
 func _physics_process(delta: float) -> void:
-	# 如果正在砍树、挖矿或建造，则不允许移动
-	if is_chopping or is_mining or is_building:
+	# 如果正在砍树或挖矿，则不允许移动
+	if is_chopping or is_mining:
+		velocity = Vector2.ZERO
+	# 如果正在建造且已经达到建造地点，则不允许移动
+	elif is_building and build_manager.is_building and build_manager.worker.global_position.distance_to(build_manager.target_position) <= 5.0:
 		velocity = Vector2.ZERO
 	else:
 		# 调用父类处理移动和键盘输入
@@ -237,16 +240,46 @@ func collect_gold(gold = null) -> void:
 # 建造城堡
 func build_castle(pos: Vector2) -> void:
 	print("工人开始建造城堡")
+
+	# 先确保工人不在其他状态
+	is_chopping = false
+	is_mining = false
+
+	# 确保位置有效
+	if pos == Vector2.ZERO:
+		print("错误：无效的建造位置")
+		return
+
 	build_manager.build_castle(pos)
 
 # 建造房屋
 func build_house(pos: Vector2) -> void:
 	print("工人开始建造房屋")
+
+	# 先确保工人不在其他状态
+	is_chopping = false
+	is_mining = false
+
+	# 确保位置有效
+	if pos == Vector2.ZERO:
+		print("错误：无效的建造位置")
+		return
+
 	build_manager.build_house(pos)
 
 # 建造箭塔
 func build_tower(pos: Vector2) -> void:
 	print("工人开始建造箭塔")
+
+	# 先确保工人不在其他状态
+	is_chopping = false
+	is_mining = false
+
+	# 确保位置有效
+	if pos == Vector2.ZERO:
+		print("错误：无效的建造位置")
+		return
+
 	build_manager.build_tower(pos)
 
 # 修理建筑

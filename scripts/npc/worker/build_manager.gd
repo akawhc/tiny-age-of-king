@@ -70,26 +70,42 @@ func start_building(pos: Vector2, building_type: String) -> void:
 	# 移动到建造位置
 	worker.move_to(target_position)
 
-	# 设置建造状态
+	# 延迟设置建造状态，等工人实际到达后才开始建造
 	is_building = true
-	worker.is_building = true  # 设置工人的建造状态
 
 	# 获取或创建建筑目标
 	var site_manager = get_site_manager()
 	current_building_target = site_manager.register_building_site(pos, building_type, worker)
 
+	# 检查建筑工地是否成功创建
+	if current_building_target == null:
+		print("错误：无法创建建筑工地")
+		is_building = false
+		return
+
 	print("工人开始建造 ", building_type, "，目标位置: ", target_position)
+
+	# 延迟设置工人的建造状态，避免过早阻止工人移动
+	call_deferred("_defer_set_worker_building_state", true)
 
 # 更新建造进度
 func update_building(_delta: float) -> void:
 	if not is_building or not current_building_target:
 		if is_building:
 			print("工人无法建造: 当前建造目标丢失")
+			is_building = false
+			worker.is_building = false
 		return
 
 	# 检查是否到达建造位置
 	var distance_to_target = worker.global_position.distance_to(target_position)
-	if distance_to_target > 5.0:  # 还没到达目标位置
+
+	# 距离检查 - 如果距离大于5.0，工人还没到达目标位置
+	if distance_to_target > 5.0:
+		# 如果工人离目标位置太远，可能是路径找不到，尝试重新寻路
+		if distance_to_target > 100.0 and randf() < 0.01:  # 1%概率尝试重新寻路
+			print("工人无法到达建造位置，尝试重新寻路")
+			worker.move_to(target_position)
 		return
 
 	# 确保工人面向建筑
@@ -97,7 +113,7 @@ func update_building(_delta: float) -> void:
 	if direction_to_building.x != 0:
 		worker.animated_sprite_2d.flip_h = direction_to_building.x < 0
 
-	# 如果工人没有在执行其他动画，开始新的建造动作
+	# 如果工人没有在执行其他动画且已到达目标位置，开始新的建造动作
 	if not worker.is_chopping and not worker.is_mining:
 		start_build_animation(direction_to_building)
 
@@ -208,3 +224,8 @@ func stop_building() -> void:
 
 	# 恢复工人状态
 	worker.animation_manager.set_animation_state(Vector2.ZERO, worker.wood_manager.is_carrying)
+
+# 延迟设置工人的建造状态
+func _defer_set_worker_building_state(state: bool) -> void:
+	worker.is_building = state
+	print("设置工人建造状态为: ", state)

@@ -737,6 +737,9 @@ position = Vector2(-3434, 3222)
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
 position = Vector2(-3629, 2806)
 
+[node name="Camera2D" type="Camera2D" parent="worker"]
+position = Vector2(266, 27)
+
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-4223, 2816)
 
@@ -757,6 +760,3 @@ position = Vector2(-3793, 2878)
 
 [node name="archer" parent="." instance=ExtResource("37_1bjhp")]
 position = Vector2(-3362, 2832)
-
-[node name="Camera2D" type="Camera2D" parent="archer"]
-position = Vector2(-1, 1)

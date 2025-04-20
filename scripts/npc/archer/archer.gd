@@ -254,7 +254,7 @@ func play_idle_animation() -> void:
 		animated_sprite.play("idle")
 
 # 添加处理输入的方法
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	# 只有被选中的单位才响应按键
 	if !is_selected:
 		return

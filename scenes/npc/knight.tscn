@@ -1,6 +1,6 @@
 [gd_scene load_steps=67 format=3 uid="uid://6rwkugbcxppt"]
 
-[ext_resource type="Script" path="res://scripts/knight.gd" id="1_chi2w"]
+[ext_resource type="Script" path="res://scripts/npc/knight/knight.gd" id="1_chi2w"]
 [ext_resource type="Texture2D" uid="uid://ymilw7312e7p" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_py2x8"]
 [ext_resource type="Texture2D" uid="uid://c7bd1xbfdjkvy" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Dead/Dead.png" id="3_f88cs"]
 
