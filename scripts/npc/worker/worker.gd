@@ -71,6 +71,9 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("chop"):
+		# 阻止事件传递，确保UI按钮不会被触发
+		get_viewport().set_input_as_handled()
+
 		# 如果已经在执行动画，不再开始新的动作
 		if is_chopping or is_mining:
 			return
@@ -88,6 +91,8 @@ func _input(event: InputEvent) -> void:
 			# 否则执行砍树动作
 			start_chop()
 	elif event.is_action_pressed("drop"):
+		# 阻止事件传递
+		get_viewport().set_input_as_handled()
 		drop_carried_resource()
 
 func _physics_process(delta: float) -> void:

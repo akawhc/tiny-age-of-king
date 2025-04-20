@@ -49,6 +49,9 @@ func _ready() -> void:
 	# 获取建筑管理器实例
 	_building_manager = BuildingManager.get_instance()
 
+	# 添加输入事件处理器，用于截获并处理空格键
+	set_process_input(true)
+
 func _on_window_size_changed() -> void:
 	var current_screen_size = get_viewport_rect().size
 	if current_screen_size != _last_screen_size:
@@ -63,8 +66,14 @@ func _setup_workbench() -> void:
 	_buttons_container.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_buttons_container.add_theme_constant_override("separation", 10)
 
-	# 确保按钮容器拦截所有鼠标事件
+	# 确保按钮容器拦截所有鼠标事件，但不拦截所有输入
 	_buttons_container.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	# 添加触摸屏和鼠标输入过滤，防止在按钮上按空格键
+	for child in _buttons_container.get_children():
+		if child is Button:
+			child.focus_mode = Control.FOCUS_CLICK
+			child.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	# 设置容器的锚点为左下角
 	_buttons_container.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
@@ -111,6 +120,10 @@ func _update_buttons() -> void:
 		button.text = button_config.text
 		button.name = button_config.id
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		# 配置按钮只响应鼠标点击，不响应空格键
+		button.focus_mode = Control.FOCUS_CLICK
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 		# 从配置中获取按钮样式
 		var min_height = config.button_style.min_height
@@ -190,3 +203,17 @@ func get_selected_units() -> Array:
 # 获取选中的工人单位
 func get_selected_workers() -> Array:
 	return _selected_units.filter(func(unit): return unit.is_in_group("workers"))
+
+# 添加一个新的输入处理函数，用于过滤空格键输入
+func _input(event: InputEvent) -> void:
+	# 检查是否是空格键按下事件
+	if event.is_action_pressed("chop") or (event is InputEventKey and event.keycode == KEY_SPACE):
+		# 获取当前焦点控件
+		var focus_owner = get_viewport().gui_get_focus_owner()
+
+		# 如果当前焦点在按钮上，阻止空格键事件
+		if focus_owner is Button and _buttons_container.is_ancestor_of(focus_owner):
+			print("阻止空格键触发按钮")
+			get_viewport().set_input_as_handled()
+			# 移除按钮焦点，防止空格键触发
+			focus_owner.release_focus()
