@@ -62,6 +62,10 @@ func _init_components() -> void:
 	animated_sprite_2d.frame_changed.connect(_on_animation_frame_changed)
 
 func _input(event: InputEvent) -> void:
+	# 只有被选中的单位才响应按键输入
+	if !is_selected:
+		return
+
 	# 如果正在建造，跳过其他输入处理
 	if is_building:
 		return

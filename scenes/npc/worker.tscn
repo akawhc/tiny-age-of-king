@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://dmutufjourytk"]
+[gd_scene load_steps=59 format=3 uid="uid://dmutufjourytk"]
 
 [ext_resource type="Texture2D" uid="uid://dg5fmr4vbyib7" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png" id="1_bkb4p"]
 [ext_resource type="Script" path="res://scripts/worker/worker.gd" id="1_yvxqw"]
@@ -88,6 +88,10 @@ region = Rect2(768, 384, 192, 192)
 [sub_resource type="AtlasTexture" id="AtlasTexture_qc4mk"]
 atlas = ExtResource("1_bkb4p")
 region = Rect2(960, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ekcxm"]
+atlas = ExtResource("1_bkb4p")
+region = Rect2(0, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bmp71"]
 atlas = ExtResource("1_bkb4p")
@@ -277,10 +281,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qc4mk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ekcxm")
 }],
 "loop": false,
 "name": &"hammer",
-"speed": 5.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -386,6 +393,8 @@ script = ExtResource("1_yvxqw")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_60ukm")
 animation = &"hammer"
+frame = 6
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-3, 3)

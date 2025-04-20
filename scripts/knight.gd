@@ -44,7 +44,8 @@ func _ready() -> void:
 	animated_sprite_2d.frame_changed.connect(_on_animation_frame_changed)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("chop") and not is_attacking:
+	# 只有被选中的单位才响应攻击按键
+	if is_selected and event.is_action_pressed("chop") and not is_attacking:
 		start_attack()
 
 func _physics_process(delta: float) -> void:

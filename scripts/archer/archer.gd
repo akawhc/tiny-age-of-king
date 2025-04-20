@@ -252,3 +252,12 @@ func update_animation(direction: Vector2) -> void:
 func play_idle_animation() -> void:
 	if animated_sprite:
 		animated_sprite.play("idle")
+
+# 添加处理输入的方法
+func _input(event: InputEvent) -> void:
+	# 只有被选中的单位才响应按键
+	if !is_selected:
+		return
+
+	# 这里可以添加弓箭手特有的按键处理
+	# 例如特殊射击模式、切换箭矢类型等
