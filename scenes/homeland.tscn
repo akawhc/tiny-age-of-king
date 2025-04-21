@@ -762,7 +762,7 @@ position = Vector2(-1237, 258)
 
 [node name="archer" parent="." instance=ExtResource("37_1bjhp")]
 z_index = 1
-position = Vector2(-48, 37)
+position = Vector2(-42, 59)
 
 [node name="barrel" parent="." instance=ExtResource("39_jpwvj")]
 position = Vector2(-433, 49)

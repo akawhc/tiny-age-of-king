@@ -1,6 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://bjtvh77kr53uh"]
+[gd_scene load_steps=34 format=3 uid="uid://bjtvh77kr53uh"]
 
 [ext_resource type="Texture2D" uid="uid://bh7s2d7f000fp" path="res://sprites/Tiny Swords/Factions/Goblins/Troops/Barrel/Red/Barrel_Red.png" id="1_32lq0"]
+[ext_resource type="Texture2D" uid="uid://b64k6pjhm44g2" path="res://sprites/Tiny Swords/Effects/Explosion/Explosions.png" id="2_5qf8c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cflhm"]
 atlas = ExtResource("1_32lq0")
@@ -17,6 +18,42 @@ region = Rect2(128, 640, 128, 128)
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ebkw"]
 atlas = ExtResource("1_32lq0")
 region = Rect2(0, 640, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_duuc3"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8etkf"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7gta"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t64qh"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bir55"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i6duw"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fo02d"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4t7fj"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h2oxr"]
+atlas = ExtResource("2_5qf8c")
+region = Rect2(1536, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2m170"]
 atlas = ExtResource("1_32lq0")
@@ -101,6 +138,33 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4ebkw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_duuc3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8etkf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p7gta")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t64qh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bir55")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i6duw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fo02d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4t7fj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h2oxr")
 }],
 "loop": true,
 "name": &"explode",
@@ -183,7 +247,7 @@ radius = 24.1868
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pi1b3")
 animation = &"close"
-frame_progress = 0.0208205
+frame_progress = 0.051522
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 7)

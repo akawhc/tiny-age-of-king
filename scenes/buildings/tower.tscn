@@ -1,21 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://crorj12p8p3ov"]
+[gd_scene load_steps=5 format=3 uid="uid://bojoy2f2why45"]
 
-[ext_resource type="Texture2D" uid="uid://bmfsohngo5hea" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_leybc"]
+[ext_resource type="Texture2D" uid="uid://c0jb1fxgmf2pu" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_uyaqq"]
+[ext_resource type="Script" path="res://scripts/building/tower.gd" id="2_e87v1"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_auf6o"]
-size = Vector2(93, 48.6875)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwqf"]
+size = Vector2(90, 47)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d17mp"]
+bg_color = Color(0.847059, 0.235294, 0.235294, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="Tower" type="StaticBody2D" groups=["buildings", "towers"]]
 z_index = 5
 y_sort_enabled = true
-position = Vector2(2, 63)
+input_pickable = true
+script = ExtResource("2_e87v1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-y_sort_enabled = true
-position = Vector2(2, -83)
-texture = ExtResource("1_leybc")
-offset = Vector2(0, -20)
+texture = ExtResource("1_uyaqq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(3.5, -40.6562)
-shape = SubResource("RectangleShape2D_auf6o")
+position = Vector2(0, 44.5)
+shape = SubResource("RectangleShape2D_tlwqf")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+z_index = 10
+offset_left = -45.0
+offset_top = -100.0
+offset_right = 45.0
+offset_bottom = -90.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_d17mp")
+value = 100.0
+show_percentage = false
+
+[connection signal="health_changed" from="." to="." method="_on_health_changed"]

@@ -72,7 +72,7 @@ func _process(delta: float) -> void:
 		State.EXPLODING:
 			pass
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# 如果在爆炸或隐藏状态，不移动
 	if current_state == State.EXPLODING or current_state == State.HIDING:
 		velocity = Vector2.ZERO

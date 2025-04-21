@@ -1,13 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://bojoy2f2why45"]
+[gd_scene load_steps=5 format=3 uid="uid://bojoy2f2why45"]
 
 [ext_resource type="Texture2D" uid="uid://bl80xrtjqk4os" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Castle/Castle_Blue.png" id="1_4juos"]
+[ext_resource type="Script" path="res://scripts/building/castle.gd" id="2_asjgx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwqf"]
 size = Vector2(254.25, 99.1875)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d17mp"]
+bg_color = Color(0.847059, 0.235294, 0.235294, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="Castle" type="StaticBody2D" groups=["buildings", "castles"]]
 z_index = 5
 y_sort_enabled = true
+input_pickable = true
+script = ExtResource("2_asjgx")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(4, -34)
@@ -19,3 +34,16 @@ shape = SubResource("RectangleShape2D_tlwqf")
 
 [node name="YSortPosition" type="Marker2D" parent="."]
 position = Vector2(0, 73)
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+z_index = 10
+offset_left = -120.0
+offset_top = -150.0
+offset_right = 130.0
+offset_bottom = -135.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_d17mp")
+value = 100.0
+show_percentage = false
+
+[connection signal="health_changed" from="." to="." method="_on_health_changed"]
