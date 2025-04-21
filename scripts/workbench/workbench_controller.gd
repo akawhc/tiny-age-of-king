@@ -25,6 +25,7 @@ var _building_manager: BuildingManager  # 建筑管理器单例
 func _ready() -> void:
 	config = WorkbenchConfig.new()
 	_buttons_container = $ActionButtons
+	add_to_group("workbench")
 
 	if not _buttons_container:
 		push_error("WorkbenchController: ButtonsContainer 节点未找到")

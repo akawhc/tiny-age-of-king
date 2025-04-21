@@ -242,8 +242,6 @@ func collect_gold(gold = null) -> void:
 
 # 建造城堡
 func build_castle(pos: Vector2) -> void:
-	print("工人开始建造城堡")
-
 	# 先确保工人不在其他状态
 	is_chopping = false
 	is_mining = false
@@ -257,8 +255,6 @@ func build_castle(pos: Vector2) -> void:
 
 # 建造房屋
 func build_house(pos: Vector2) -> void:
-	print("工人开始建造房屋")
-
 	# 先确保工人不在其他状态
 	is_chopping = false
 	is_mining = false
@@ -272,8 +268,6 @@ func build_house(pos: Vector2) -> void:
 
 # 建造箭塔
 func build_tower(pos: Vector2) -> void:
-	print("工人开始建造箭塔")
-
 	# 先确保工人不在其他状态
 	is_chopping = false
 	is_mining = false

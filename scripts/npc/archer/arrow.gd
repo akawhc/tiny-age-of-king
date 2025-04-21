@@ -76,8 +76,6 @@ func _determine_rotation_direction() -> void:
 		else:  # 向下
 			rotation_direction = -1  # 逆时针
 
-	print("箭矢方向: ", rad_to_deg(angle), "度, 旋转方向: ", "顺时针" if rotation_direction > 0 else "逆时针")
-
 func _process(delta: float) -> void:
 	# 如果已经落地，不再处理
 	if has_landed:

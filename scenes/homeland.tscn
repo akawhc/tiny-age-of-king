@@ -740,7 +740,7 @@ z_index = 0
 position = Vector2(265, 161)
 
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
-position = Vector2(-448, 404)
+position = Vector2(-174, 73)
 
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-1387, 26)

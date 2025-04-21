@@ -7,7 +7,7 @@ extends Building
 
 func _ready() -> void:
 	building_type = "Tower"
-	max_health = 200  # 塔有较高生命值
+	max_health = 500  # 塔有较高生命值
 	current_health = max_health
 	super._ready()  # 调用父类的_ready方法
 
