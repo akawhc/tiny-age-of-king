@@ -45,7 +45,6 @@ var enemies_in_range: Array = []
 func _ready() -> void:
 	super._ready()
 
-	# 添加到弓箭手组
 	add_to_group("archers")
 	add_to_group("soldiers")
 
@@ -59,7 +58,6 @@ func _ready() -> void:
 		circle_shape.radius = ARCHER_CONFIG.detection_radius
 		detection_shape.shape = circle_shape
 
-	# 连接必要的信号
 	detection_area.body_entered.connect(_on_detection_area_body_entered)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
 	animated_sprite.animation_finished.connect(_on_animation_finished)
@@ -76,19 +74,16 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
-	if event.is_action_pressed("chop"):  # 与工人共用砍树按键(空格)
+	if event.is_action_pressed("chop"):
 		get_viewport().set_input_as_handled()
 
 		if !can_attack:
 			print("弓箭手正在冷却中，无法攻击")
 			return
 
-		# 手动发起攻击
 		if target_enemy:
-			# 如果有目标，则攻击目标
 			start_attack()
 		else:
-			# 没有目标时，向面朝方向发射
 			manual_shoot()
 
 func _process(delta: float) -> void:
@@ -128,10 +123,8 @@ func _physics_process(delta: float) -> void:
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	# 检测进入范围的敌人
 	if body.is_in_group("goblin"):
-		# 将敌人添加到检测列表中，而不是立即设为目标
 		enemies_in_range.append(body)
-		print("弓箭手发现敌人: ", body.name)
-		update_target() # 更新攻击目标
+		update_target()
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
 	# 敌人离开检测范围
@@ -140,8 +133,7 @@ func _on_detection_area_body_exited(body: Node2D) -> void:
 			enemies_in_range.erase(body)
 		if body == target_enemy:
 			target_enemy = null
-		print("敌人离开了弓箭手的射程")
-		update_target() # 更新攻击目标
+		update_target()
 
 # 更新目标敌人为最近的哥布林
 func update_target() -> void:
@@ -164,7 +156,6 @@ func start_attack() -> void:
 	current_state = ArcherState.ATTACKING
 	can_attack = false
 
-	# 计算攻击方向并播放对应的射击动画
 	var attack_direction = (target_enemy.global_position - global_position).normalized()
 	play_attack_animation(attack_direction)
 
@@ -235,14 +226,12 @@ func _on_animation_finished() -> void:
 			play_idle_animation()
 
 func shoot_arrow() -> void:
-	# 计算射击方向
 	var shoot_direction
 
+	# 如果目标存在，则朝目标射击
 	if target_enemy:
-		# 如果有目标，瞄准目标
 		shoot_direction = (target_enemy.global_position - global_position).normalized()
 	else:
-		# 如果没有目标，根据朝向射击
 		shoot_direction = facing_direction
 		if animated_sprite.flip_h:
 			shoot_direction = Vector2(-1, 0)

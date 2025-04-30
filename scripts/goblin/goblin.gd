@@ -101,22 +101,9 @@ func find_target() -> void:
 	if current_state == BaseState.DEAD:
 		return
 
-	var characters = []
-	var buildings = []
-
-	# 检测角色
-	var potential_targets = get_tree().get_nodes_in_group("player_units")
-	for pot_target in potential_targets:
-		var distance = global_position.distance_to(pot_target.global_position)
-		if distance <= CONFIG.detection_radius:
-			characters.append(pot_target)
-
-	# 检测建筑
-	var buildings_targets = get_tree().get_nodes_in_group("player_buildings")
-	for building in buildings_targets:
-		var distance = global_position.distance_to(building.global_position)
-		if distance <= CONFIG.detection_radius:
-			buildings.append(building)
+	# 获取范围内的攻击目标
+	var characters = get_group_nodes("soldiers")
+	var buildings = get_group_nodes("buildings")
 
 	# 优先攻击角色，其次是建筑
 	if characters.size() > 0:
@@ -126,8 +113,16 @@ func find_target() -> void:
 		var closest_building = find_closest_node(buildings)
 		set_target(closest_building)
 	else:
-		# 没有目标
 		target = null
+
+func get_group_nodes(group_name: String) -> Array:
+	var group_nodes = get_tree().get_nodes_in_group(group_name)
+	var targets = []
+	for node in group_nodes:
+		var distance = global_position.distance_to(node.global_position)
+		if distance <= CONFIG.detection_radius:
+			targets.append(node)
+	return targets
 
 # 找到最近的节点
 func find_closest_node(nodes: Array) -> Node2D:
@@ -167,12 +162,10 @@ func change_state(new_state: int) -> void:
 	if current_state == new_state:
 		return
 
-	# 退出当前状态
+	# 已经死亡则不能改变状态
 	if current_state == BaseState.DEAD:
-		# 已经死亡则不能改变状态
 		return
 
-	# 进入新状态
 	var old_state = current_state
 	current_state = new_state
 
