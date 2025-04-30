@@ -248,8 +248,7 @@ script = ExtResource("1_k13v8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pi1b3")
-animation = &"explode"
-frame = 11
+animation = &"close"
 frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

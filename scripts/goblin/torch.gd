@@ -34,7 +34,6 @@ func _ready() -> void:
 		"attack_damage": 15,      # 攻击伤害
 		"attack_cooldown": 1.5,   # 攻击冷却时间(秒)
 		"attack_distance": 80.0,  # 攻击距离 - 应该与attack_range接近
-		"approach_distance": 120.0, # 接近距离
 		"min_distance": 45.0,     # 最小保持距离
 		"attack_interval": 1.0,   # 攻击检测间隔
 	}
@@ -58,9 +57,11 @@ func play_idle_animation() -> void:
 	elif current_direction == Direction.DOWN:
 		animated_sprite.play("idle")
 	elif current_direction == Direction.LEFT:
-		animated_sprite.play("idle_left")
+		animated_sprite.flip_h = true
+		animated_sprite.play("idle")
 	elif current_direction == Direction.RIGHT:
-		animated_sprite.play("idle_right")
+		animated_sprite.flip_h = false
+		animated_sprite.play("idle")
 
 func process_state(delta: float) -> void:
 	# print("process_state: ", current_state)

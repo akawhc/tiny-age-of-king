@@ -20,23 +20,35 @@ var exploded: bool = false
 func _ready() -> void:
 	# 配置参数
 	CONFIG = {
-		"move_speed": 100.0,       # 移动速度
+		"move_speed": 50.0,       # 移动速度
 		"health": 50,              # 生命值
-		"detection_radius": 150,   # 检测半径
-		"explosion_damage": 200,    # 爆炸伤害
-		"explosion_radius": 200,   # 爆炸伤害半径
+		"detection_radius": 80,   # 检测半径
+		"explosion_damage": 20,    # 爆炸伤害
+		"explosion_radius": 100,   # 爆炸伤害半径
 		"attack_interval": 1.0,    # 攻击检测间隔
-		"attack_distance": 100.0,   # 攻击距离 - 爆炸时的理想距离
-		"approach_distance": 80.0, # 接近距离 - 开始减速的距离
+		"attack_distance": 100.0,   # 攻击距离
 	}
 
 	super._ready()
+	# 监听动画帧变化事件
+	animated_sprite.frame_changed.connect(_on_frame_changed)
 
 func initialize() -> void:
 	super.initialize()
 	animated_sprite.play("close")
 
 func process_state(_delta: float) -> void:
+	# 检查是否有目标在爆炸范围内
+	if current_state != BarrelState.EXPLODING and current_state != BarrelState.DEAD:
+		var nearby_targets = get_tree().get_nodes_in_group("soldiers")
+		for t in nearby_targets:
+			if is_instance_valid(t):
+				var distance = global_position.distance_to(t.global_position)
+				if distance <= CONFIG.detection_radius:
+					print("检测到目标在爆炸范围内！")
+					change_state(BarrelState.EXPLODING)
+					return
+
 	match current_state:
 		BarrelState.IDLE:
 			pass
@@ -122,27 +134,31 @@ func explode() -> void:
 		return
 
 	exploded = true
+	animated_sprite.play("explode")
 
-	# 对爆炸范围内的士兵和建筑造成伤害
-	explode_damage("soldiers")
-	explode_damage("buildings")
+func _on_frame_changed() -> void:
+	if animated_sprite.animation == "explode":
+		# 获取当前动画的总帧数
+		var total_frames = animated_sprite.sprite_frames.get_frame_count(animated_sprite.animation)
+		# 在倒数第二帧触发伤害
+		if animated_sprite.frame == total_frames - 6:
+			explode_damage("soldiers")
+			explode_damage("buildings")
 
-	# 爆炸效果
-	print("爆炸桶爆炸了！")
-
-	# 爆炸后销毁
-	await animated_sprite.animation_finished
-	queue_free()
+func _on_animation_finished() -> void:
+	if animated_sprite.animation == "explode":
+		queue_free()
 
 func explode_damage(group_name: String) -> void:
 	var targets = get_tree().get_nodes_in_group(group_name)
 	for t in targets:
-		var distance = global_position.distance_to(t.global_position)
-		if distance <= CONFIG.explosion_radius:
-			if t.has_method("take_damage"):
-				var damage_factor = 1.0 - (distance / CONFIG.explosion_radius)
-				var actual_damage = int(CONFIG.explosion_damage * damage_factor)
-				t.take_damage(actual_damage)
+		if is_instance_valid(t):  # 确保目标还存在
+			var distance = global_position.distance_to(t.global_position)
+			if distance <= CONFIG.explosion_radius:
+				if t.has_method("take_damage"):
+					var damage_factor = 1.0 - (distance / CONFIG.explosion_radius)
+					var actual_damage = int(CONFIG.explosion_damage * damage_factor)
+					t.take_damage(actual_damage)
 
 func handle_death() -> void:
 	change_state(BarrelState.EXPLODING)

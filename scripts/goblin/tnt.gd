@@ -25,10 +25,10 @@ func _ready() -> void:
 	CONFIG = {
 		"move_speed": 90.0,       # 移动速度
 		"health": 40,             # 生命值
-		"detection_radius": 180,  # 检测半径
+		"detection_radius": 150,  # 检测半径
 		"throw_range": 150,       # 投掷范围
 		"throw_damage": 25,       # 投掷伤害
-		"explosion_radius": 80,   # 爆炸伤害半径
+		"explosion_radius": 100,   # 爆炸伤害半径
 		"attack_interval": 1.0,   # 攻击检测间隔
 	}
 

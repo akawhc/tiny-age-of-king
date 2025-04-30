@@ -32,7 +32,6 @@ var CONFIG = {
 	"detection_radius": 150,   # 检测半径
 	"attack_interval": 1.0,    # 攻击检测间隔
 	"attack_distance": 60.0,   # 攻击距离 - 在此距离停止并攻击
-	"approach_distance": 80.0, # 接近距离 - 大于此距离时会接近目标，小于此距离时会减速
 }
 
 func _ready() -> void:

@@ -131,6 +131,7 @@ func _draw() -> void:
 # 受到伤害
 func take_damage(damage: int) -> void:
 	health -= damage
+	print(name, " 受到 ", damage, " 点伤害，剩余生命值：", health)
 
 	if health <= 0:
 		handle_death()
