@@ -38,18 +38,20 @@ func _ready() -> void:
 	# 监听动画完成事件
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 
-# 重写初始化方法
 func initialize() -> void:
 	super.initialize()
 	# 初始化特定变量
 	can_throw = true
 	throw_cooldown = 0.0
 
-# 重写播放待机动画
 func play_idle_animation() -> void:
 	animated_sprite.play("idle")
 
-# 重写状态处理
+func handle_attack() -> void:
+	# TNT哥布林在攻击距离内会投掷TNT
+	if can_throw:
+		change_state(TntState.THROWING)
+
 func process_state(delta: float) -> void:
 	# 投掷冷却
 	if !can_throw:
@@ -89,7 +91,6 @@ func process_state(delta: float) -> void:
 			# 死亡状态
 			pass
 
-# 重写物理处理
 func _physics_process(_delta: float) -> void:
 	# 如果在投掷或死亡状态，不移动
 	if current_state == TntState.THROWING or current_state == TntState.DEAD:
@@ -100,7 +101,6 @@ func _physics_process(_delta: float) -> void:
 	velocity = move_direction * CONFIG.move_speed
 	move_and_slide()
 
-# 重写随机行为
 func _random_action() -> void:
 	# 如果已经有目标，不执行随机行为
 	if target != null:
@@ -120,7 +120,6 @@ func _random_action() -> void:
 			# 待机
 			change_state(TntState.IDLE)
 
-# 重写状态进入处理
 func on_state_enter(new_state: int, _old_state: int) -> void:
 	match new_state:
 		TntState.IDLE:
@@ -134,7 +133,6 @@ func on_state_enter(new_state: int, _old_state: int) -> void:
 			# 播放死亡动画或特效
 			queue_free()
 
-# 投掷TNT
 func throw_tnt() -> void:
 	if !can_throw or !target:
 		return
@@ -144,7 +142,6 @@ func throw_tnt() -> void:
 	# 实际投掷逻辑将在动画的特定帧触发
 	print("TNT哥布林准备投掷!")
 
-# 在特定动画帧实际生成并投掷TNT
 func spawn_and_throw_tnt() -> void:
 	if !target:
 		return
@@ -165,7 +162,6 @@ func spawn_and_throw_tnt() -> void:
 		# 将炸弹添加到场景
 		get_tree().root.add_child(bomb)
 
-# 动画完成回调
 func _on_animation_finished() -> void:
 	if animated_sprite.animation == "throw":
 		change_state(TntState.IDLE)

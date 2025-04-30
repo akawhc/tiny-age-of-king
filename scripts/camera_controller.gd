@@ -133,14 +133,13 @@ func _handle_mouse_follow(delta: float) -> void:
 
 	# 只在边缘时移动或总是跟随鼠标移动
 	if !config.mouse_follow.follow_only_at_edge or (config.mouse_follow.follow_only_at_edge and is_at_edge):
-		# 计算相机位置偏移
-		var offset = (mouse_pos - viewport_center) * zoom.x * config.mouse_follow.weight
+		var camera_offset = (mouse_pos - viewport_center) * zoom.x * config.mouse_follow.weight
 
 		# 加上额外偏移量
-		offset += config.mouse_follow.offset
+		camera_offset += config.mouse_follow.offset
 
 		# 移动相机（平滑过渡）- 降低移动速度
-		global_position = global_position.lerp(global_position + offset, delta * config.mouse_follow.lerp_speed)
+		global_position = global_position.lerp(global_position + camera_offset, delta * config.mouse_follow.lerp_speed)
 
 func _handle_keyboard_input(event: InputEvent) -> void:
 	if not config.keyboard.enabled:

@@ -37,8 +37,8 @@
 [ext_resource type="PackedScene" uid="uid://bo6o26bl2gexf" path="res://scenes/resources/meat.tscn" id="35_jyqfj"]
 [ext_resource type="PackedScene" uid="uid://dt58y5ip4b0jw" path="res://scenes/resources/sheep.tscn" id="36_au03j"]
 [ext_resource type="PackedScene" uid="uid://ci8pjvxlimwx5" path="res://scenes/npc/archer.tscn" id="37_1bjhp"]
-[ext_resource type="PackedScene" uid="uid://cduh6w1v71qce" path="res://scenes/goblin/barrel.tscn" id="39_jpwvj"]
-[ext_resource type="PackedScene" uid="uid://cyxbscdor8jh1" path="res://scenes/goblin/tnt.tscn" id="40_v6hjl"]
+[ext_resource type="PackedScene" uid="uid://cyxbscdor8jh1" path="res://scenes/goblin/tnt.tscn" id="39_vbrem"]
+[ext_resource type="PackedScene" uid="uid://cduh6w1v71qce" path="res://scenes/goblin/barrel.tscn" id="40_4k30a"]
 [ext_resource type="PackedScene" uid="uid://0g32qp6mlxfh" path="res://scenes/goblin/torch.tscn" id="41_tt8rx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
@@ -763,11 +763,11 @@ position = Vector2(-1237, 258)
 z_index = 1
 position = Vector2(-42, 59)
 
-[node name="barrel" parent="." instance=ExtResource("39_jpwvj")]
-position = Vector2(-433, 49)
-
-[node name="tnt" parent="." instance=ExtResource("40_v6hjl")]
-position = Vector2(-368, -51)
-
 [node name="torch" parent="." instance=ExtResource("41_tt8rx")]
-position = Vector2(-348, 133)
+position = Vector2(-150, 155)
+
+[node name="tnt" parent="." instance=ExtResource("39_vbrem")]
+position = Vector2(-55, 155)
+
+[node name="barrel" parent="." instance=ExtResource("40_4k30a")]
+position = Vector2(79, 104)

@@ -15,18 +15,19 @@ enum BarrelState {
 	EXPLODING
 }
 
-# 桶兵特有的变量
 var exploded: bool = false
 
 func _ready() -> void:
 	# 配置参数
 	CONFIG = {
-		"move_speed": 100.0,      # 移动速度
-		"health": 5000,           # 生命值
-		"detection_radius": 150,  # 检测半径
-		"explosion_damage": 30,   # 爆炸伤害
-		"explosion_radius": 100,  # 爆炸伤害半径
-		"attack_interval": 1.0,   # 攻击检测间隔
+		"move_speed": 100.0,       # 移动速度
+		"health": 50,              # 生命值
+		"detection_radius": 150,   # 检测半径
+		"explosion_damage": 30,    # 爆炸伤害
+		"explosion_radius": 100,   # 爆炸伤害半径
+		"attack_interval": 1.0,    # 攻击检测间隔
+		"attack_distance": 100.0,   # 攻击距离 - 爆炸时的理想距离
+		"approach_distance": 80.0, # 接近距离 - 开始减速的距离
 	}
 
 	super._ready()
@@ -51,32 +52,17 @@ func process_state(_delta: float) -> void:
 		BarrelState.EXPLODING:
 			pass
 
+func handle_attack() -> void:
+	# 桶兵在攻击距离内会爆炸
+	change_state(BarrelState.EXPLODING)
+
 func _physics_process(_delta: float) -> void:
 	# 如果在爆炸或隐藏状态，不移动
 	if current_state == BarrelState.EXPLODING or current_state == BarrelState.HIDING:
 		velocity = Vector2.ZERO
 		return
 
-	# 如果有目标，向目标移动
-	if target and current_state == BarrelState.RUNNING:
-		move_direction = (target.global_position - global_position).normalized()
-		velocity = move_direction * CONFIG.move_speed
-
-		# 如果靠近目标，爆炸攻击
-		if global_position.distance_to(target.global_position) < CONFIG.explosion_radius * 0.7:
-			change_state(BarrelState.EXPLODING)
-	else:
-		# 否则按当前移动方向移动
-		velocity = move_direction * CONFIG.move_speed
-
-		# 如果速度很小，视为静止
-		if velocity.length() < 10:
-			velocity = Vector2.ZERO
-			if current_state == BarrelState.RUNNING:
-				change_state(BarrelState.IDLE)
-
-	# 应用移动
-	move_and_slide()
+	super._physics_process(_delta)
 
 func _random_action() -> void:
 	# 如果已经有目标，不执行随机行为
@@ -157,7 +143,6 @@ func explode_damage(group_name: String) -> void:
 				var damage_factor = 1.0 - (distance / CONFIG.explosion_radius)
 				var actual_damage = int(CONFIG.explosion_damage * damage_factor)
 				t.take_damage(actual_damage)
-
 
 func handle_death() -> void:
 	change_state(BarrelState.EXPLODING)

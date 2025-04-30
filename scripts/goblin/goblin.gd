@@ -27,10 +27,12 @@ var attack_timer: float = 0.0
 
 # 由子类覆盖的配置
 var CONFIG = {
-	"move_speed": 100.0,      # 移动速度
-	"health": 50,             # 生命值
-	"detection_radius": 150,  # 检测半径
-	"attack_interval": 1.0,   # 攻击检测间隔
+	"move_speed": 100.0,       # 移动速度
+	"health": 50,              # 生命值
+	"detection_radius": 150,   # 检测半径
+	"attack_interval": 1.0,    # 攻击检测间隔
+	"attack_distance": 60.0,   # 攻击距离 - 在此距离停止并攻击
+	"approach_distance": 80.0, # 接近距离 - 大于此距离时会接近目标，小于此距离时会减速
 }
 
 func _ready() -> void:
@@ -81,8 +83,23 @@ func _physics_process(_delta: float) -> void:
 
 	# 如果有目标，向目标移动
 	if target and current_state == BaseState.RUNNING:
-		move_direction = (target.global_position - global_position).normalized()
-		velocity = move_direction * CONFIG.move_speed
+		var distance_to_target = global_position.distance_to(target.global_position)
+		var direction_to_target = (target.global_position - global_position).normalized()
+
+		# 如果在攻击距离内，停止移动并攻击
+		if distance_to_target <= CONFIG.attack_distance:
+			velocity = Vector2.ZERO
+			handle_attack()
+		# 如果在接近距离内但大于攻击距离，根据距离调整移动
+		elif distance_to_target <= CONFIG.approach_distance:
+			var distance_factor = (distance_to_target - CONFIG.attack_distance) / (CONFIG.approach_distance - CONFIG.attack_distance)
+
+			move_direction = direction_to_target * distance_factor
+			velocity = move_direction * CONFIG.move_speed
+		# 如果在接近距离外，全速移动
+		else:
+			move_direction = direction_to_target
+			velocity = move_direction * CONFIG.move_speed
 	else:
 		# 否则按当前移动方向移动
 		velocity = move_direction * CONFIG.move_speed
@@ -96,24 +113,35 @@ func _physics_process(_delta: float) -> void:
 	# 应用移动
 	move_and_slide()
 
+# 处理攻击行为，子类需重写
+func handle_attack() -> void:
+	pass
+
 # 寻找攻击目标
 func find_target() -> void:
 	if current_state == BaseState.DEAD:
 		return
 
-	# 获取范围内的攻击目标
-	var characters = get_group_nodes("soldiers")
-	var buildings = get_group_nodes("buildings")
+	# 检查当前目标是否有效
+	if target != null:
+		# 检查目标是否存在于场景树中（未被销毁）
+		if !is_instance_valid(target) or !target.is_inside_tree():
+			target = null
+		# 检查目标是否超出检测范围
+		elif global_position.distance_to(target.global_position) > CONFIG.detection_radius:
+			target = null
 
-	# 优先攻击角色，其次是建筑
-	if characters.size() > 0:
-		var closest_character = find_closest_node(characters)
-		set_target(closest_character)
-	elif buildings.size() > 0:
-		var closest_building = find_closest_node(buildings)
-		set_target(closest_building)
-	else:
-		target = null
+	# 如果没有有效目标，寻找新目标
+	if target == null:
+		# 获取范围内的所有潜在目标
+		var all_targets = []
+		all_targets.append_array(get_group_nodes("soldiers"))
+		all_targets.append_array(get_group_nodes("buildings"))
+
+		# 如果有可攻击目标，选择最近的
+		if all_targets.size() > 0:
+			var closest_target = find_closest_node(all_targets)
+			set_target(closest_target)
 
 func get_group_nodes(group_name: String) -> Array:
 	var group_nodes = get_tree().get_nodes_in_group(group_name)
@@ -179,8 +207,6 @@ func on_state_enter(_new_state: int, _old_state: int) -> void:
 # 设置目标
 func set_target(new_target: Node2D) -> void:
 	target = new_target
-	if target:
-		change_state(BaseState.RUNNING)
 
 # 受到伤害
 func take_damage(damage: int) -> void:
