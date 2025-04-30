@@ -28,6 +28,8 @@ signal health_changed(current_health, max_health)
 signal building_destroyed(building_type, position)
 
 func _ready() -> void:
+	add_to_group("buildings")
+
 	# 获取正常状态的精灵节点
 	normal_sprite = $Sprite2D
 

@@ -39,11 +39,15 @@ var arrow_scene_path: String = "res://scenes/projectiles/arrow.tscn"
 @onready var detection_area: Area2D = $DetectionArea
 @onready var arrow_spawn_point: Marker2D = $ArrowSpawnPoint
 
+# 新增变量
+var enemies_in_range: Array = []
+
 func _ready() -> void:
 	super._ready()
 
 	# 添加到弓箭手组
 	add_to_group("archers")
+	add_to_group("soldiers")
 
 	# 覆盖父类的默认移动速度
 	move_speed = ARCHER_CONFIG.move_speed
@@ -123,15 +127,35 @@ func _physics_process(delta: float) -> void:
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	# 检测进入范围的敌人
-	if body.is_in_group("enemies") and !target_enemy:
-		target_enemy = body
+	if body.is_in_group("goblin"):
+		# 将敌人添加到检测列表中，而不是立即设为目标
+		enemies_in_range.append(body)
 		print("弓箭手发现敌人: ", body.name)
+		update_target() # 更新攻击目标
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
 	# 敌人离开检测范围
-	if body == target_enemy:
-		target_enemy = null
+	if body.is_in_group("goblin"):
+		if enemies_in_range.has(body):
+			enemies_in_range.erase(body)
+		if body == target_enemy:
+			target_enemy = null
 		print("敌人离开了弓箭手的射程")
+		update_target() # 更新攻击目标
+
+# 更新目标敌人为最近的哥布林
+func update_target() -> void:
+	var closest_enemy = null
+	var closest_distance = INF
+
+	for enemy in enemies_in_range:
+		if is_instance_valid(enemy):
+			var distance = global_position.distance_to(enemy.global_position)
+			if distance < closest_distance:
+				closest_distance = distance
+				closest_enemy = enemy
+
+	target_enemy = closest_enemy
 
 func start_attack() -> void:
 	if current_state == ArcherState.ATTACKING:

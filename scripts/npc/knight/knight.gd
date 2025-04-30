@@ -40,6 +40,7 @@ var has_hit = false  # 是否已经造成伤害
 
 func _ready() -> void:
 	super._ready()  # 调用父类的 _ready
+	add_to_group("soldiers")
 	animated_sprite_2d.play(ANIMATION_STATES.IDLE)  # 初始状态为待机
 	animated_sprite_2d.frame_changed.connect(_on_animation_frame_changed)
 

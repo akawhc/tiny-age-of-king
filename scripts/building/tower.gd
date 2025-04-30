@@ -7,11 +7,11 @@ extends Building
 
 func _ready() -> void:
 	building_type = "Tower"
-	max_health = 500  # 塔有较高生命值
+	max_health = 500
 	current_health = max_health
-	super._ready()  # 调用父类的_ready方法
 
-	# 可以在这里添加塔特有的属性和行为
+	super._ready()
+
 
 # 重写摧毁纹理路径获取方法，如果有特定的塔摧毁纹理
 func get_destroy_texture_path() -> String:

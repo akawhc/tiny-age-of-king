@@ -428,4 +428,4 @@ shape = SubResource("CircleShape2D_4rcl1")
 shape = SubResource("CircleShape2D_5k0rc")
 
 [node name="ArrowSpawnPoint" type="Marker2D" parent="."]
-position = Vector2(34, 9)
+position = Vector2(43, 5)

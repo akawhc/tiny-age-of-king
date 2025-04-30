@@ -13,7 +13,7 @@ enum CameraMode {
 
 # 相机配置
 var config = {
-	"camera_mode": CameraMode.FIXED,  # 相机模式
+	"camera_mode": CameraMode.FOLLOW_MOUSE,  # 相机模式
 	"mouse_follow": {
 		"enabled": false,                   # 是否启用鼠标跟随 - 默认禁用，只使用边缘滚动
 		"offset": Vector2.ZERO,             # 鼠标跟随偏移量
@@ -27,7 +27,7 @@ var config = {
 		"move_speed": 300.0                 # 键盘移动速度
 	},
 	"edge_scroll": {
-		"enabled": false,                    # 是否启用边缘滚动
+		"enabled": true,                    # 是否启用边缘滚动
 		"margin_percent": 0.02,             # 边缘滚动边距百分比（屏幕宽/高的百分比）- 降低为2%
 		"min_margin": 10.0,                 # 最小边缘滚动边距（像素）
 		"max_margin": 25.0,                 # 最大边缘滚动边距（像素）

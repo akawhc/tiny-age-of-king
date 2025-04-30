@@ -29,6 +29,7 @@ var is_building = false
 func _ready() -> void:
 	super._ready()  # 调用父类的 _ready
 	add_to_group("workers")
+	add_to_group("soldiers")
 
 	# 初始化组件
 	_init_components()
