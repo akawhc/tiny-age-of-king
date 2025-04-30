@@ -81,38 +81,6 @@ func _physics_process(_delta: float) -> void:
 		velocity = Vector2.ZERO
 		return
 
-	# 如果有目标，向目标移动
-	if target and current_state == BaseState.RUNNING:
-		var distance_to_target = global_position.distance_to(target.global_position)
-		var direction_to_target = (target.global_position - global_position).normalized()
-
-		# 如果在攻击距离内，停止移动并攻击
-		if distance_to_target <= CONFIG.attack_distance:
-			velocity = Vector2.ZERO
-			handle_attack()
-		# 如果在接近距离内但大于攻击距离，根据距离调整移动
-		elif distance_to_target <= CONFIG.approach_distance:
-			var distance_factor = (distance_to_target - CONFIG.attack_distance) / (CONFIG.approach_distance - CONFIG.attack_distance)
-
-			move_direction = direction_to_target * distance_factor
-			velocity = move_direction * CONFIG.move_speed
-		# 如果在接近距离外，全速移动
-		else:
-			move_direction = direction_to_target
-			velocity = move_direction * CONFIG.move_speed
-	else:
-		# 否则按当前移动方向移动
-		velocity = move_direction * CONFIG.move_speed
-
-		# 如果速度很小，视为静止
-		if velocity.length() < 10:
-			velocity = Vector2.ZERO
-			if current_state == BaseState.RUNNING:
-				change_state(BaseState.IDLE)
-
-	# 应用移动
-	move_and_slide()
-
 # 处理攻击行为，子类需重写
 func handle_attack() -> void:
 	pass

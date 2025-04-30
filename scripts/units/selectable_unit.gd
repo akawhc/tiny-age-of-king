@@ -9,12 +9,14 @@ extends CharacterBody2D
 @export var move_speed: float = 100.0
 @export var selection_indicator_color: Color = Color(0.2, 0.4, 0.8, 0.8)  # 蓝色
 @export var selection_indicator_width: float = 2.0  # 轮廓线宽度
+@export var health: int = 100  # 生命值
 
 # 状态变量
 var is_selected: bool = false
 var target_position: Vector2 = Vector2.ZERO
 var is_moving: bool = false
 var collision_shape: CollisionShape2D
+var is_dead: bool = false  # 死亡状态
 
 func _ready() -> void:
 	# 将单位添加到可选择单位组
@@ -23,6 +25,11 @@ func _ready() -> void:
 	collision_shape = $CollisionShape2D
 
 func _physics_process(_delta: float) -> void:
+	# 如果单位已死亡，不处理移动
+	if is_dead:
+		velocity = Vector2.ZERO
+		return
+
 	# 只有被选中的单位才响应键盘输入
 	if is_selected:
 		var input_dir = Vector2.ZERO
@@ -76,6 +83,10 @@ func set_selected(selected: bool) -> void:
 	queue_redraw()
 
 func move_to(pos: Vector2) -> void:
+	# 如果已死亡，不响应移动命令
+	if is_dead:
+		return
+
 	target_position = pos  # 使用全局坐标作为目标位置
 	is_moving = true
 	print(name, " 开始移动到位置：", pos)
@@ -116,6 +127,46 @@ func _draw() -> void:
 			points.push_back(center + point)
 
 		draw_polyline(points, selection_indicator_color.darkened(0.3), 1.0)
+
+# 受到伤害
+func take_damage(damage: int) -> void:
+	health -= damage
+
+	if health <= 0:
+		handle_death()
+	else:
+		# 受伤反馈
+		modulate = Color(1, 0.5, 0.5)
+		await get_tree().create_timer(0.2).timeout
+		modulate = Color(1, 1, 1)
+
+# 处理死亡
+func handle_death() -> void:
+	is_dead = true
+
+	# 停止移动
+	velocity = Vector2.ZERO
+	is_moving = false
+
+	# 禁用碰撞
+	if collision_shape:
+		collision_shape.set_deferred("disabled", true)
+
+	# 播放死亡动画或效果
+	play_death_animation()
+
+	# 从组中移除
+	remove_from_group("selectable_units")
+	if is_in_group("soldiers"):
+		remove_from_group("soldiers")
+
+	# 延迟销毁
+	queue_free()
+
+# 虚函数，由子类实现
+func play_death_animation() -> void:
+	# 默认实现，子类可重写
+	modulate = Color(0.5, 0.5, 0.5, 0.7)  # 变灰表示死亡
 
 # 虚函数，由具体的单位类型实现
 func update_animation(_direction: Vector2) -> void:

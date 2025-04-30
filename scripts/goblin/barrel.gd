@@ -23,8 +23,8 @@ func _ready() -> void:
 		"move_speed": 100.0,       # 移动速度
 		"health": 50,              # 生命值
 		"detection_radius": 150,   # 检测半径
-		"explosion_damage": 30,    # 爆炸伤害
-		"explosion_radius": 100,   # 爆炸伤害半径
+		"explosion_damage": 200,    # 爆炸伤害
+		"explosion_radius": 200,   # 爆炸伤害半径
 		"attack_interval": 1.0,    # 攻击检测间隔
 		"attack_distance": 100.0,   # 攻击距离 - 爆炸时的理想距离
 		"approach_distance": 80.0, # 接近距离 - 开始减速的距离

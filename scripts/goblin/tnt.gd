@@ -60,6 +60,10 @@ func process_state(delta: float) -> void:
 			throw_cooldown = 0.0
 			can_throw = true
 
+	# 检查目标有效性
+	if target == null or (!is_instance_valid(target) or !target.is_inside_tree()):
+		target = null
+
 	match current_state:
 		TntState.IDLE:
 			# 如果有目标并且在检测范围内，追击目标

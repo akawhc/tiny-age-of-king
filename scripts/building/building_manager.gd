@@ -280,6 +280,6 @@ func spawn_building(building_type: String, pos: Vector2) -> void:
 		push_error("无法加载建筑场景: " + scene_path)
 
 # 处理建筑被摧毁的回调
-func _on_building_destroyed(building_type: String, position: Vector2) -> void:
-	print("建筑被摧毁: ", building_type, " 在位置 ", position)
+func _on_building_destroyed(building_type: String, pos: Vector2) -> void:
+	print("建筑被摧毁: ", building_type, " 在位置 ", pos)
 	# 在这里可以添加额外的逻辑，例如更新游戏状态、触发游戏事件等
