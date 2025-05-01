@@ -5,6 +5,14 @@
 extends CharacterBody2D
 class_name GoblinBase
 
+# 方向枚举
+enum Direction {
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT
+}
+
 # 基础状态
 enum BaseState {
 	IDLE,      # 待机
@@ -16,10 +24,12 @@ enum BaseState {
 var current_state: int = BaseState.IDLE  # 使用int类型以兼容子类扩展的状态枚举
 var health: int = 50
 var target: Node2D = null
-var move_direction: Vector2 = Vector2.ZERO
 var random_timer: float = 0.0
 var random_move_cooldown: float = 3.0
 var attack_timer: float = 0.0
+
+var move_direction: Vector2 = Vector2.ZERO  # 移动方向
+var current_direction: Direction = Direction.DOWN  # 当前朝向
 
 # 节点引用
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -79,6 +89,7 @@ func _physics_process(_delta: float) -> void:
 	if current_state == BaseState.DEAD:
 		velocity = Vector2.ZERO
 		return
+	play_idle_animation()
 
 # 处理攻击行为，子类需重写
 func handle_attack() -> void:
@@ -194,3 +205,30 @@ func handle_death() -> void:
 # 播放待机动画
 func play_idle_animation() -> void:
 	animated_sprite.play("idle")
+
+
+func _update_target_direction(t: Node2D) -> void:
+	# 目标相对于当前角色的向量值
+	move_direction = (t.global_position - global_position).normalized()
+	_update_direction(move_direction)
+
+func _update_direction(direction: Vector2) -> void:
+	move_direction = direction
+	if move_direction == Vector2.ZERO:
+		return
+
+	var angle = move_direction.angle()
+
+	# 将弧度转换为角度
+	var degrees = rad_to_deg(angle)
+
+	if degrees >= -45 and degrees < 45:
+		current_direction = Direction.RIGHT
+		animated_sprite.flip_h = false
+	elif degrees >= 45 and degrees < 135:
+		current_direction = Direction.DOWN
+	elif degrees >= -135 and degrees < -45:
+		current_direction = Direction.UP
+	else:
+		current_direction = Direction.LEFT
+		animated_sprite.flip_h = true

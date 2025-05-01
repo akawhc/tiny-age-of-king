@@ -4,14 +4,6 @@
 
 extends GoblinBase
 
-# 方向枚举
-enum Direction {
-	UP,
-	RIGHT,
-	DOWN,
-	LEFT
-}
-
 # 扩展状态
 enum TorchState {
 	IDLE = BaseState.IDLE,     # 继承基类状态
@@ -21,7 +13,6 @@ enum TorchState {
 }
 
 # 火把哥布林特有变量
-var current_direction: Direction = Direction.DOWN
 var attack_cooldown: float = 0.0
 var can_attack: bool = true
 
@@ -142,31 +133,6 @@ func _physics_process(delta: float) -> void:
 		# 如果没有目标或在IDLE状态，使用基类的移动逻辑
 		super._physics_process(delta)
 
-func _update_target_direction(t: Node2D) -> void:
-	# 目标相对于当前角色的向量值
-	move_direction = (t.global_position - global_position).normalized()
-	_update_direction(move_direction)
-
-func _update_direction(direction: Vector2) -> void:
-	move_direction = direction
-	if move_direction == Vector2.ZERO:
-		return
-
-	var angle = move_direction.angle()
-
-	# 将弧度转换为角度
-	var degrees = rad_to_deg(angle)
-
-	if degrees >= -45 and degrees < 45:
-		current_direction = Direction.RIGHT
-		animated_sprite.flip_h = false
-	elif degrees >= 45 and degrees < 135:
-		current_direction = Direction.DOWN
-	elif degrees >= -135 and degrees < -45:
-		current_direction = Direction.UP
-	else:
-		current_direction = Direction.LEFT
-		animated_sprite.flip_h = true
 
 func _random_action() -> void:
 	# 如果已经有目标，不执行随机行为
