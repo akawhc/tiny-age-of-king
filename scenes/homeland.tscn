@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=70 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lou7g"]
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
@@ -37,6 +37,7 @@
 [ext_resource type="PackedScene" uid="uid://bo6o26bl2gexf" path="res://scenes/resources/meat.tscn" id="35_jyqfj"]
 [ext_resource type="PackedScene" uid="uid://dt58y5ip4b0jw" path="res://scenes/resources/sheep.tscn" id="36_au03j"]
 [ext_resource type="PackedScene" uid="uid://cyxbscdor8jh1" path="res://scenes/goblin/tnt.tscn" id="37_vo84i"]
+[ext_resource type="PackedScene" uid="uid://ci8pjvxlimwx5" path="res://scenes/npc/archer.tscn" id="38_b355g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -648,7 +649,7 @@ sources/26 = SubResource("TileSetAtlasSource_0gcsk")
 
 [node name="land" type="Node2D"]
 y_sort_enabled = true
-position = Vector2(3624, 442)
+position = Vector2(3594, 484)
 script = ExtResource("1_lou7g")
 
 [node name="sea" type="TextureRect" parent="."]
@@ -725,11 +726,11 @@ position = Vector2(-1455, 3590)
 
 [node name="Castle" parent="." instance=ExtResource("32_4v5cv")]
 z_index = 0
-position = Vector2(-139, -138)
+position = Vector2(-142, -214)
 
 [node name="House" parent="." instance=ExtResource("31_cdcu6")]
 z_index = 0
-position = Vector2(-222, 281)
+position = Vector2(-431, 259)
 
 [node name="Tower" parent="." instance=ExtResource("32_4v5cv")]
 z_index = 0
@@ -757,4 +758,7 @@ position = Vector2(-833, 72)
 position = Vector2(-1237, 258)
 
 [node name="tnt" parent="." instance=ExtResource("37_vo84i")]
-position = Vector2(-325, 81)
+position = Vector2(-34, 112)
+
+[node name="archer" parent="." instance=ExtResource("38_b355g")]
+position = Vector2(206, -198)

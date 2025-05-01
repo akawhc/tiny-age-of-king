@@ -22,6 +22,15 @@ var turn_speed = 3.0                 # 转向速度
 # TNT炸弹场景
 @onready var bomb_scene = preload("res://scenes/projectiles/bomb.tscn")
 
+# 投掷相关参数
+const THROW_OFFSET_Y = -10  # 投掷高度偏移
+const THROW_OFFSET_X = 20   # 投掷水平偏移
+
+func _on_animation_frame_changed():
+	if animated_sprite.animation == "throw":
+		if animated_sprite.frame == animated_sprite.sprite_frames.get_frame_count("throw") - 2:
+			spawn_and_throw_tnt()
+
 func _ready() -> void:
 	# 配置参数
 	CONFIG = {
@@ -42,6 +51,8 @@ func _ready() -> void:
 
 	# 监听动画完成事件
 	animated_sprite.animation_finished.connect(_on_animation_finished)
+	# 监听动画帧变化事件
+	animated_sprite.frame_changed.connect(_on_animation_frame_changed)
 
 func initialize() -> void:
 	super.initialize()
@@ -169,18 +180,27 @@ func spawn_and_throw_tnt() -> void:
 	if !target:
 		return
 
-	print("TNT哥布林投掷了炸弹!")
+	# 实例化炸弹
+	var bomb = bomb_scene.instantiate()
+	get_tree().get_root().add_child(bomb)
 
-	# # 实例化炸弹
-	# var bomb = bomb_scene.instantiate()
-	# get_tree().current_scene.add_child(bomb)
+	# 计算投掷方向
+	var throw_direction = (target.global_position - global_position).normalized()
 
-	# # 初始化炸弹
-	# bomb.initialize(
-	# 	global_position,           # 初始位置
-	# 	target.global_position,    # 目标位置
-	# 	CONFIG.throw_damage        # 伤害值
-	# )
+	# 计算生成位置
+	var spawn_offset = Vector2(
+		throw_direction.x * THROW_OFFSET_X,
+		THROW_OFFSET_Y
+	)
+	var spawn_position = global_position + spawn_offset
+
+	# 初始化炸弹
+	bomb.initialize(
+		spawn_position,           # 初始位置
+		target.global_position,    # 目标位置
+		CONFIG.throw_damage,       # 伤害值
+		CONFIG.explosion_radius    # 爆炸半径
+	)
 
 func _on_animation_finished() -> void:
 	if animated_sprite.animation == "throw":

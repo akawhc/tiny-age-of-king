@@ -11,18 +11,18 @@ var current_state = BombState.FLYING
 var velocity = Vector2.ZERO
 var _gravity = 500
 var damage = 20
-var explosion_radius = 100
+var explosion_radius = 200
 var target_position = Vector2.ZERO
 var flight_height = 200.0  # 抛物线最高点的高度
 
 func _ready():
 	animated_sprite.play("fire")
 
-func initialize(initial_position: Vector2, target_pos: Vector2, bomb_damage: float):
+func initialize(initial_position: Vector2, target_pos: Vector2, bomb_damage: float, bomb_explosion_radius: float):
 	position = initial_position
 	target_position = target_pos
 	damage = bomb_damage
-
+	explosion_radius = bomb_explosion_radius
 	# 计算到达目标所需的初始速度
 	calculate_initial_velocity()
 
@@ -67,16 +67,19 @@ func handle_exploding_state():
 		queue_free()
 
 func explode_damage():
-	# 获取爆炸范围内的所有对象
-	var overlapping_areas = get_overlapping_areas()
+	# 获取所有可能的目标
+	var all_soldiers = get_tree().get_nodes_in_group("soldiers")
+	var all_buildings = get_tree().get_nodes_in_group("buildings")
 
-	for area in overlapping_areas:
-		if area.is_in_group("soldiers") or area.is_in_group("buildings"):
+	# 检查所有单位
+	for target in all_soldiers + all_buildings:
+		var distance = global_position.distance_to(target.global_position)
+		# 如果在爆炸范围内
+		if distance <= explosion_radius:
 			# 计算伤害衰减
-			var distance = position.distance_to(area.position)
 			var damage_multiplier = 1.0 - (distance / explosion_radius)
 			damage_multiplier = clamp(damage_multiplier, 0, 1)
 
-			# 如果目标有 take_damage 方法，则造成伤害
-			if area.has_method("take_damage"):
-				area.take_damage(damage * damage_multiplier)
+			# 造成伤害
+			if target.has_method("take_damage"):
+				target.take_damage(damage * damage_multiplier)

@@ -34,10 +34,12 @@ var auto_attack: bool = true  # 是否自动攻击，可以在UI中设置
 # 箭矢场景路径
 var arrow_scene_path: String = "res://scenes/projectiles/arrow.tscn"
 
+# 箭矢生成位置配置
+const ARROW_SPAWN_RADIUS = 50.0  # 箭矢生成的半径距离
+
 # 节点引用
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var detection_area: Area2D = $DetectionArea
-@onready var arrow_spawn_point: Marker2D = $ArrowSpawnPoint
 
 # 新增变量
 var enemies_in_range: Array = []
@@ -226,7 +228,7 @@ func _on_animation_finished() -> void:
 			play_idle_animation()
 
 func shoot_arrow() -> void:
-	var shoot_direction
+	var shoot_direction: Vector2
 
 	# 如果目标存在，则朝目标射击
 	if target_enemy:
@@ -241,8 +243,11 @@ func shoot_arrow() -> void:
 	if arrow_scene:
 		var arrow_instance = arrow_scene.instantiate()
 
+		# 计算箭矢生成位置：在射击方向上的固定半径位置
+		var spawn_position = global_position + (shoot_direction * ARROW_SPAWN_RADIUS)
+
 		# 设置箭矢参数
-		arrow_instance.global_position = arrow_spawn_point.global_position
+		arrow_instance.global_position = spawn_position
 
 		# 使用箭矢的initialize方法初始化
 		arrow_instance.initialize(

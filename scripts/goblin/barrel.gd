@@ -40,7 +40,7 @@ func initialize() -> void:
 func process_state(_delta: float) -> void:
 	# 检查是否有目标在爆炸范围内
 	if current_state != BarrelState.EXPLODING and current_state != BarrelState.DEAD:
-		var nearby_targets = get_tree().get_nodes_in_group("soldiers")
+		var nearby_targets = get_tree().get_nodes_in_group("soldiers") + get_tree().get_nodes_in_group("buildings")
 		for t in nearby_targets:
 			if is_instance_valid(t):
 				var distance = global_position.distance_to(t.global_position)
