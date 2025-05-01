@@ -36,7 +36,7 @@
 [ext_resource type="PackedScene" uid="uid://b8j6v3q4y8n0x" path="res://scenes/resources/wood.tscn" id="34_lcbja"]
 [ext_resource type="PackedScene" uid="uid://bo6o26bl2gexf" path="res://scenes/resources/meat.tscn" id="35_jyqfj"]
 [ext_resource type="PackedScene" uid="uid://dt58y5ip4b0jw" path="res://scenes/resources/sheep.tscn" id="36_au03j"]
-[ext_resource type="PackedScene" uid="uid://cduh6w1v71qce" path="res://scenes/goblin/barrel.tscn" id="40_4k30a"]
+[ext_resource type="PackedScene" uid="uid://cyxbscdor8jh1" path="res://scenes/goblin/tnt.tscn" id="37_vo84i"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -756,5 +756,5 @@ position = Vector2(-833, 72)
 [node name="sheep" parent="." instance=ExtResource("36_au03j")]
 position = Vector2(-1237, 258)
 
-[node name="barrel" parent="." instance=ExtResource("40_4k30a")]
-position = Vector2(89, 174)
+[node name="tnt" parent="." instance=ExtResource("37_vo84i")]
+position = Vector2(-325, 81)
