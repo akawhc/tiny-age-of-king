@@ -1,0 +1,89 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8j6v3q4y8n0x"]
+
+[ext_resource type="Script" path="res://scripts/ui/resource_display.gd" id="1_2x4p3"]
+[ext_resource type="Texture2D" uid="uid://bcx2aybatvhhg" path="res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png" id="2_m4k3l"]
+[ext_resource type="Texture2D" uid="uid://c8k1dbn7w6nrn" path="res://sprites/Tiny Swords/Resources/Resources/G_Idle_(NoShadow).png" id="3_n5k3m"]
+[ext_resource type="Texture2D" uid="uid://blqbphjp0bxj8" path="res://sprites/Tiny Swords/Resources/Resources/M_Idle_(NoShadow).png" id="4_p6k3n"]
+
+[node name="ResourceDisplay" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 64.0
+script = ExtResource("1_2x4p3")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 380.0
+offset_bottom = 64.0
+
+[node name="WoodAmount" type="Label" parent="Panel"]
+layout_mode = 2
+offset_left = 336.0
+offset_top = 9.0
+offset_right = 354.0
+offset_bottom = 54.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "0"
+vertical_alignment = 1
+
+[node name="wood" type="TextureRect" parent="Panel"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+offset_left = 221.0
+offset_top = -48.0
+offset_right = 349.0
+offset_bottom = 80.0
+rotation = -0.0574704
+size_flags_vertical = 4
+texture = ExtResource("2_m4k3l")
+stretch_mode = 5
+
+[node name="MeatAmount" type="Label" parent="Panel"]
+layout_mode = 2
+offset_left = 206.0
+offset_top = 9.0
+offset_right = 224.0
+offset_bottom = 54.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "0"
+vertical_alignment = 1
+
+[node name="meat" type="TextureRect" parent="Panel"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+offset_left = 95.0
+offset_top = -45.0
+offset_right = 223.0
+offset_bottom = 83.0
+rotation = -0.00243631
+size_flags_vertical = 4
+texture = ExtResource("4_p6k3n")
+stretch_mode = 5
+
+[node name="GoldAmount" type="Label" parent="Panel"]
+layout_mode = 2
+offset_left = 81.0
+offset_top = 8.0
+offset_right = 99.0
+offset_bottom = 53.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "0"
+vertical_alignment = 1
+
+[node name="gold" type="TextureRect" parent="Panel"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+offset_left = -33.0
+offset_top = -43.0
+offset_right = 95.0
+offset_bottom = 85.0
+size_flags_vertical = 4
+texture = ExtResource("3_n5k3m")
+stretch_mode = 5

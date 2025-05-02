@@ -5,6 +5,9 @@
 
 extends Camera2D
 
+# 信号声明
+signal zoom_changed(zoom)
+
 enum CameraMode {
 	FIXED,            # 固定相机
 	FOLLOW_CHARACTER, # 跟随角色
@@ -109,6 +112,9 @@ func _handle_zoom(delta: float) -> void:
 
 	# 平滑缩放
 	zoom = zoom.lerp(config.zoom.target, delta * config.zoom.lerp_speed)
+
+	# 发送缩放变化信号
+	emit_signal("zoom_changed", zoom)
 
 func _handle_mouse_follow(delta: float) -> void:
 	if not config.mouse_follow.enabled:
