@@ -58,7 +58,7 @@ func _physics_process(_delta: float) -> void:
 		var direction = (target_position - global_position)  # 使用全局坐标计算方向
 		var distance = direction.length()
 
-		if distance > 5:  # 到达目标位置的阈值
+		if distance > 10:  # 到达目标位置的阈值
 			direction = direction.normalized()
 			velocity = direction * move_speed
 			# 使用 move_and_slide 移动

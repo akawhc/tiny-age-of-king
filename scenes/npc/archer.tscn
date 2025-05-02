@@ -423,9 +423,7 @@ position = Vector2(0, 8)
 shape = SubResource("CircleShape2D_4rcl1")
 
 [node name="DetectionArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_5k0rc")
-
-[node name="ArrowSpawnPoint" type="Marker2D" parent="."]
-position = Vector2(43, 5)

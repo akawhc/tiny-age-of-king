@@ -41,7 +41,6 @@ func _input(event: InputEvent) -> void:
 					get_viewport().set_input_as_handled()
 					return
 
-		if not selected_units.is_empty():
 			# 获取目标位置（转换为全局坐标）
 			var target_pos = get_viewport().get_mouse_position()
 			target_pos = get_viewport().get_canvas_transform().affine_inverse() * target_pos

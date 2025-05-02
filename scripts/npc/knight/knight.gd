@@ -95,7 +95,6 @@ var wood_count = 0  # 木材数量
 var nearest_tree = null  # 最近的树
 
 # 调试绘制变量
-var is_debug: bool = false
 var debug_draw_duration: float = 0.5  # 调试绘制持续时间
 var debug_draw_timer: float = 0.0     # 调试绘制计时器
 var debug_attack_info = null          # 存储攻击信息用于绘制
@@ -142,11 +141,6 @@ func update_facing_direction(direction: Vector2) -> void:
 		animated_sprite_2d.flip_h = false
 
 func _process(delta: float) -> void:
-	# 处理调试绘制计时器
-	if is_debug:
-		if debug_draw_timer > 0:
-			debug_draw_timer -= delta
-			queue_redraw()  # 强制重新绘制
 
 	# 处理攻击冷却
 	if !can_attack:
@@ -408,17 +402,6 @@ func perform_attack() -> void:
 		if hit_target.has_method("take_damage"):
 			hit_target.take_damage(damage, knockback_direction * knockback_force, 0.7)
 
-	# 更新调试绘制信息
-	if is_debug:
-		debug_attack_info = {
-			"direction": attack_direction,
-			"range": attack_range,
-			"angle": attack_angle,
-			"num_rays": 9,
-			"hits": range(hits.size())  # 用于绘制命中效果
-		}
-		debug_draw_timer = debug_draw_duration
-		queue_redraw()
 
 # 状态转换函数
 func change_state(new_state: KnightState) -> void:
@@ -447,41 +430,3 @@ func change_state(new_state: KnightState) -> void:
 		KnightState.COMBO_WINDOW:
 			combo_timer = 0.0
 			can_attack = true  # 确保可以继续连击
-
-func _draw() -> void:
-	if debug_draw_timer > 0 and debug_attack_info != null:
-		var attack_direction = debug_attack_info.direction
-		var attack_range = debug_attack_info.range
-		var attack_angle = debug_attack_info.angle
-		var num_rays = debug_attack_info.num_rays
-		var hits = debug_attack_info.hits
-
-		# 绘制扇形范围
-		var points = PackedVector2Array()
-		points.append(Vector2.ZERO)  # 起点
-
-		var start_angle = attack_direction.angle() - attack_angle / 2
-		var end_angle = attack_direction.angle() + attack_angle / 2
-		var num_points = 32  # 扇形的平滑度
-
-		for i in range(num_points + 1):
-			var angle = start_angle + (end_angle - start_angle) * i / num_points
-			points.append(Vector2.from_angle(angle) * attack_range)
-
-		# 绘制扇形填充
-		draw_colored_polygon(points, Color(1, 0, 0, 0.1))  # 半透明红色填充
-
-		# 绘制扇形边界
-		for i in range(points.size() - 1):
-			draw_line(points[i], points[i + 1], Color(1, 0, 0, 0.5), 2.0)
-
-		# 绘制射线
-		var start_ray = -(num_rays - 1) / 2
-		for i in range(num_rays):
-			var ray_angle = (start_ray + i) * (attack_angle / (num_rays - 1))
-			var ray_direction = attack_direction.rotated(ray_angle)
-			var ray_end = ray_direction * attack_range
-
-			# 根据是否命中使用不同颜色
-			var ray_color = Color(0, 1, 0, 0.5) if i in hits else Color(1, 1, 0, 0.5)
-			draw_line(Vector2.ZERO, ray_end, ray_color, 1.0)
