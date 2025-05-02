@@ -153,20 +153,36 @@ func _on_button_pressed(action_id: String) -> void:
 	for unit in _selected_units:
 		if is_instance_valid(unit):
 			valid_units.append(unit)
-
 	_selected_units = valid_units
 
-	# 获取当前选中的工人
+	# 根据 action_id 分发到不同的处理函数
+	match action_id:
+		# 建筑相关
+		"build_house", "build_tower", "build_castle":
+			handle_build_action(action_id)
+		# 城堡相关
+		"produce_worker", "produce_archer", "produce_knight":
+			handle_unit_production(action_id)
+		_:
+			print("未知的操作: ", action_id)
+
+	button_clicked.emit(action_id)
+
+func handle_build_action(action_id: String) -> void:
 	var selected_workers = get_selected_workers()
 	if selected_workers.is_empty():
 		print("没有工人被选中，无法开始建造")
 		return
 
-	# 处理建造预览请求
 	_building_manager.handle_preview_request(action_id, selected_workers)
-	button_clicked.emit(action_id)
 
-# 公共接口
+func handle_unit_production(action_id: String) -> void:
+	var selected_castle = get_selected_castle()
+	if selected_castle.is_empty():
+		print("没有城堡被选中，无法开始建造")
+		return
+	_building_manager.handle_unit_production(action_id, selected_castle)
+
 func set_interaction_type(type: String) -> void:
 	if _interaction_type != type:
 		_interaction_type = type
@@ -197,6 +213,10 @@ func get_selected_units() -> Array:
 # 获取选中的工人单位
 func get_selected_workers() -> Array:
 	return _selected_units.filter(func(unit): return unit.is_in_group("workers"))
+
+# 获取选中的城堡单位
+func get_selected_castle() -> Array:
+	return _selected_units.filter(func(unit): return unit.is_in_group("castles"))
 
 # 添加一个新的输入处理函数，用于过滤空格键输入
 func _input(event: InputEvent) -> void:

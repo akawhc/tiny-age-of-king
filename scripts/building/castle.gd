@@ -17,6 +17,7 @@ func _ready() -> void:
 	max_health = 1000
 	current_health = max_health
 
+	add_to_group("castles")
 	super._ready()
 
 	# 初始化资源管理器引用
@@ -45,8 +46,8 @@ func setup_collection_timer() -> void:
 
 func _on_resource_entered(area: Area2D) -> void:
 	# 检查是否是资源
-	if area.get_parent().is_in_group("resources"):
-		collect_resource(area.get_parent())
+	if area.is_in_group("resources"):
+		collect_resource(area)
 
 func _on_collection_timer_timeout() -> void:
 	# 检查范围内的所有资源

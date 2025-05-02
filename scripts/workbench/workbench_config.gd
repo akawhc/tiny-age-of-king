@@ -29,7 +29,7 @@ class_name WorkbenchConfig
 
 # 按钮配置
 @export var button_configs: Dictionary = {
-	"NONE": [], # 没有选中目标时不显示按钮
+	"NONE": [],
 	"WORKER": [
 		{"id": "build_house", "text": "建造房屋", "action": "build_house"},
 		{"id": "build_tower", "text": "建造箭塔", "action": "build_tower"},
@@ -40,6 +40,12 @@ class_name WorkbenchConfig
 		{"id": "upgrade", "text": "升级", "action": "upgrade"},
 		{"id": "demolish", "text": "拆除", "action": "demolish"},
 		{"id": "produce", "text": "生产", "action": "produce"},
+		{"id": "exit", "text": "退出", "action": "exit"}
+	],
+	"CASTLE": [
+		{"id": "produce_worker", "text": "生产工人", "action": "produce_worker"},
+		{"id": "produce_archer", "text": "生产射手", "action": "produce_archer"},
+		{"id": "produce_knight", "text": "生产骑士", "action": "produce_knight"},
 		{"id": "exit", "text": "退出", "action": "exit"}
 	],
 	"TREE": [
