@@ -29,17 +29,9 @@ func _ready() -> void:
 	setup_collection_timer()
 
 func setup_detection_area() -> void:
-	detection_area = Area2D.new()
-	var collision_shape = CollisionShape2D.new()
-	var circle_shape = CircleShape2D.new()
-
-	circle_shape.radius = RESOURCE_DETECTION_RADIUS
-	collision_shape.shape = circle_shape
-
-	detection_area.add_child(collision_shape)
-	add_child(detection_area)
-
-	# 连接信号
+	# 获取场景中的 DetectionArea 节点
+	detection_area = $DetectionArea
+	# 连接区域进入信号
 	detection_area.area_entered.connect(_on_resource_entered)
 
 func setup_collection_timer() -> void:
@@ -60,8 +52,8 @@ func _on_collection_timer_timeout() -> void:
 	# 检查范围内的所有资源
 	var areas = detection_area.get_overlapping_areas()
 	for area in areas:
-		if area.get_parent().is_in_group("resources"):
-			collect_resource(area.get_parent())
+		if area.is_in_group("resources"):
+			collect_resource(area)
 
 func collect_resource(resource_node: Node2D) -> void:
 	# 获取资源类型和数量
@@ -71,11 +63,11 @@ func collect_resource(resource_node: Node2D) -> void:
 	# 更新全局资源数量
 	match resource_type:
 		"wood":
-			resource_manager.add_wood(amount)
+			resource_manager.add_resource("wood", amount)
 		"gold":
-			resource_manager.add_gold(amount)
+			resource_manager.add_resource("gold", amount)
 		"meat":
-			resource_manager.add_meat(amount)
+			resource_manager.add_resource("meat", amount)
 
 	# 销毁资源节点
 	resource_node.queue_free()

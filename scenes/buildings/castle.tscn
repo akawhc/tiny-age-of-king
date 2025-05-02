@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqxqxq2mj8p4k"]
+[gd_scene load_steps=6 format=3 uid="uid://bqxqxq2mj8p4k"]
 
 [ext_resource type="Texture2D" uid="uid://bl80xrtjqk4os" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Castle/Castle_Blue.png" id="1_4juos"]
 [ext_resource type="Script" path="res://scripts/building/castle.gd" id="2_asjgx"]
@@ -18,6 +18,9 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e213f"]
+size = Vector2(395, 282)
+
 [node name="Castle" type="StaticBody2D" groups=["buildings", "castles"]]
 y_sort_enabled = true
 input_pickable = true
@@ -30,6 +33,7 @@ texture = ExtResource("1_4juos")
 offset = Vector2(0, -40)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(-3, 21.5)
 shape = SubResource("RectangleShape2D_tlwqf")
 
@@ -43,5 +47,11 @@ offset_bottom = -135.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_d17mp")
 value = 100.0
 show_percentage = false
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(-3.5, -21)
+shape = SubResource("RectangleShape2D_e213f")
 
 [connection signal="health_changed" from="." to="." method="_on_health_changed"]

@@ -724,7 +724,7 @@ y_sort_enabled = true
 position = Vector2(-1455, 3590)
 
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
-position = Vector2(-40, -41)
+position = Vector2(-145, 120)
 
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-1387, 26)
@@ -736,7 +736,7 @@ y_sort_enabled = true
 position = Vector2(-101, 206)
 
 [node name="meat" parent="." instance=ExtResource("35_jyqfj")]
-position = Vector2(-48, 138)
+position = Vector2(-61, 11)
 
 [node name="sheep" parent="." instance=ExtResource("36_au03j")]
 position = Vector2(-1237, 258)
