@@ -34,6 +34,10 @@ func _prepare_config() -> void:
 
 # 扩展_ready方法初始化腐烂计时器
 func _ready() -> void:
+	# 设置资源类型和数量
+	resource_type = "meat"
+	amount = 4  # 每个肉类资源提供4单位
+
 	super._ready()  # 调用父类的_ready方法
 	add_to_group("resources")  # 将肉类资源添加到resources组
 	is_fresh = true

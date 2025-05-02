@@ -6,6 +6,10 @@
 class_name CollectibleResource
 extends Area2D
 
+# 资源类型和数量
+var resource_type: String = "none"  # 将被子类覆盖
+var amount: int = 1  # 默认数量
+
 # 资源配置 - 子类应该覆盖这些常量
 const DEFAULT_CONFIG = {
 	"resource_name": "Resource", # 资源名称，用于日志和函数映射
@@ -25,6 +29,9 @@ var config = DEFAULT_CONFIG
 
 # 初始化
 func _ready() -> void:
+	# 将资源添加到resources组
+	add_to_group("resources")
+
 	# 准备配置 - 子类应在继承后设置自己的配置
 	_prepare_config()
 

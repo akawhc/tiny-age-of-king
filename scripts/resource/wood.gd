@@ -22,6 +22,10 @@ const WOOD_CONFIG = {
 }
 
 func _ready() -> void:
+	# 设置资源类型和数量
+	resource_type = "wood"
+	amount = 5  # 每个木材资源提供5单位
+
 	super._ready()  # 调用父类的_ready方法
 	add_to_group("resources")  # 将木材资源添加到resources组
 	_play_drop_animation()

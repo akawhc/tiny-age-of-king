@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bojoy2f2why45"]
+[gd_scene load_steps=4 format=3 uid="uid://bojoy2f2why45"]
 
-[ext_resource type="Texture2D" uid="uid://c0jb1fxgmf2pu" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_uyaqq"]
-[ext_resource type="Script" path="res://scripts/building/tower.gd" id="2_e87v1"]
+[ext_resource type="Texture2D" uid="uid://bmfsohngo5hea" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_uyaqq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwqf"]
 size = Vector2(90, 47)
@@ -22,7 +21,6 @@ corner_radius_bottom_left = 2
 z_index = 5
 y_sort_enabled = true
 input_pickable = true
-script = ExtResource("2_e87v1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_uyaqq")
@@ -41,5 +39,3 @@ offset_bottom = -90.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_d17mp")
 value = 100.0
 show_percentage = false
-
-[connection signal="health_changed" from="." to="." method="_on_health_changed"]

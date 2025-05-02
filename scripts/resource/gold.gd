@@ -22,6 +22,10 @@ const GOLD_CONFIG = {
 }
 
 func _ready() -> void:
+	# 设置资源类型和数量
+	resource_type = "gold"
+	amount = 3  # 每个金币资源提供3单位
+
 	super._ready()  # 调用父类的_ready方法
 	add_to_group("resources")  # 将金币资源添加到resources组
 	_play_drop_animation()

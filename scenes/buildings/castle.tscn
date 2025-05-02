@@ -1,10 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bojoy2f2why45"]
+[gd_scene load_steps=5 format=3 uid="uid://bqxqxq2mj8p4k"]
 
 [ext_resource type="Texture2D" uid="uid://bl80xrtjqk4os" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Castle/Castle_Blue.png" id="1_4juos"]
 [ext_resource type="Script" path="res://scripts/building/castle.gd" id="2_asjgx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwqf"]
-size = Vector2(254.25, 99.1875)
+size = Vector2(254.25, 89)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d17mp"]
 bg_color = Color(0.847059, 0.235294, 0.235294, 1)
@@ -29,11 +29,8 @@ position = Vector2(4, -34)
 texture = ExtResource("1_4juos")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(5, 23.5938)
+position = Vector2(5, 18.5)
 shape = SubResource("RectangleShape2D_tlwqf")
-
-[node name="YSortPosition" type="Marker2D" parent="."]
-position = Vector2(0, 73)
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false

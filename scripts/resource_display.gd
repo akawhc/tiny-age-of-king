@@ -57,20 +57,20 @@ func _update_scale():
 	# 计算基础缩放比例
 	var scale_x = window_size.x / BASE_SCREEN_SIZE.x
 	var scale_y = window_size.y / BASE_SCREEN_SIZE.y
-	var scale = min(scale_x, scale_y)
+	var display_scale = min(scale_x, scale_y)
 
 	# 考虑相机缩放
 	if camera != null:
-		scale = scale / current_camera_zoom.x  # 相机缩小（zoom增大）时，UI要放大
+		display_scale = display_scale / current_camera_zoom.x  # 相机缩小（zoom增大）时，UI要放大
 
 	# 限制缩放范围
-	scale = clamp(scale, MIN_SCALE, MAX_SCALE)
+	display_scale = clamp(display_scale, MIN_SCALE, MAX_SCALE)
 
 	# 应用缩放
-	panel.scale = Vector2(scale, scale)
+	panel.scale = Vector2(display_scale, display_scale)
 
 	# 更新位置（保持在左上角，考虑缩放）
-	var margin = 5 * scale  # 边距也跟随缩放
+	var margin = 5 * display_scale  # 边距也跟随缩放
 	panel.position = Vector2(margin, margin)
 
 func _on_resources_changed(resource_type: String, amount: int) -> void:
