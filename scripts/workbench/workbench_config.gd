@@ -36,29 +36,10 @@ class_name WorkbenchConfig
 		{"id": "build_gate", "text": "建造城堡", "action": "build_castle"},
 		{"id": "repair", "text": "修复", "action": "repair"},
 	],
-	"BUILDING": [
-		{"id": "upgrade", "text": "升级", "action": "upgrade"},
-		{"id": "demolish", "text": "拆除", "action": "demolish"},
-		{"id": "produce", "text": "生产", "action": "produce"},
-		{"id": "exit", "text": "退出", "action": "exit"}
-	],
 	"CASTLE": [
 		{"id": "produce_worker", "text": "生产工人", "action": "produce_worker"},
 		{"id": "produce_archer", "text": "生产射手", "action": "produce_archer"},
 		{"id": "produce_knight", "text": "生产骑士", "action": "produce_knight"},
-		{"id": "exit", "text": "退出", "action": "exit"}
-	],
-	"TREE": [
-		{"id": "cut", "text": "派工人砍树", "action": "cut_tree"},
-		{"id": "exit", "text": "退出", "action": "exit"}
-	],
-	"GOLD_MINE": [
-		{"id": "mine", "text": "派工人采矿", "action": "mine_gold"},
-		{"id": "build_mine", "text": "建造采矿场", "action": "build_mine"},
-		{"id": "exit", "text": "退出", "action": "exit"}
-	],
-	"UNIT": [
-		{"id": "move", "text": "移动", "action": "move"},
 		{"id": "exit", "text": "退出", "action": "exit"}
 	]
 }

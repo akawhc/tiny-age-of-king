@@ -21,6 +21,7 @@ var _last_screen_size: Vector2
 var _selection_manager: Node
 var _selected_units: Array = []  # 存储选中的单位
 var _building_manager: BuildingManager  # 建筑管理器单例
+var _unit_manager: UnitManager  # 单位管理器单例
 
 func _ready() -> void:
 	config = WorkbenchConfig.new()
@@ -37,6 +38,8 @@ func _ready() -> void:
 	# 设置初始状态
 	_setup_workbench()
 	_update_buttons()
+	_building_manager = BuildingManager.get_instance()
+	_unit_manager = UnitManager.get_instance()
 
 	# 连接窗口大小变化信号
 	get_tree().root.size_changed.connect(_on_window_size_changed)
@@ -45,9 +48,6 @@ func _ready() -> void:
 	_selection_manager = get_tree().get_first_node_in_group("selection_manager")
 	if _selection_manager:
 		_selection_manager.selection_type_changed.connect(_on_selection_type_changed)
-
-	# 获取建筑管理器实例
-	_building_manager = BuildingManager.get_instance()
 
 	# 添加输入事件处理器，用于截获并处理空格键
 	set_process_input(true)
@@ -179,9 +179,33 @@ func handle_build_action(action_id: String) -> void:
 func handle_unit_production(action_id: String) -> void:
 	var selected_castle = get_selected_castle()
 	if selected_castle.is_empty():
-		print("没有城堡被选中，无法开始建造")
+		print("没有城堡被选中，无法生产单位")
 		return
-	_building_manager.handle_unit_production(action_id, selected_castle)
+
+	var castle = selected_castle[0]
+	# 获取城堡的碰撞形状
+	var collision_shape = castle.get_node("CollisionShape2D")
+	if not collision_shape:
+		print("城堡没有碰撞形状")
+		return
+
+	# 获取碰撞形状的尺寸
+	var shape_size = Vector2.ZERO
+	if collision_shape.shape is RectangleShape2D:
+		shape_size = collision_shape.shape.size
+
+	# 计算生成位置（在城堡右侧，距离碰撞形状一定距离）
+	var spawn_offset = Vector2(shape_size.x / 2 + 50, 0)  # 在碰撞形状右侧50像素处
+	var spawn_position = castle.global_position + spawn_offset
+
+	# 根据不同单位类型生成单位
+	match action_id:
+		"produce_worker":
+			_unit_manager.spawn_unit("Worker", spawn_position)
+		"produce_archer":
+			_unit_manager.spawn_unit("Archer", spawn_position)
+		"produce_knight":
+			_unit_manager.spawn_unit("Knight", spawn_position)
 
 func set_interaction_type(type: String) -> void:
 	if _interaction_type != type:

@@ -17,7 +17,7 @@ func _ready() -> void:
 	max_health = 1000
 	current_health = max_health
 
-	add_to_group("castles")
+	add_to_group("selectable_units")
 	super._ready()
 
 	# 初始化资源管理器引用
@@ -76,3 +76,9 @@ func collect_resource(resource_node: Node2D) -> void:
 # 重写摧毁纹理路径获取方法，如果有特定的城堡摧毁纹理
 func get_destroy_texture_path() -> String:
 	return "res://sprites/Tiny Swords/Factions/Knights/Buildings/Castle/Castle_Destroyed.png"
+
+# 下面的逻辑是为了兼容 selectable_unit 的接口，避免因为接口不存在而报错
+func set_selected(_selected: bool) -> void:
+	pass
+func move_to(_pos: Vector2) -> void:
+	pass

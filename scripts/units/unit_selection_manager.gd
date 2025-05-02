@@ -59,13 +59,14 @@ func update_selection(units: Array) -> void:
 
 	# 高亮新选中的单位
 	for unit in selected_units:
-		# print("设置单位选中状态：", unit.name)
 		unit.set_selected(true)
 
 	# 发送选择类型变化信号
 	if not selected_units.is_empty():
 		if selected_units[0].is_in_group("workers"):
 			selection_type_changed.emit("WORKER", selected_units)
+		elif selected_units[0].is_in_group("castles"):
+			selection_type_changed.emit("CASTLE", selected_units)
 		else:
 			selection_type_changed.emit("NONE", [])
 	else:

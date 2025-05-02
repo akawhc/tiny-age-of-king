@@ -1,7 +1,7 @@
 # @file: unit_manager.gd
 # @brief: 单位管理器，负责处理单位的生成和管理
 # @author: ponywu
-# @date: 2025-04-21
+# @date: 2025-05-02
 
 class_name UnitManager
 extends Node
