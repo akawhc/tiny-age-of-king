@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://0g32qp6mlxfh"]
+[gd_scene load_steps=36 format=3 uid="uid://0g32qp6mlxfh"]
 
 [ext_resource type="Texture2D" uid="uid://byfss37hflobh" path="res://sprites/Tiny Swords/Factions/Goblins/Troops/Torch/Red/Torch_Red.png" id="1_wwx27"]
 [ext_resource type="Script" path="res://scripts/goblin/torch.gd" id="1_y7j4h"]
@@ -102,14 +102,6 @@ region = Rect2(960, 0, 192, 192)
 [sub_resource type="AtlasTexture" id="AtlasTexture_s8xdl"]
 atlas = ExtResource("1_wwx27")
 region = Rect2(1152, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7oiyg"]
-atlas = ExtResource("1_wwx27")
-region = Rect2(0, 768, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_60qey"]
-atlas = ExtResource("1_wwx27")
-region = Rect2(0, 576, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7hurm"]
 atlas = ExtResource("1_wwx27")
@@ -234,22 +226,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_7oiyg")
-}],
-"loop": true,
-"name": &"idle_back",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_60qey")
-}],
-"loop": true,
-"name": &"idle_front",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_7hurm")
 }, {
 "duration": 1.0,
@@ -280,7 +256,7 @@ script = ExtResource("1_y7j4h")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_883wn")
-animation = &"attack_up"
+animation = &"attack_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(3, 9)

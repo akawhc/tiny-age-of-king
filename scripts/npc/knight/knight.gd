@@ -9,7 +9,7 @@ extends "res://scripts/units/selectable_unit.gd"
 # 骑士配置
 const KNIGHT_CONFIG = {
 	"detection_radius": 150.0,  # 检测半径
-	"attack_range": 60.0,      # 攻击范围
+	"attack_range": 120.0,      # 攻击范围
 	"move_speed": 150.0,       # 移动速度
 	"attack_cooldown": 1.0,    # 攻击冷却时间(秒)
 }
@@ -94,6 +94,12 @@ var has_hit: bool = false
 var wood_count = 0  # 木材数量
 var nearest_tree = null  # 最近的树
 
+# 调试绘制变量
+var is_debug: bool = false
+var debug_draw_duration: float = 0.5  # 调试绘制持续时间
+var debug_draw_timer: float = 0.0     # 调试绘制计时器
+var debug_attack_info = null          # 存储攻击信息用于绘制
+
 func _ready() -> void:
 	super._ready()
 	add_to_group("soldiers")
@@ -136,6 +142,12 @@ func update_facing_direction(direction: Vector2) -> void:
 		animated_sprite_2d.flip_h = false
 
 func _process(delta: float) -> void:
+	# 处理调试绘制计时器
+	if is_debug:
+		if debug_draw_timer > 0:
+			debug_draw_timer -= delta
+			queue_redraw()  # 强制重新绘制
+
 	# 处理攻击冷却
 	if !can_attack:
 		attack_cooldown_timer += delta
@@ -354,49 +366,59 @@ func get_attack_animation(combo_number: int) -> String:
 		FacingDirection.RIGHT, FacingDirection.LEFT:
 			base_animation = ANIMATION_STATES.ATTACK.SIDE[attack_type]
 
-	print("当前连击：", combo_key, " 类型：", attack_type, " 动画：", base_animation, " 描述：", ATTACK_CONFIG[combo_key]["description"])
 	return base_animation
 
 func perform_attack() -> void:
 	# 获取攻击范围内的敌人
 	var attack_direction = Vector2.RIGHT if not animated_sprite_2d.flip_h else Vector2.LEFT
-	var space_state = get_world_2d().direct_space_state
 
 	# 根据攻击类型调整攻击范围和角度
 	var combo_key = "combo" + str(current_combo)
 	var is_heavy = ATTACK_CONFIG[combo_key]["type"] == "HEAVY"
 	var attack_angle = PI / 4 if not is_heavy else PI / 3  # 重击有更大的攻击角度
 	var attack_range = KNIGHT_CONFIG.attack_range * (1.2 if is_heavy else 1.0)  # 重击有更大的攻击范围
+	var knockback_force = 300 if is_heavy else 150  # 重击有更强的击退效果
 
-	# 创建扇形攻击区域
+	# 获取所有可能的目标
+	var potential_targets = get_tree().get_nodes_in_group("goblin")
 	var hits = []
-	var num_rays = 7 if not is_heavy else 9  # 重击使用更多的射线以提高精度
-	var start_ray = -(num_rays - 1) / 2
 
-	for i in range(num_rays):
-		var ray_angle = (start_ray + i) * (attack_angle / (num_rays - 1))
-		var ray_direction = attack_direction.rotated(ray_angle)
+	# 检查每个目标是否在攻击范围和角度内
+	for target in potential_targets:
+		var to_target = target.global_position - global_position
+		var distance = to_target.length()
 
-		var query = PhysicsRayQueryParameters2D.create(
-			global_position,
-			global_position + ray_direction * attack_range
-		)
-		query.collide_with_areas = true
-		var result = space_state.intersect_ray(query)
+		# 检查距离
+		if distance > attack_range:
+			continue
 
-		if result and "collider" in result:
-			var collider = result.collider
-			if collider.get_parent().is_in_group("goblin") and not hits.has(collider):
-				hits.append(collider)
-				var damage = ATTACK_CONFIG[combo_key]["damage"]
-				# 重击造成击退效果
-				if is_heavy:
-					var knockback_direction = (collider.global_position - global_position).normalized()
-					# 这里假设敌人有 apply_knockback 方法
-					if collider.get_parent().has_method("apply_knockback"):
-						collider.get_parent().apply_knockback(knockback_direction * 200)
-				collider.get_parent().take_damage(damage)
+		# 检查角度
+		var target_angle = attack_direction.angle_to(to_target.normalized())
 
+		if abs(target_angle) > attack_angle / 2:
+			continue
+
+		# 记录命中
+		hits.append(target)
+
+	# 对所有命中的目标造成伤害
+	for hit_target in hits:
+		var damage = ATTACK_CONFIG[combo_key]["damage"]
+		var knockback_direction = (hit_target.global_position - global_position).normalized() * 5
+		if hit_target.has_method("take_damage"):
+			hit_target.take_damage(damage, knockback_direction * knockback_force, 0.7)
+
+	# 更新调试绘制信息
+	if is_debug:
+		debug_attack_info = {
+			"direction": attack_direction,
+			"range": attack_range,
+			"angle": attack_angle,
+			"num_rays": 9,
+			"hits": range(hits.size())  # 用于绘制命中效果
+		}
+		debug_draw_timer = debug_draw_duration
+		queue_redraw()
 
 # 状态转换函数
 func change_state(new_state: KnightState) -> void:
@@ -425,3 +447,41 @@ func change_state(new_state: KnightState) -> void:
 		KnightState.COMBO_WINDOW:
 			combo_timer = 0.0
 			can_attack = true  # 确保可以继续连击
+
+func _draw() -> void:
+	if debug_draw_timer > 0 and debug_attack_info != null:
+		var attack_direction = debug_attack_info.direction
+		var attack_range = debug_attack_info.range
+		var attack_angle = debug_attack_info.angle
+		var num_rays = debug_attack_info.num_rays
+		var hits = debug_attack_info.hits
+
+		# 绘制扇形范围
+		var points = PackedVector2Array()
+		points.append(Vector2.ZERO)  # 起点
+
+		var start_angle = attack_direction.angle() - attack_angle / 2
+		var end_angle = attack_direction.angle() + attack_angle / 2
+		var num_points = 32  # 扇形的平滑度
+
+		for i in range(num_points + 1):
+			var angle = start_angle + (end_angle - start_angle) * i / num_points
+			points.append(Vector2.from_angle(angle) * attack_range)
+
+		# 绘制扇形填充
+		draw_colored_polygon(points, Color(1, 0, 0, 0.1))  # 半透明红色填充
+
+		# 绘制扇形边界
+		for i in range(points.size() - 1):
+			draw_line(points[i], points[i + 1], Color(1, 0, 0, 0.5), 2.0)
+
+		# 绘制射线
+		var start_ray = -(num_rays - 1) / 2
+		for i in range(num_rays):
+			var ray_angle = (start_ray + i) * (attack_angle / (num_rays - 1))
+			var ray_direction = attack_direction.rotated(ray_angle)
+			var ray_end = ray_direction * attack_range
+
+			# 根据是否命中使用不同颜色
+			var ray_color = Color(0, 1, 0, 0.5) if i in hits else Color(1, 1, 0, 0.5)
+			draw_line(Vector2.ZERO, ray_end, ray_color, 1.0)

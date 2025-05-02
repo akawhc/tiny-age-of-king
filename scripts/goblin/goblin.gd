@@ -187,7 +187,7 @@ func set_target(new_target: Node2D) -> void:
 	target = new_target
 
 # 受到伤害
-func take_damage(damage: int) -> void:
+func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO, idle_probability: float = 0) -> void:
 	health -= damage
 
 	if health <= 0:
@@ -197,6 +197,17 @@ func take_damage(damage: int) -> void:
 		modulate = Color(1, 0.5, 0.5)
 		await get_tree().create_timer(0.2).timeout
 		modulate = Color(1, 1, 1)
+
+	if knockback_force != Vector2.ZERO:
+		# 设置击退速度
+		velocity = knockback_force
+		# 应用物理移动
+		move_and_slide()
+
+		# 恢复正常动画
+		if health > 0:
+			if randf() < idle_probability:  # 打入僵直的概率
+				change_state(BaseState.IDLE)
 
 # 处理死亡
 func handle_death() -> void:

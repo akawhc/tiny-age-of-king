@@ -43,16 +43,11 @@ func initialize() -> void:
 	current_direction = Direction.DOWN
 
 func play_idle_animation() -> void:
-	if current_direction == Direction.UP:
-		animated_sprite.play("idle_back")
-	elif current_direction == Direction.DOWN:
-		animated_sprite.play("idle")
-	elif current_direction == Direction.LEFT:
+	if current_direction == Direction.LEFT:
 		animated_sprite.flip_h = true
-		animated_sprite.play("idle")
-	elif current_direction == Direction.RIGHT:
+	else:
 		animated_sprite.flip_h = false
-		animated_sprite.play("idle")
+	animated_sprite.play("idle")
 
 func process_state(delta: float) -> void:
 	# print("process_state: ", current_state)
@@ -142,7 +137,7 @@ func _random_action() -> void:
 	var action = randi() % 5
 
 	match action:
-		0, 1:
+		0, 1, 2:
 			# 随机移动
 			move_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 			_update_direction(move_direction)
