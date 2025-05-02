@@ -46,9 +46,10 @@ func _find_main_camera():
 		if camera.has_signal("zoom_changed"):
 			camera.zoom_changed.connect(_on_camera_zoom_changed)
 
-func _on_camera_zoom_changed(zoom: Vector2):
-	current_camera_zoom = zoom
-	_update_scale()
+func _on_camera_zoom_changed(_zoom: Vector2):
+	pass
+	# current_camera_zoom = zoom
+	# _update_scale()
 
 func _update_scale():
 	# 获取当前窗口大小

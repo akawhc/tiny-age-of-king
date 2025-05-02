@@ -114,7 +114,7 @@ func drop_resource() -> void:
 	resource.global_position = parent.global_position + throw_offset + Vector2(0, vertical_offset) + random_offset
 
 	# 将资源添加到场景中
-	parent.get_parent().add_child(resource)
+	get_tree().get_root().add_child(resource)
 
 	# 更新状态
 	resource_count -= 1
