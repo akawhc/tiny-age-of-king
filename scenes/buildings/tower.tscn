@@ -18,15 +18,17 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [node name="Tower" type="StaticBody2D" groups=["buildings", "towers"]]
-z_index = 5
 y_sort_enabled = true
 input_pickable = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-3, -59)
 texture = ExtResource("1_uyaqq")
+offset = Vector2(0, -30)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 44.5)
+y_sort_enabled = true
+position = Vector2(-1, -22)
 shape = SubResource("RectangleShape2D_tlwqf")
 
 [node name="HealthBar" type="ProgressBar" parent="."]

@@ -19,12 +19,12 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [node name="House" type="StaticBody2D" groups=["buildings", "houses"]]
-z_index = 5
 y_sort_enabled = true
 input_pickable = true
 script = ExtResource("2_8lh0m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
 texture = ExtResource("1_liqmi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
