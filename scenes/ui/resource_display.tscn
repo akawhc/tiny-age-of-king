@@ -14,15 +14,15 @@ script = ExtResource("1_528n2")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_right = 380.0
+offset_right = 569.0
 offset_bottom = 64.0
 
 [node name="WoodAmount" type="Label" parent="Panel"]
 layout_mode = 2
-offset_left = 336.0
-offset_top = 9.0
-offset_right = 354.0
-offset_bottom = 54.0
+offset_left = 481.0
+offset_top = 8.0
+offset_right = 499.0
+offset_bottom = 53.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 32
@@ -32,9 +32,9 @@ vertical_alignment = 1
 [node name="wood" type="TextureRect" parent="Panel"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-offset_left = 221.0
+offset_left = 363.0
 offset_top = -48.0
-offset_right = 349.0
+offset_right = 491.0
 offset_bottom = 80.0
 rotation = -0.0574704
 size_flags_vertical = 4
@@ -43,10 +43,10 @@ stretch_mode = 5
 
 [node name="MeatAmount" type="Label" parent="Panel"]
 layout_mode = 2
-offset_left = 206.0
-offset_top = 9.0
-offset_right = 224.0
-offset_bottom = 54.0
+offset_left = 288.0
+offset_top = 8.0
+offset_right = 306.0
+offset_bottom = 53.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 32
@@ -54,12 +54,12 @@ text = "0"
 vertical_alignment = 1
 
 [node name="meat" type="TextureRect" parent="Panel"]
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-offset_left = 95.0
-offset_top = -45.0
-offset_right = 223.0
-offset_bottom = 83.0
+offset_left = 171.0
+offset_top = -43.0
+offset_right = 299.0
+offset_bottom = 85.0
 rotation = -0.00243631
 size_flags_vertical = 4
 texture = ExtResource("4_p6k3n")

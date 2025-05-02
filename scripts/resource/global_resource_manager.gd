@@ -7,9 +7,9 @@ static var instance: GlobalResourceManager = null
 
 # 资源数据
 var resources = {
-	"wood": 0,
-	"gold": 0,
-	"meat": 0
+	"wood": 1000,
+	"gold": 1000,
+	"meat": 1000
 }
 
 # 建筑成本配置
