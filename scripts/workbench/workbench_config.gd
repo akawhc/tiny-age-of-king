@@ -27,6 +27,42 @@ class_name WorkbenchConfig
 	}
 }
 
+# 资源消耗配置
+@export var resource_costs: Dictionary = {
+	# 单位生产消耗
+	"produce_worker": {
+		"gold": 50,
+		"meat": 20
+	},
+	"produce_archer": {
+		"gold": 80,
+		"wood": 30,
+		"meat": 20
+	},
+	"produce_knight": {
+		"gold": 120,
+		"wood": 20,
+		"meat": 40
+	},
+	# 建筑消耗
+	"build_house": {
+		"wood": 100,
+		"gold": 50
+	},
+	"build_tower": {
+		"wood": 150,
+		"gold": 100
+	},
+	"build_castle": {
+		"wood": 300,
+		"gold": 200
+	},
+	"build_mine": {
+		"wood": 100,
+		"gold": 150
+	}
+}
+
 # 按钮配置
 @export var button_configs: Dictionary = {
 	"NONE": [],
