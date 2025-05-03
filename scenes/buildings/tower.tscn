@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bojoy2f2why45"]
+[gd_scene load_steps=5 format=3 uid="uid://bojoy2f2why45"]
 
+[ext_resource type="Script" path="res://scripts/building/tower.gd" id="1_aowvf"]
 [ext_resource type="Texture2D" uid="uid://bmfsohngo5hea" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_uyaqq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwqf"]
@@ -20,6 +21,7 @@ corner_radius_bottom_left = 2
 [node name="Tower" type="StaticBody2D" groups=["buildings", "towers"]]
 y_sort_enabled = true
 input_pickable = true
+script = ExtResource("1_aowvf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-3, -59)
@@ -34,10 +36,10 @@ shape = SubResource("RectangleShape2D_tlwqf")
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false
 z_index = 10
-offset_left = -45.0
-offset_top = -100.0
-offset_right = 45.0
-offset_bottom = -90.0
+offset_left = -59.0
+offset_top = -202.0
+offset_right = 55.0
+offset_bottom = -192.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_d17mp")
 value = 100.0
 show_percentage = false

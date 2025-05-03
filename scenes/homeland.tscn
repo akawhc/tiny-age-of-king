@@ -725,7 +725,7 @@ y_sort_enabled = true
 position = Vector2(-1455, 3590)
 
 [node name="torch" parent="item" instance=ExtResource("28_sr5uv")]
-position = Vector2(-1217, 3513)
+position = Vector2(-1670, 3650)
 
 [node name="worker" parent="." instance=ExtResource("25_4wgfr")]
 position = Vector2(111, 42)
