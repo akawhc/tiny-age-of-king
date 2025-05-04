@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://6rwkugbcxppt"]
+[gd_scene load_steps=70 format=3 uid="uid://6rwkugbcxppt"]
 
 [ext_resource type="Script" path="res://scripts/npc/knight/knight.gd" id="1_chi2w"]
 [ext_resource type="Texture2D" uid="uid://ymilw7312e7p" path="res://sprites/Tiny Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_py2x8"]
@@ -131,14 +131,6 @@ region = Rect2(768, 0, 192, 192)
 [sub_resource type="AtlasTexture" id="AtlasTexture_5lu75"]
 atlas = ExtResource("2_py2x8")
 region = Rect2(960, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1ifhe"]
-atlas = ExtResource("2_py2x8")
-region = Rect2(960, 960, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y8rqf"]
-atlas = ExtResource("2_py2x8")
-region = Rect2(960, 1344, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m7jbw"]
 atlas = ExtResource("2_py2x8")
@@ -378,24 +370,8 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5lu75")
 }],
-"loop": false,
+"loop": true,
 "name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1ifhe")
-}],
-"loop": false,
-"name": &"idle_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_y8rqf")
-}],
-"loop": false,
-"name": &"idle_up",
 "speed": 5.0
 }, {
 "frames": [{

@@ -10,8 +10,9 @@ var is_building = false
 var current_building_target = null  # 当前正在建造的建筑对象
 
 # 建造参数
-const BUILD_DISTANCE = 50.0  # 工人与建筑中心的距离
+const TARGET_BUILD_REACH_DISTANCE = 10.0 # 工人需要到达目标位置的距离阈值
 const BUILD_SPEED = 1  # 每次敲击增加的建造进度
+const BUILD_OUTER_MARGIN = 10.0 # 工人与建筑边缘的距离
 
 # 建造目标信息
 var target_position = Vector2.ZERO  # 工人的目标位置
@@ -62,17 +63,6 @@ func start_building(pos: Vector2, building_type: String) -> void:
 		print("工人无法开始建造")
 		return
 
-	# 计算工人的目标位置（建筑周围的位置）
-	var angle = randf() * TAU  # 随机角度，让工人分散开
-	var offset = Vector2(cos(angle), sin(angle)) * BUILD_DISTANCE
-	target_position = pos + offset
-
-	# 移动到建造位置
-	worker.move_to(target_position)
-
-	# 延迟设置建造状态，等工人实际到达后才开始建造
-	is_building = true
-
 	# 获取或创建建筑目标
 	var site_manager = get_site_manager()
 	current_building_target = site_manager.register_building_site(pos, building_type, worker)
@@ -81,7 +71,33 @@ func start_building(pos: Vector2, building_type: String) -> void:
 	if current_building_target == null:
 		print("错误：无法创建建筑工地")
 		is_building = false
+		# 注意：这里可能需要通知 site_manager 注销这个失败的工地，取决于其实现
 		return
+
+	# --- 新逻辑：计算建筑外部的目标位置 ---
+	# 获取建筑尺寸 (需要根据实际情况实现 get_building_size)
+	var building_size = get_building_size(building_type)
+	if building_size == Vector2.ZERO:
+		print("错误: 无法获取建筑尺寸 ", building_type)
+		# 清理：如果工地已注册，需要注销
+		site_manager.unregister_building_site(current_building_target.id) # 假设有此方法
+		current_building_target = null
+		is_building = false
+		return
+
+	# 计算建筑的实际占地矩形
+	var building_rect = Rect2(pos - building_size / 2.0, building_size)
+	# 计算一个包含工人站立空间的外部目标矩形
+	var target_rect = building_rect.grow(BUILD_OUTER_MARGIN)
+
+	# 寻找目标矩形边框上离工人最近的点
+	target_position = find_closest_point_on_rect_perimeter(target_rect, worker.global_position)
+	# --- 结束新逻辑 ---
+
+	# 移动到建造位置
+	worker.move_to(target_position)
+
+	is_building = true
 
 	print("工人开始建造 ", building_type, "，目标位置: ", target_position)
 
@@ -100,22 +116,22 @@ func update_building(_delta: float) -> void:
 	# 检查是否到达建造位置
 	var distance_to_target = worker.global_position.distance_to(target_position)
 
-	# 距离检查 - 如果距离大于5.0，工人还没到达目标位置
-	if distance_to_target > 5.0:
-		# 如果工人离目标位置太远，可能是路径找不到，尝试重新寻路
-		if distance_to_target > 100.0 and randf() < 0.01:  # 1%概率尝试重新寻路
-			print("工人无法到达建造位置，尝试重新寻路")
+	# 距离检查 - 如果距离大于阈值，工人还没到达目标位置
+	if distance_to_target > TARGET_BUILD_REACH_DISTANCE:
+		# 如果工人离目标位置太远，可能是路径找不到，尝试重新寻路 (减少重新寻路的检查距离)
+		if distance_to_target > 50.0 and randf() < 0.01:  # 1%概率尝试重新寻路
+			print("工人离建造位置较远，尝试重新寻路")
 			worker.move_to(target_position)
 		return
 
-	# 确保工人面向建筑
-	var direction_to_building = (current_building_target.position - worker.global_position).normalized()
-	if direction_to_building.x != 0:
-		worker.animated_sprite_2d.flip_h = direction_to_building.x < 0
+	# 确保工人面向建筑 (目标中心点)
+	var direction_to_building_center = (current_building_target.position - worker.global_position).normalized()
+	if direction_to_building_center.x != 0:
+		worker.animated_sprite_2d.flip_h = direction_to_building_center.x < 0
 
 	# 如果工人没有在执行其他动画且已到达目标位置，开始新的建造动作
 	if not worker.is_chopping and not worker.is_mining:
-		start_build_animation(direction_to_building)
+		start_build_animation(direction_to_building_center) # 使用朝向建筑中心的方向
 
 # 开始建造动画
 func start_build_animation(facing_direction: Vector2) -> void:
@@ -133,7 +149,7 @@ func on_build_animation_frame_changed(frame: int) -> void:
 
 	# 检查工人是否已经到达建造位置
 	var distance_to_target = worker.global_position.distance_to(target_position)
-	if distance_to_target > 5.0:
+	if distance_to_target > TARGET_BUILD_REACH_DISTANCE: # 使用常量
 		# 工人还没到达建造位置，不应该增加建造进度
 		return
 
@@ -229,3 +245,49 @@ func stop_building() -> void:
 func _defer_set_worker_building_state(state: bool) -> void:
 	worker.is_building = state
 	print("设置工人建造状态为: ", state)
+
+# --- Helper Functions ---
+
+# 辅助函数：根据建筑类型获取尺寸 (需要根据实际项目结构实现)
+# 注意：这里的尺寸应该是建筑碰撞体或占地面积的尺寸
+func get_building_size(building_type: String) -> Vector2:
+	# 示例：需要从配置文件、场景或其他地方加载实际尺寸
+	match building_type:
+		"Castle":
+			return Vector2(250, 150) # 假设城堡尺寸 (示例值)
+		"House":
+			return Vector2(100, 60)   # 假设房屋尺寸 (示例值)
+		"Tower":
+			return Vector2(100, 50)   # 假设箭塔尺寸 (示例值)
+		_:
+			printerr("未知的建筑类型，无法获取尺寸: ", building_type)
+			return Vector2.ZERO
+
+# 辅助函数：寻找矩形边框上离给定点最近的点
+func find_closest_point_on_rect_perimeter(rect: Rect2, point: Vector2) -> Vector2:
+	# 将点限制在矩形区域内
+	var closest_point = point.clamp(rect.position, rect.position + rect.size)
+
+	# 如果点恰好在矩形内部（意味着原始点也在内部），需要将其投射到最近的边框上
+	var tolerance = 0.001
+	if rect.has_point(point) and \
+	   point.x > rect.position.x + tolerance and point.x < rect.end.x - tolerance and \
+	   point.y > rect.position.y + tolerance and point.y < rect.end.y - tolerance:
+
+		var dist_left = point.x - rect.position.x
+		var dist_right = (rect.position.x + rect.size.x) - point.x
+		var dist_top = point.y - rect.position.y
+		var dist_bottom = (rect.position.y + rect.size.y) - point.y
+
+		var min_dist = min(min(dist_left, dist_right), min(dist_top, dist_bottom))
+
+		if abs(min_dist - dist_left) < tolerance:
+			closest_point.x = rect.position.x
+		elif abs(min_dist - dist_right) < tolerance:
+			closest_point.x = rect.position.x + rect.size.x
+		elif abs(min_dist - dist_top) < tolerance:
+			closest_point.y = rect.position.y
+		else: # abs(min_dist - dist_bottom) < tolerance:
+			closest_point.y = rect.position.y + rect.size.y
+
+	return closest_point

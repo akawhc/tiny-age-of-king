@@ -33,7 +33,6 @@ texture = ExtResource("1_4juos")
 offset = Vector2(0, -40)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(-3, 21.5)
 shape = SubResource("RectangleShape2D_tlwqf")
 
@@ -49,6 +48,7 @@ value = 100.0
 show_percentage = false
 
 [node name="DetectionArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 position = Vector2(-3.5, -21)

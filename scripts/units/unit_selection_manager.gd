@@ -92,7 +92,7 @@ func move_units_to(target_pos: Vector2) -> void:
 	# 计算单位的目标位置
 	var unit_count = selected_units.size()
 	var formation_width: int = int(ceil(sqrt(unit_count)))  # 确保formation_width是整数
-	var spacing = 50  # 单位之间的间距
+	var spacing = 100  # 单位之间的间距
 
 	for i in range(unit_count):
 		var row = i * 1.0 / formation_width

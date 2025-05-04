@@ -118,6 +118,8 @@ func _ready() -> void:
 		detection_area.body_entered.connect(_on_detection_area_body_entered)
 		detection_area.body_exited.connect(_on_detection_area_body_exited)
 
+	play_idle_animation()
+
 func update_facing_direction(direction: Vector2) -> void:
 	if direction.length() == 0:
 		return
