@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=71 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lou7g"]
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" uid="uid://bojoy2f2why45" path="res://scenes/buildings/tower.tscn" id="37_4dim5"]
 [ext_resource type="PackedScene" uid="uid://bqxqxq2mj8p4k" path="res://scenes/buildings/castle.tscn" id="37_umwo8"]
 [ext_resource type="PackedScene" uid="uid://ci8pjvxlimwx5" path="res://scenes/npc/archer.tscn" id="38_b355g"]
+[ext_resource type="PackedScene" uid="uid://b8j6v3q4y8n0x" path="res://scenes/resources/wood.tscn" id="39_2n1bv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -713,7 +714,7 @@ animation = &"default"
 
 [node name="tree2" parent="item/trees" instance=ExtResource("25_e0wlo")]
 y_sort_enabled = true
-position = Vector2(-1400, 3100)
+position = Vector2(-985, 3327)
 
 [node name="gold_mines" type="TileMapLayer" parent="item"]
 y_sort_enabled = true
@@ -724,8 +725,8 @@ position = Vector2(-1455, 3590)
 [node name="torch" parent="item" instance=ExtResource("28_sr5uv")]
 position = Vector2(-1670, 3650)
 
-[node name="worker" parent="." instance=ExtResource("25_4wgfr")]
-position = Vector2(-271, 84)
+[node name="worker" parent="item" instance=ExtResource("25_4wgfr")]
+position = Vector2(-1131, 3328)
 
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-1387, 26)
@@ -734,10 +735,10 @@ position = Vector2(-1387, 26)
 
 [node name="Gold" parent="." instance=ExtResource("33_fph12")]
 y_sort_enabled = true
-position = Vector2(265, 297)
+position = Vector2(186, 172)
 
 [node name="meat" parent="." instance=ExtResource("35_jyqfj")]
-position = Vector2(-447, 161)
+position = Vector2(151, 243)
 
 [node name="sheep" parent="." instance=ExtResource("36_au03j")]
 position = Vector2(-1237, 258)
@@ -788,3 +789,6 @@ position = Vector2(-188, -239)
 
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
 position = Vector2(-179, 447)
+
+[node name="Wood" parent="." instance=ExtResource("39_2n1bv")]
+position = Vector2(108, 177)
