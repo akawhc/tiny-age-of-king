@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b8j6v3q4y8n0x"]
 
 [ext_resource type="Script" path="res://scripts/resource/wood.gd" id="1_2d3yt"]
-[ext_resource type="Texture2D" uid="uid://bcx2aybatvhhg" path="res://sprites/Tiny Swords/Resources/Resources/W_Idle_(NoShadow).png" id="2_n4k3p"]
+[ext_resource type="Texture2D" uid="uid://cqppkf81iff0d" path="res://sprites/Tiny Swords/Resources/Resources/W_Idle.png" id="2_e76yy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 34.0588
@@ -12,7 +12,7 @@ script = ExtResource("1_2d3yt")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -6)
 scale = Vector2(0.8, 0.8)
-texture = ExtResource("2_n4k3p")
+texture = ExtResource("2_e76yy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, 10)

@@ -34,7 +34,7 @@ const TREE_ANIMATIONS = {
 	"STUMP": "stump"      # 树桩状态
 }
 
-@export var max_health: int = 100
+@export var max_health: int = 10
 var current_health: int = max_health
 var is_being_chopped: bool = false
 var chop_cooldown: bool = false
@@ -169,7 +169,6 @@ func _respawn_tree() -> void:
 		TREE_CONFIG.respawn.grow_duration
 	).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
-	print("树木重生完成")
 
 func spawn_wood() -> void:
 	var wood_count = randi_range(
@@ -184,17 +183,17 @@ func spawn_wood() -> void:
 			randf_range(-TREE_CONFIG.wood_spawn.spread_range, TREE_CONFIG.wood_spawn.spread_range)
 		)
 		wood.global_position = global_position + spawn_offset
-		get_parent().add_child(wood)
+		get_tree().get_root().add_child(wood)
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("players"):
+	if body.is_in_group("workers"):
 		is_being_chopped = true
 		if body.has_method("set_nearest_tree"):
 			body.set_nearest_tree(self)
 			print("设置最近的树")  # 调试信息
 
 func _on_body_exited(body: Node2D) -> void:
-	if body.is_in_group("players"):
+	if body.is_in_group("workers"):
 		is_being_chopped = false
 		if body.has_method("set_nearest_tree"):
 			body.set_nearest_tree(null)

@@ -25,24 +25,26 @@ func _ready() -> void:
 	# 设置资源类型和数量
 	resource_type = "wood"
 	amount = 5  # 每个木材资源提供5单位
-
 	super._ready()  # 调用父类的_ready方法
-	add_to_group("resources")  # 将木材资源添加到resources组
-	_play_drop_animation()
 	# body_entered.connect(_on_body_entered)
 
 func _play_drop_animation() -> void:
+	var initial_global_pos = global_position
 	var tween = create_tween()
+
+	# 向上弹起
 	tween.tween_property(
 		self,
-		"position",
-		position + Vector2(0, -WOOD_CONFIG.drop_animation.height),
+		"global_position",
+		initial_global_pos + Vector2(0, -WOOD_CONFIG.drop_animation.height),
 		WOOD_CONFIG.drop_animation.up_time
 	)
+
+	# 落回原位
 	tween.tween_property(
 		self,
-		"position",
-		position,
+		"global_position",
+		initial_global_pos,
 		WOOD_CONFIG.drop_animation.down_time
 	)
 

@@ -67,10 +67,9 @@ func _on_body_entered(body: Node2D) -> void:
 	# 收集对象方法名
 	var collect_method = "collect_" + config.resource_name.to_lower()
 
-	if body.is_in_group("workers") or body.is_in_group("players"):
+	if body.is_in_group("workers"):
 		if body.has_method(collect_method):
-			if body.name.begins_with("worker"):
-				body.call(collect_method, self)  # 传递资源实例给工人
+			body.call(collect_method, self)  # 传递资源实例给工人
 		else:
 			# 如果没有特定方法但在可收集组中，也播放动画
 			_play_collect_animation()
