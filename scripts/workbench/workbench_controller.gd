@@ -213,10 +213,6 @@ func _consume_resources(action_id: String) -> bool:
 	if not costs:
 		return true
 
-	# 消耗资源
-	for resource_type in costs:
-		_resource_manager.consume_resource(resource_type, costs[resource_type])
-
 	return true
 
 # 资源变化时更新按钮状态

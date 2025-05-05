@@ -102,10 +102,8 @@ func try_build(building_type: String) -> bool:
 	if has_sufficient_resources(costs):
 		for resource_type in costs:
 			consume_resource(resource_type, costs[resource_type])
-		print(building_type + " 建造成功！")
 		return true
 	else:
-		print(building_type + " 资源不足，无法建造！")
 		return false
 
 # 尝试生产单位

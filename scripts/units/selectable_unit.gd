@@ -89,7 +89,6 @@ func move_to(pos: Vector2) -> void:
 
 	target_position = pos  # 使用全局坐标作为目标位置
 	is_moving = true
-	print(name, " 开始移动到位置：", pos)
 
 func _draw() -> void:
 	if is_selected and collision_shape:

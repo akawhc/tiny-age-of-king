@@ -56,10 +56,6 @@ class_name WorkbenchConfig
 	"build_castle": {
 		"wood": 300,
 		"gold": 200
-	},
-	"build_mine": {
-		"wood": 100,
-		"gold": 150
 	}
 }
 

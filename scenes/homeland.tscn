@@ -691,11 +691,28 @@ tile_set = SubResource("TileSet_rd3fl")
 
 [node name="tree2" parent="." instance=ExtResource("25_e0wlo")]
 y_sort_enabled = true
-position = Vector2(-248, 73)
+position = Vector2(-437, 417)
+
+[node name="tree2" parent="tree2" instance=ExtResource("25_e0wlo")]
+y_sort_enabled = true
+position = Vector2(-11, -91)
+
+[node name="tree3" parent="tree2" instance=ExtResource("25_e0wlo")]
+y_sort_enabled = true
+position = Vector2(-260, 0)
+
+[node name="tree2" parent="tree2/tree3" instance=ExtResource("25_e0wlo")]
+y_sort_enabled = true
+position = Vector2(1, -99)
 
 [node name="tree" parent="." instance=ExtResource("25_e0wlo")]
 y_sort_enabled = true
-position = Vector2(-813, -169)
+position = Vector2(-574, 418)
+animation = &"default"
+
+[node name="tree" parent="tree" instance=ExtResource("25_e0wlo")]
+y_sort_enabled = true
+position = Vector2(-3, -90)
 animation = &"default"
 
 [node name="item" type="Node2D" parent="."]
@@ -717,13 +734,13 @@ metadata/_edit_lock_ = true
 y_sort_enabled = true
 
 [node name="gold_mine" parent="item/gold_mines" instance=ExtResource("27_6yuoh")]
-position = Vector2(-1455, 3590)
+position = Vector2(-1229, 3781)
 
 [node name="torch" parent="item" instance=ExtResource("28_sr5uv")]
 position = Vector2(-1670, 3650)
 
 [node name="worker" parent="item" instance=ExtResource("25_4wgfr")]
-position = Vector2(-1131, 3328)
+position = Vector2(-1079, 3129)
 
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-1387, 26)
@@ -732,19 +749,19 @@ position = Vector2(-1387, 26)
 
 [node name="Gold" parent="." instance=ExtResource("33_fph12")]
 y_sort_enabled = true
-position = Vector2(186, 172)
+position = Vector2(285, -77)
 
 [node name="meat" parent="." instance=ExtResource("35_jyqfj")]
-position = Vector2(151, 243)
+position = Vector2(250, -6)
 
 [node name="sheep" parent="." instance=ExtResource("36_au03j")]
-position = Vector2(-1237, 258)
+position = Vector2(-633, 517)
 
 [node name="archer" parent="." instance=ExtResource("38_b355g")]
-position = Vector2(-111, 331)
+position = Vector2(111, 105)
 
 [node name="17" type="Sprite2D" parent="."]
-position = Vector2(108, -9)
+position = Vector2(207, -258)
 texture = ExtResource("19_302ig")
 
 [node name="18" type="Sprite2D" parent="."]
@@ -752,7 +769,7 @@ position = Vector2(-1040, 351)
 texture = ExtResource("20_nlktd")
 
 [node name="13" type="Sprite2D" parent="."]
-position = Vector2(165, 74)
+position = Vector2(264, -175)
 texture = ExtResource("15_oikob")
 
 [node name="09" type="Sprite2D" parent="."]
@@ -782,10 +799,10 @@ position = Vector2(-726, 25)
 position = Vector2(380, 96)
 
 [node name="Castle" parent="." instance=ExtResource("37_umwo8")]
-position = Vector2(-188, -239)
+position = Vector2(-146, -400)
 
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
 position = Vector2(-179, 447)
 
 [node name="Wood" parent="." instance=ExtResource("39_2n1bv")]
-position = Vector2(108, 177)
+position = Vector2(207, -72)

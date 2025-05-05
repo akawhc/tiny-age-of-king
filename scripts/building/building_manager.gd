@@ -9,6 +9,7 @@ extends Node2D
 
 # 单例实例
 static var instance: BuildingManager = null
+var _resource_manager: GlobalResourceManager
 
 # 预加载的建筑预览纹理
 var preview_textures = {
@@ -58,6 +59,9 @@ static func get_instance() -> BuildingManager:
 			scene_tree.root.call_deferred("add_child", instance)
 			print("BuildingManager 单例已添加到场景树")
 	return instance
+
+func _ready() -> void:
+	_resource_manager = GlobalResourceManager.get_instance()
 
 # 加载所有建筑预览纹理
 func _load_preview_textures() -> void:
@@ -144,13 +148,33 @@ func stop_preview() -> void:
 		_current_preview = null
 
 # 检查是否可以在指定位置建造
-func can_build_at_position(_pos: Vector2) -> bool:
-	# 这里添加建造位置的检查逻辑
-	# 1. 检查是否与其他建筑重叠
-	# 2. 检查是否在可建造区域内
-	# 3. 检查是否有足够的资源
+func can_build_at_position(pos: Vector2) -> bool:
+	# 获取物理空间状态用于检测
+	var space_state = get_world_2d().direct_space_state
 
-	# 返回 true 表示可建造
+	# 创建一个圆形的检测形状
+	var shape = CircleShape2D.new()
+	shape.radius = 32.0  # 设置检测半径，根据建筑大小调整
+
+	# 设置检测参数
+	var query = PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = Transform2D(0, pos)  # 设置检测位置
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+
+	# 1. 检查是否与其他建筑重叠
+	# 设置检测掩码为建筑层
+	query.collision_mask = 0b10  # 假设建筑在第1层
+	var building_collisions = space_state.intersect_shape(query)
+
+	if not building_collisions.is_empty():
+		print("建造位置与现有建筑重叠")
+		return false
+
+	# 2. 检查是否在可建造区域内
+	# TODO
+
 	return true
 
 # 处理建造预览请求
@@ -180,6 +204,20 @@ func confirm_build(pos: Vector2) -> void:
 
 	print("确认在位置 ", pos, " 建造 ", building_type)
 
+	# 检查并消耗资源
+	var costs = {
+		"Castle": {"wood": 300, "gold": 200},
+		"House": {"wood": 100, "gold": 50},
+		"Tower": {"wood": 150, "gold": 100}
+	}
+
+	# 获取当前建筑类型的资源消耗
+	var building_costs = costs.get(building_type, {})
+	for resource_type in building_costs:
+		_resource_manager.consume_resource(resource_type, building_costs[resource_type])
+		print("消耗资源：", resource_type, " 数量：", building_costs[resource_type])
+
+	# 开始建造
 	match building_type:
 		"Castle":
 			start_castle_construction(workers, pos)
