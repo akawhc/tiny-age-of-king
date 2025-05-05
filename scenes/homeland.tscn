@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=73 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lou7g"]
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
@@ -39,6 +39,8 @@
 [ext_resource type="PackedScene" uid="uid://bqxqxq2mj8p4k" path="res://scenes/buildings/castle.tscn" id="37_umwo8"]
 [ext_resource type="PackedScene" uid="uid://ci8pjvxlimwx5" path="res://scenes/npc/archer.tscn" id="38_b355g"]
 [ext_resource type="PackedScene" uid="uid://b8j6v3q4y8n0x" path="res://scenes/resources/wood.tscn" id="39_2n1bv"]
+[ext_resource type="PackedScene" uid="uid://cduh6w1v71qce" path="res://scenes/goblin/barrel.tscn" id="40_cbux6"]
+[ext_resource type="PackedScene" uid="uid://cyxbscdor8jh1" path="res://scenes/goblin/tnt.tscn" id="41_ks2re"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4i3b1"]
 texture = ExtResource("4_i6rp5")
@@ -740,7 +742,7 @@ position = Vector2(-1229, 3781)
 position = Vector2(-1670, 3650)
 
 [node name="worker" parent="item" instance=ExtResource("25_4wgfr")]
-position = Vector2(-1079, 3129)
+position = Vector2(-717, 3202)
 
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-1387, 26)
@@ -758,7 +760,7 @@ position = Vector2(250, -6)
 position = Vector2(-633, 517)
 
 [node name="archer" parent="." instance=ExtResource("38_b355g")]
-position = Vector2(111, 105)
+position = Vector2(-525, 34)
 
 [node name="17" type="Sprite2D" parent="."]
 position = Vector2(207, -258)
@@ -806,3 +808,12 @@ position = Vector2(-179, 447)
 
 [node name="Wood" parent="." instance=ExtResource("39_2n1bv")]
 position = Vector2(207, -72)
+
+[node name="barrel" parent="." instance=ExtResource("40_cbux6")]
+position = Vector2(-514, -80)
+
+[node name="tnt" parent="." instance=ExtResource("41_ks2re")]
+position = Vector2(-473, -213)
+
+[node name="torch" parent="." instance=ExtResource("28_sr5uv")]
+position = Vector2(-171, -69)

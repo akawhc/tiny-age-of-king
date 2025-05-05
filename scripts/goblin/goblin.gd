@@ -89,7 +89,14 @@ func _physics_process(_delta: float) -> void:
 	if current_state == BaseState.DEAD:
 		velocity = Vector2.ZERO
 		return
-	play_idle_animation()
+
+	# 处理移动
+	if current_state == BaseState.RUNNING and move_direction != Vector2.ZERO:
+		velocity = move_direction * CONFIG.move_speed
+		move_and_slide()
+	else:
+		velocity = Vector2.ZERO
+		play_idle_animation()
 
 # 处理攻击行为，子类需重写
 func handle_attack() -> void:
@@ -150,7 +157,6 @@ func _random_action() -> void:
 		return
 
 	var action = randi() % 5
-
 	match action:
 		0, 1:
 			# 随机移动

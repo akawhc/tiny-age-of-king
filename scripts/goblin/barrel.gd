@@ -49,6 +49,7 @@ func process_state(_delta: float) -> void:
 					change_state(BarrelState.EXPLODING)
 					return
 
+	print("当前状态：", current_state)
 	match current_state:
 		BarrelState.IDLE:
 			pass
@@ -82,6 +83,7 @@ func _random_action() -> void:
 		return
 
 	var action = randi() % 10
+	print("火药桶随机行为：", action)
 
 	match action:
 		0, 1:

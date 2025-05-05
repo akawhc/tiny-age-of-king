@@ -15,6 +15,8 @@ enum TorchState {
 # 火把哥布林特有变量
 var attack_cooldown: float = 0.0
 var can_attack: bool = true
+var state_change_cooldown: float = 0.0
+const STATE_CHANGE_COOLDOWN_TIME: float = 0.5  # 状态切换冷却时间
 
 func _ready() -> void:
 	CONFIG = {
@@ -50,13 +52,16 @@ func play_idle_animation() -> void:
 	animated_sprite.play("idle")
 
 func process_state(delta: float) -> void:
-	# print("process_state: ", current_state)
 	# 攻击冷却
 	if !can_attack:
 		attack_cooldown += delta
 		if attack_cooldown >= CONFIG.attack_cooldown:
 			attack_cooldown = 0.0
 			can_attack = true
+
+	# 状态切换冷却
+	if state_change_cooldown > 0:
+		state_change_cooldown -= delta
 
 	# 检查目标有效性
 	if target == null or (!is_instance_valid(target) or !target.is_inside_tree()):
@@ -66,34 +71,40 @@ func process_state(delta: float) -> void:
 
 	match current_state:
 		TorchState.IDLE:
-			if target:
+			if target and state_change_cooldown <= 0:
 				var distance = global_position.distance_to(target.global_position)
 				# 如果在攻击范围内并且可以攻击，直接攻击
 				if distance <= CONFIG.attack_range and can_attack:
 					change_state(TorchState.ATTACKING)
+					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 				# 如果在检测范围内但超出攻击范围，开始追击
 				elif distance < CONFIG.detection_radius and distance > CONFIG.attack_range:
 					change_state(TorchState.RUNNING)
+					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 
 		TorchState.RUNNING:
 			if target:
 				var distance = global_position.distance_to(target.global_position)
-				if distance <= CONFIG.attack_range and can_attack:
+				if distance <= CONFIG.attack_range and can_attack and state_change_cooldown <= 0:
 					change_state(TorchState.ATTACKING)
-				elif distance > CONFIG.detection_radius:
+					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
+				elif distance > CONFIG.detection_radius and state_change_cooldown <= 0:
 					# 如果目标超出检测范围，停止追踪
 					target = null
 					move_direction = Vector2.ZERO
 					change_state(TorchState.IDLE)
-
+					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 			else:
 				# 没有目标时，停止移动并回到待机
 				move_direction = Vector2.ZERO
-				change_state(TorchState.IDLE)
+				if state_change_cooldown <= 0:
+					change_state(TorchState.IDLE)
+					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 
 		TorchState.ATTACKING:
-			if !target:
+			if !target and state_change_cooldown <= 0:
 				change_state(TorchState.IDLE)
+				state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 
 		TorchState.DEAD:
 			# 死亡状态
@@ -125,7 +136,6 @@ func _physics_process(delta: float) -> void:
 
 		move_and_slide()
 	else:
-		# 如果没有目标或在IDLE状态，使用基类的移动逻辑
 		super._physics_process(delta)
 
 
@@ -135,7 +145,7 @@ func _random_action() -> void:
 		return
 
 	var action = randi() % 5
-
+	print("火把哥布林随机行为：", action)
 	match action:
 		0, 1, 2:
 			# 随机移动
@@ -202,15 +212,19 @@ func _apply_attack_damage() -> void:
 
 func _on_animation_finished() -> void:
 	if animated_sprite.animation.begins_with("attack_"):
-		change_state(TorchState.IDLE)
+		if state_change_cooldown <= 0:
+			change_state(TorchState.IDLE)
+			state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 
 		# 攻击结束后立即检查目标位置
 		if target and is_instance_valid(target) and target.is_inside_tree():
 			var distance = global_position.distance_to(target.global_position)
 
 			# 如果目标在攻击范围内且可以攻击，再次攻击
-			if distance <= CONFIG.attack_range and can_attack:
+			if distance <= CONFIG.attack_range and can_attack and state_change_cooldown <= 0:
 				change_state(TorchState.ATTACKING)
+				state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 			# 如果目标在检测范围内但超出攻击范围，追击目标
-			elif distance < CONFIG.detection_radius and distance > CONFIG.attack_range:
+			elif distance < CONFIG.detection_radius and distance > CONFIG.attack_range and state_change_cooldown <= 0:
 				change_state(TorchState.RUNNING)
+				state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME

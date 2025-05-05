@@ -18,6 +18,8 @@ var can_throw: bool = true
 var throw_cooldown_time: float = 3.0
 var desired_direction = Vector2.ZERO  # 期望的移动方向
 var turn_speed = 3.0                 # 转向速度
+var state_change_cooldown: float = 0.0
+const STATE_CHANGE_COOLDOWN_TIME: float = 0.5  # 状态切换冷却时间
 
 # TNT炸弹场景
 @onready var bomb_scene = preload("res://scenes/projectiles/bomb.tscn")
@@ -89,6 +91,10 @@ func process_state(delta: float) -> void:
 			throw_cooldown = 0.0
 			can_throw = true
 
+	# 状态切换冷却
+	if state_change_cooldown > 0:
+		state_change_cooldown -= delta
+
 	# 检查目标有效性
 	if target == null or (!is_instance_valid(target) or !target.is_inside_tree()):
 		target = null
@@ -97,25 +103,28 @@ func process_state(delta: float) -> void:
 
 	match current_state:
 		TntState.IDLE:
-			if target:
+			if target and state_change_cooldown <= 0:
 				var distance = global_position.distance_to(target.global_position)
 				if distance <= CONFIG.detection_radius:
 					# 如果在投掷范围内并且可以投掷，直接投掷
 					if distance <= CONFIG.throw_range and distance >= CONFIG.min_throw_range:
 						if can_throw:
 							change_state(TntState.THROWING)
+							state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 					# 如果在检测范围内但不在理想投掷范围，开始移动调整位置
 					else:
 						change_state(TntState.RUNNING)
+						state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 
 		TntState.RUNNING:
 			if target:
 				var distance = global_position.distance_to(target.global_position)
 				# 超过视野范围，停止追踪
-				if distance > CONFIG.detection_radius:
+				if distance > CONFIG.detection_radius and state_change_cooldown <= 0:
 					target = null
 					_update_movement(delta, Vector2.ZERO)
 					change_state(TntState.IDLE)
+					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 				# 如果超出投掷范围，则继续追击，尝试进入投掷范围
 				elif distance > CONFIG.throw_range:
 					var new_direction = (target.global_position - global_position).normalized()
@@ -129,18 +138,19 @@ func process_state(delta: float) -> void:
 					)
 					_update_movement(delta, new_direction)
 				# 如果在理想投掷范围内且可以投掷，进行投掷
-				elif can_throw:
+				elif can_throw and state_change_cooldown <= 0:
 					change_state(TntState.THROWING)
-				else:
-					change_state(TntState.IDLE)
+					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 			else:
 				# 没有目标时，停止移动并回到待机
+				await get_tree().create_timer(randf_range(1.0, 2.0)).timeout
 				_update_movement(delta, Vector2.ZERO)
 				change_state(TntState.IDLE)
 
 		TntState.THROWING:
-			if !target:
+			if !target and state_change_cooldown <= 0:
 				change_state(TntState.IDLE)
+				state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 
 		TntState.DEAD:
 			# 死亡状态
@@ -165,7 +175,9 @@ func _physics_process(delta: float) -> void:
 		velocity = move_direction * CONFIG.move_speed
 		move_and_slide()
 	else:
-		# 如果没有目标或在其他状态，使用基类的移动逻辑
+		print("super._physics_process")
+		print("super当前状态：", current_state)
+		print("super移动方向：", move_direction)
 		super._physics_process(delta)
 
 
