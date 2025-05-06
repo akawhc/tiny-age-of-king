@@ -26,7 +26,7 @@ var config = {
 		"follow_only_at_edge": true         # 是否只在鼠标靠近边缘时才跟随移动
 	},
 	"keyboard": {
-		"enabled": false,                    # 是否启用键盘移动
+		"enabled": false,                   # 是否启用键盘移动
 		"move_speed": 300.0                 # 键盘移动速度
 	},
 	"edge_scroll": {

@@ -21,7 +21,7 @@ const STATE_CHANGE_COOLDOWN_TIME: float = 0.5  # 状态切换冷却时间
 func _ready() -> void:
 	CONFIG = {
 		"move_speed": 110.0,      # 移动速度
-		"health": 6000,           # 生命值
+		"health": 60,           # 生命值
 		"detection_radius": 200,  # 检测半径
 		"attack_range": 90,       # 攻击范围
 		"attack_damage": 15,      # 攻击伤害

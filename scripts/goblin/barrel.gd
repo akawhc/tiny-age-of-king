@@ -137,6 +137,8 @@ func explode() -> void:
 
 	exploded = true
 	animated_sprite.play("explode")
+	await animated_sprite.animation_finished
+	queue_free()
 
 func _on_frame_changed() -> void:
 	if animated_sprite.animation == "explode":

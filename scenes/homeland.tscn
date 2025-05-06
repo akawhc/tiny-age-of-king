@@ -742,7 +742,10 @@ position = Vector2(-1229, 3781)
 position = Vector2(-1670, 3650)
 
 [node name="worker" parent="item" instance=ExtResource("25_4wgfr")]
-position = Vector2(-717, 3202)
+position = Vector2(-1018, 3194)
+
+[node name="archer" parent="item" instance=ExtResource("38_b355g")]
+position = Vector2(-1263, 2642)
 
 [node name="select_manager" parent="." instance=ExtResource("30_qq1nu")]
 position = Vector2(-1387, 26)
@@ -810,10 +813,10 @@ position = Vector2(-179, 447)
 position = Vector2(207, -72)
 
 [node name="barrel" parent="." instance=ExtResource("40_cbux6")]
-position = Vector2(-514, -80)
+position = Vector2(-659, -201)
 
 [node name="tnt" parent="." instance=ExtResource("41_ks2re")]
-position = Vector2(-473, -213)
+position = Vector2(-523, -456)
 
 [node name="torch" parent="." instance=ExtResource("28_sr5uv")]
-position = Vector2(-171, -69)
+position = Vector2(-547, -83)

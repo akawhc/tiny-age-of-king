@@ -68,7 +68,6 @@ func _load_preview_textures() -> void:
 	for building_type in preview_textures.keys():
 		var texture_path = resource_path + building_type + "/" + building_type + "_Blue.png"
 		preview_textures[building_type] = load(texture_path)
-		print("预加载建筑预览纹理：", building_type)
 
 func _input(event: InputEvent) -> void:
 	if not _current_preview:
@@ -103,8 +102,6 @@ func _input(event: InputEvent) -> void:
 
 # 创建建筑预览
 func start_preview(building_type: String, workers: Array) -> void:
-	print("开始预览建筑：", building_type)
-
 	# 如果已有预览，先取消
 	if _current_preview:
 		cancel_build()
