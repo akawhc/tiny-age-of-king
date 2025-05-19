@@ -828,10 +828,10 @@ offset_bottom = -108.0
 position = Vector2(-1537, 122)
 
 [node name="tnt" parent="." instance=ExtResource("41_ks2re")]
-position = Vector2(-159, 15)
+position = Vector2(-769, 440)
 
 [node name="torch" parent="." instance=ExtResource("28_sr5uv")]
-position = Vector2(-45, -61)
+position = Vector2(172, 477)
 
 [node name="archer2" parent="." instance=ExtResource("38_b355g")]
 position = Vector2(-1286, 454)

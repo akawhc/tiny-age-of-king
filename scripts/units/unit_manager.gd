@@ -72,6 +72,15 @@ func get_unit_from_pool(unit_type: String) -> Node:
 
 # 生成单位
 func spawn_unit(unit_type: String, spawn_position: Vector2) -> void:
+	# 获取资源管理器
+	var resource_manager = GlobalResourceManager.get_instance()
+
+	# 检查资源是否足够
+	if not resource_manager.try_produce_unit(unit_type):
+		print("资源不足，无法生成单位：", unit_type)
+		return
+
+	# 从对象池获取单位
 	var unit = get_unit_from_pool(unit_type)
 
 	if unit:
