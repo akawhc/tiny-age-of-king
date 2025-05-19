@@ -39,7 +39,7 @@ var config = {
 	},
 	"zoom": {
 		"enabled": true,                    # 是否启用缩放
-		"min": 0.5,                         # 最小缩放值
+		"min": 0.4,                         # 最小缩放值
 		"max": 2.0,                         # 最大缩放值
 		"step": 0.1,                        # 缩放步长
 		"target": Vector2(1, 1),            # 目标缩放
@@ -217,7 +217,11 @@ func _handle_edge_scroll(delta: float) -> void:
 	if scroll_direction != Vector2.ZERO:
 		# 使用基于时间的平滑移动
 		var speed = config.edge_scroll.speed * delta
-		global_position += scroll_direction.normalized() * speed * zoom.x
+		# 修改：使用平滑的缩放因子，避免缩小时速度无限增大
+		var zoom_factor = 1.0 + (1.0 - zoom.x) * 0.6  # 缩小时缓慢增加，但有上限
+		# 确保缩放因子不会小于一个最小值
+		zoom_factor = max(0.5, zoom_factor)
+		global_position += scroll_direction.normalized() * speed * zoom_factor
 
 # 设置跟随目标
 func set_follow_target(target) -> void:
