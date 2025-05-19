@@ -175,9 +175,6 @@ func _physics_process(delta: float) -> void:
 		velocity = move_direction * CONFIG.move_speed
 		move_and_slide()
 	else:
-		print("super._physics_process")
-		print("super当前状态：", current_state)
-		print("super移动方向：", move_direction)
 		super._physics_process(delta)
 
 

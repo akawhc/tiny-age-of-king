@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="knight"
+config/name="tiny age of king"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.png"
 

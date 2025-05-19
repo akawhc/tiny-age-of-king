@@ -145,7 +145,6 @@ func _random_action() -> void:
 		return
 
 	var action = randi() % 5
-	print("火把哥布林随机行为：", action)
 	match action:
 		0, 1, 2:
 			# 随机移动

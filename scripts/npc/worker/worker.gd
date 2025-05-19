@@ -31,7 +31,7 @@ func _ready() -> void:
 	add_to_group("workers")
 	add_to_group("soldiers")
 
-	health = 5000
+	health = 50
 
 	# 初始化组件
 	_init_components()
