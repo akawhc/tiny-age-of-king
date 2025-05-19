@@ -2,8 +2,10 @@ extends Node
 
 class_name GlobalResourceManager
 
-# 单例实例
-static var instance: GlobalResourceManager = null
+static var instance: GlobalResourceManager = GlobalResourceManager.new()
+
+static func get_instance() -> GlobalResourceManager:
+	return instance
 
 # 资源数据
 var resources = {
@@ -47,21 +49,6 @@ const UNIT_COSTS = {
 # 信号
 signal resources_changed(resource_type, amount)
 signal insufficient_resources(resource_type, required, current)
-
-# 获取单例实例
-static func get_instance() -> GlobalResourceManager:
-	if instance == null:
-		instance = GlobalResourceManager.new()
-
-		# 确保添加到场景树中
-		if Engine.is_editor_hint():
-			return instance
-
-		var scene_tree = Engine.get_main_loop()
-		if scene_tree and scene_tree is SceneTree:
-			scene_tree.root.call_deferred("add_child", instance)
-			print("GlobalResourceManager 单例已添加到场景树")
-	return instance
 
 # 添加资源
 func add_resource(type: String, amount: int) -> void:

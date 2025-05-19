@@ -160,9 +160,6 @@ func handle_death() -> void:
 	if is_in_group("soldiers"):
 		remove_from_group("soldiers")
 
-	# 将单位回收到对象池，而不是直接销毁
-	var unit_manager = UnitManager.get_instance()
-
 	# 获取单位类型
 	var unit_type = "Worker"  # 默认类型
 	if is_in_group("knights"):
@@ -171,7 +168,7 @@ func handle_death() -> void:
 		unit_type = "Archer"
 
 	# 回收到对象池
-	unit_manager.recycle_unit(self, unit_type)
+	UnitManager.get_instance().recycle_unit(self, unit_type)
 
 # 虚函数，由子类实现
 func play_death_animation() -> void:

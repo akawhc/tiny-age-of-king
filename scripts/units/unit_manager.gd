@@ -70,9 +70,8 @@ func get_unit_from_pool(unit_type: String) -> Node:
 		push_error("无法加载单位场景：" + scene_path)
 		return null
 
-# 生成单位
+# 从对象池种生成单位
 func spawn_unit(unit_type: String, spawn_position: Vector2) -> void:
-	# 获取资源管理器
 	var resource_manager = GlobalResourceManager.get_instance()
 
 	# 检查资源是否足够
