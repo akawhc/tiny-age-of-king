@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfrash40tci6a"]
+
+[ext_resource type="Script" path="res://scripts/switch/zsort_switch.gd" id="1_0feks"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1jcor"]
+size = Vector2(186.069, 21.9602)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vv8w1"]
+size = Vector2(186.075, 20.5649)
+
+[node name="zsort_swicth" type="Node2D"]
+script = ExtResource("1_0feks")
+
+[node name="high_zsort" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="high_zsort"]
+position = Vector2(0.00654602, -10.9879)
+shape = SubResource("RectangleShape2D_1jcor")
+
+[node name="low_zsort" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="low_zsort"]
+position = Vector2(-0.0374794, 10.38)
+shape = SubResource("RectangleShape2D_vv8w1")

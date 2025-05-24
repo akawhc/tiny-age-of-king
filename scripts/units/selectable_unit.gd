@@ -24,6 +24,60 @@ func _ready() -> void:
 	# 获取碰撞形状节点
 	collision_shape = $CollisionShape2D
 
+	# 尝试连接场景中的zsort切换器
+	connect_to_zsort_switches()
+
+	# 尝试连接场景中的桥梁遮罩切换器
+	connect_to_bridge_mask_switches()
+
+# 连接到场景中的zsort切换器
+func connect_to_zsort_switches() -> void:
+	# 查找所有zsort切换器
+	var zsort_switches = get_tree().get_nodes_in_group("zsort_switches")
+
+	if len(zsort_switches) == 0:
+		print("没有找到zsort切换器")
+		return
+
+	# 连接到所有找到的zsort切换器
+	for switch in zsort_switches:
+		connect_to_zsort_switch(switch)
+
+# 连接到单个zsort切换器
+func connect_to_zsort_switch(switch: ZSortSwitch) -> void:
+	if !switch.zsort_switched.is_connected(update_zsort):
+		switch.zsort_switched.connect(update_zsort)
+
+# 更新单位的Z排序值
+func update_zsort(new_zsort: int) -> void:
+	print(name, " 更新Zsort为 ", new_zsort)
+	z_index = new_zsort
+
+# 连接到场景中的桥梁遮罩切换器
+func connect_to_bridge_mask_switches() -> void:
+	# 查找所有桥梁遮罩切换器
+	var bridge_mask_switches = get_tree().get_nodes_in_group("bridge_mask_switches")
+
+	if len(bridge_mask_switches) == 0:
+		print("没有找到桥梁遮罩切换器")
+		return
+
+	# 连接到所有找到的桥梁遮罩切换器
+	for switch in bridge_mask_switches:
+		connect_to_bridge_mask_switch(switch)
+
+# 连接到单个桥梁遮罩切换器
+func connect_to_bridge_mask_switch(switch: BridgeMaskSwitch) -> void:
+	if !switch.enter_bridge.is_connected(update_collision_mask):
+		switch.enter_bridge.connect(update_collision_mask)
+	if !switch.exit_bridge.is_connected(update_collision_mask):
+		switch.exit_bridge.connect(update_collision_mask)
+
+# 更新单位的碰撞遮罩
+func update_collision_mask(new_mask: int) -> void:
+	print(name, " 更新碰撞遮罩为 ", new_mask)
+	collision_mask = new_mask
+
 func _physics_process(_delta: float) -> void:
 	# 如果单位已死亡，不处理移动
 	if is_dead:

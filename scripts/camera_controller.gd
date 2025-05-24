@@ -39,7 +39,7 @@ var config = {
 	},
 	"zoom": {
 		"enabled": true,                    # 是否启用缩放
-		"min": 0.4,                         # 最小缩放值
+		"min": 0.6,                         # 最小缩放值
 		"max": 2.0,                         # 最大缩放值
 		"step": 0.1,                        # 缩放步长
 		"target": Vector2(1, 1),            # 目标缩放
