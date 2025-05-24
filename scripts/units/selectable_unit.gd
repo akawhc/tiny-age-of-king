@@ -10,25 +10,36 @@ extends CharacterBody2D
 @export var selection_indicator_color: Color = Color(0.2, 0.4, 0.8, 0.8)  # 蓝色
 @export var selection_indicator_width: float = 2.0  # 轮廓线宽度
 @export var health: int = 100  # 生命值
+@export var selection_indicator_offset: Vector2 = Vector2.ZERO  # 选择指示器的偏移量
+@export var selection_indicator_radius: float = 0.0  # 选择指示器的半径，0表示使用默认值
 
 # 状态变量
 var is_selected: bool = false
 var target_position: Vector2 = Vector2.ZERO
 var is_moving: bool = false
-var collision_shape: CollisionShape2D
 var is_dead: bool = false  # 死亡状态
 
 func _ready() -> void:
 	# 将单位添加到可选择单位组
 	add_to_group("selectable_units")
-	# 获取碰撞形状节点
-	collision_shape = $CollisionShape2D
+
+	# 初始化选择指示器参数
+	init_selection_indicator()
 
 	# 尝试连接场景中的zsort切换器
 	connect_to_zsort_switches()
 
 	# 尝试连接场景中的桥梁遮罩切换器
 	connect_to_bridge_mask_switches()
+
+# 初始化选择指示器参数
+func init_selection_indicator() -> void:
+	# 如果子类没有设置，则使用默认值
+	if selection_indicator_offset == Vector2.ZERO:
+		selection_indicator_offset = Vector2(0, 20)  # 默认向下偏移
+
+	if selection_indicator_radius <= 0:
+		selection_indicator_radius = 25  # 默认半径值
 
 # 连接到场景中的zsort切换器
 func connect_to_zsort_switches() -> void:
@@ -145,14 +156,12 @@ func move_to(pos: Vector2) -> void:
 	is_moving = true
 
 func _draw() -> void:
-	if is_selected and collision_shape:
-		# 使用碰撞形状的位置作为选择指示器的中心，并向下偏移
-		var center = collision_shape.position + Vector2(0, 20)  # 向下偏移更多，以适应精灵位置
+	if is_selected:
+		# 使用CharacterBody2D节点本身的位置（原点）作为基准，而不是碰撞形状的位置
+		var center = selection_indicator_offset
 
-		# 获取碰撞形状的半径（假设使用CircleShape2D）
-		var radius = 25  # 默认值，增大一些以适应精灵大小
-		if collision_shape.shape is CircleShape2D:
-			radius = collision_shape.shape.radius * 1  # 将半径扩大1.5倍
+		# 使用配置的半径，不再依赖碰撞形状
+		var radius = selection_indicator_radius
 
 		# 绘制椭圆形选择指示器
 		var points = PackedVector2Array()
@@ -161,7 +170,7 @@ func _draw() -> void:
 			var angle = i * TAU / num_points
 			var point = Vector2(
 				cos(angle) * (radius + 3),
-				sin(angle) * (radius + 5) * 0.32  # Y轴压缩为0.3倍，使椭圆更扁
+				sin(angle) * (radius + 5) * 0.32  # Y轴压缩为0.32倍，使椭圆更扁
 			)
 			points.push_back(center + point)
 
@@ -202,9 +211,10 @@ func handle_death() -> void:
 	velocity = Vector2.ZERO
 	is_moving = false
 
-	# 禁用碰撞
-	if collision_shape:
-		collision_shape.set_deferred("disabled", true)
+	# 禁用碰撞 (使用第一个碰撞形状节点)
+	var collision = get_node_or_null("CollisionShape2D")
+	if collision:
+		collision.set_deferred("disabled", true)
 
 	# 播放死亡动画或效果
 	play_death_animation()

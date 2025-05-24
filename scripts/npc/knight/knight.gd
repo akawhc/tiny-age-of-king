@@ -102,9 +102,14 @@ var debug_attack_info = null          # 存储攻击信息用于绘制
 func _ready() -> void:
 	super._ready()
 	add_to_group("soldiers")
+	add_to_group("knights")  # 添加到骑士组
 
 	# 设置骑士血量
 	health = 300
+
+	# 设置骑士的选择指示器参数
+	selection_indicator_offset = Vector2(0, 10)  # 骑士指示器偏移
+	selection_indicator_radius = 20  # 骑士专用指示器半径
 
 	# 初始化动画
 	animated_sprite_2d.play(ANIMATION_STATES.IDLE)

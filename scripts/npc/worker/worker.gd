@@ -33,6 +33,10 @@ func _ready() -> void:
 
 	health = 50
 
+	# 设置工人的选择指示器参数
+	selection_indicator_offset = Vector2(0, 25)  # 工人的指示器偏移
+	selection_indicator_radius = 20  # 工人专用指示器半径
+
 	# 初始化组件
 	_init_components()
 

@@ -406,7 +406,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4rcl1"]
-radius = 22.0907
+radius = 15.0333
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5k0rc"]
 radius = 232.054
@@ -419,7 +419,7 @@ sprite_frames = SubResource("SpriteFrames_2ucio")
 animation = &"shoot_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 8)
+position = Vector2(-2, 15)
 shape = SubResource("CircleShape2D_4rcl1")
 
 [node name="DetectionArea" type="Area2D" parent="."]

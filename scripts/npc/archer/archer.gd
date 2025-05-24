@@ -50,6 +50,10 @@ func _ready() -> void:
 	add_to_group("archers")
 	add_to_group("soldiers")
 
+	# 设置弓箭手的选择指示器参数
+	selection_indicator_offset = Vector2(0, 30)  # 弓箭手指示器偏移
+	selection_indicator_radius = 20  # 弓箭手专用指示器半径
+
 	# 覆盖父类的默认移动速度
 	move_speed = ARCHER_CONFIG.move_speed
 
