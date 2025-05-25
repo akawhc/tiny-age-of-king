@@ -940,7 +940,7 @@ position = Vector2(1048.51, 198.045)
 position = Vector2(-1092.64, -427.715)
 
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
-position = Vector2(-866.634, -23.2212)
+position = Vector2(-624.634, 301.779)
 
 [node name="worker" parent="." instance=ExtResource("12_u31c3")]
 position = Vector2(-460.54, -378.056)
@@ -949,4 +949,4 @@ position = Vector2(-460.54, -378.056)
 position = Vector2(-864.49, 127.355)
 
 [node name="strawman" parent="." instance=ExtResource("44_hve2s")]
-position = Vector2(-1070.2, 145.708)
+position = Vector2(-1115.7, 319.708)

@@ -17,6 +17,9 @@ const STRAWMAN_CONFIG = {
 	}
 }
 
+# 预加载伤害数字场景
+const DamageNumberScene = preload("res://scenes/ui/damage_number.tscn")
+
 var is_hit: bool = false
 var hit_cooldown: bool = false
 
@@ -32,6 +35,9 @@ func take_damage(damage: int, knockback_direction: Vector2 = Vector2.ZERO, knock
 
 	# 添加视觉反馈
 	_play_damage_feedback()
+
+	# 显示伤害数字
+	_show_damage_number(damage)
 
 	# 设置受击冷却时间
 	hit_cooldown = true
@@ -65,3 +71,17 @@ func _play_damage_feedback() -> void:
 		original_position,
 		STRAWMAN_CONFIG.visual_feedback.shake_time
 	)
+
+# 显示伤害数字
+func _show_damage_number(damage: int) -> void:
+	# 实例化伤害数字场景
+	var damage_number = DamageNumberScene.instantiate()
+
+	# 设置初始位置（右上角）
+	damage_number.position = Vector2(20, -50)
+
+	# 初始化伤害值
+	damage_number.initialize(damage)
+
+	# 添加到场景
+	add_child(damage_number)
