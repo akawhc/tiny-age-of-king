@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgwtgc5v3d0mf"]
+
+[ext_resource type="Script" path="res://scripts/npc/strawman/strawman.gd" id="1_n1u8x"]
+[ext_resource type="Texture2D" uid="uid://dg0defvxnfeud" path="res://sprites/Tiny Swords/Deco/18.png" id="1_pjd4h"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yk8hi"]
+radius = 24.3467
+
+[node name="strawman" type="StaticBody2D"]
+position = Vector2(-0.471954, -1.97705)
+script = ExtResource("1_n1u8x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.0544434, -23.3971)
+shape = SubResource("CircleShape2D_yk8hi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0.417778, -57.0031)
+texture = ExtResource("1_pjd4h")

@@ -312,6 +312,7 @@ func update_animation(direction: Vector2) -> void:
 	else:
 		play_idle_animation()
 
+# 视野内自动索敌
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("goblin"):
 		enemies_in_range.append(body)
@@ -380,8 +381,11 @@ func perform_attack() -> void:
 	var attack_range = KNIGHT_CONFIG.attack_range * (1.2 if is_heavy else 1.0)  # 重击有更大的攻击范围
 	var knockback_force = 300 if is_heavy else 150  # 重击有更强的击退效果
 
-	# 获取所有可能的目标
+	# 获取所有敌对生物目标
 	var potential_targets = get_tree().get_nodes_in_group("goblin")
+	# 添加草人作为可能的目标
+	potential_targets.append_array(get_tree().get_nodes_in_group("strawmen"))
+
 	var hits = []
 
 	# 检查每个目标是否在攻击范围和角度内

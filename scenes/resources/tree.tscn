@@ -74,7 +74,7 @@ animations = [{
 radius = 63.0317
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ldy0b"]
-radius = 12.0
+radius = 15.0333
 
 [node name="tree" type="AnimatedSprite2D"]
 position = Vector2(1, 2)

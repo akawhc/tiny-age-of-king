@@ -163,11 +163,14 @@ func _on_body_entered(body: Node2D) -> void:
 	if has_landed:
 		return
 
+	print("箭矢击中了:", body.name, "，类型:", body.get_class(), "，组:", body.get_groups())
+
 	# 忽略发射者和其他箭矢
 	if body == source or body.is_in_group("projectiles"):
 		return
 
 	# 检查是否可以造成伤害
+	print("检查是否有take_damage方法:", body.has_method("take_damage"))
 	if body.has_method("take_damage"):
 		# 造成伤害
 		body.take_damage(damage)
