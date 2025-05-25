@@ -383,7 +383,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6kaag"]
-radius = 14.5688
+radius = 12.1265
 
 [node name="worker" type="CharacterBody2D"]
 y_sort_enabled = true
@@ -395,7 +395,7 @@ sprite_frames = SubResource("SpriteFrames_60ukm")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1.11363, 9.90898)
+position = Vector2(0.222733, 13.918)
 shape = SubResource("CircleShape2D_6kaag")
 
 [node name="CarriedWood" type="Node2D" parent="."]

@@ -68,4 +68,5 @@ animations = [{
 
 [node name="spray" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_kqihv")
+autoplay = "default"
 frame_progress = 0.0658413

@@ -13,7 +13,7 @@ const ResourceDisplayScene = preload("res://scenes/ui/resource_display.tscn")
 # 游戏配置
 const GAME_CONFIG = {
 	"camera": {
-		"initial_position": Vector2(0, 0)  # 相机初始位置
+		"initial_position": Vector2(-1000, -300)  # 相机初始位置
 	}
 }
 

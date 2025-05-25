@@ -19,7 +19,7 @@ const TREE_CONFIG = {
 		"shake_time": 0.1  # 晃动时间
 	},
 	"respawn": {
-		"time": 600.0,  # 重生时间（秒）
+		"time": 00.0,  # 重生时间（秒）
 		"grow_duration": 0.5,  # 生长动画持续时间
 		"start_scale": Vector2(0.5, 0.5),  # 开始大小
 		"end_scale": Vector2(1.0, 1.0),  # 最终大小

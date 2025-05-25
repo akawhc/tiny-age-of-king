@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6fro2i1iwd6h"
-path="res://.godot/imported/Tree.png-88baf41c52b0603e7bf377730695013c.ctex"
+path="res://.godot/imported/Tree.png-74903db671183a79fb4f4bc840c9e84d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/Tiny Swords/Resources/Trees/Tree.png"
-dest_files=["res://.godot/imported/Tree.png-88baf41c52b0603e7bf377730695013c.ctex"]
+source_file="res://sprites/Tiny Swords/Tree.png"
+dest_files=["res://.godot/imported/Tree.png-74903db671183a79fb4f4bc840c9e84d.ctex"]
 
 [params]
 

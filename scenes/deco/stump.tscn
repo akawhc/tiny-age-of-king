@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5q3omy6gkjva"]
+
+[ext_resource type="Texture2D" uid="uid://6fro2i1iwd6h" path="res://sprites/Tiny Swords/Tree.png" id="1_y7bft"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u273b"]
+atlas = ExtResource("1_y7bft")
+region = Rect2(0, 384, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s430y"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u273b")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h5of8"]
+
+[node name="stump" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1.88773, -66.0712)
+sprite_frames = SubResource("SpriteFrames_s430y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.944946, 0.472473)
+shape = SubResource("CircleShape2D_h5of8")

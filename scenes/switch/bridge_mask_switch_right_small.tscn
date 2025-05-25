@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cufkjbmf5535e"]
+
+[ext_resource type="Script" path="res://scripts/switch/bridge_mask_switch.gd" id="1_8q0b8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lbv6f"]
+size = Vector2(31.8208, 43.6224)
+
+[node name="bridge_mask_switch_right_small" type="Node2D"]
+rotation = 6.27334
+script = ExtResource("1_8q0b8")
+
+[node name="exit_bridge" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="exit_bridge"]
+position = Vector2(0.0936508, -37.7386)
+polygon = PackedVector2Array(0.284399, 15.8709, 0.412818, -10.5171, 47.9063, -10.2614, 47.9063, 85.7386, -0.426494, 85.4466, -0.114338, 59.702, 31.7348, 59.6575, 31.818, 15.9309)
+
+[node name="enter_bridge" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enter_bridge"]
+position = Vector2(16.0187, 0.0764676)
+shape = SubResource("RectangleShape2D_lbv6f")
