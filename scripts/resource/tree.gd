@@ -34,7 +34,7 @@ const TREE_ANIMATIONS = {
 	"STUMP": "stump"      # 树桩状态
 }
 
-@export var max_health: int = 10
+@export var max_health: int = 100
 var current_health: int = max_health
 var is_being_chopped: bool = false
 var chop_cooldown: bool = false
@@ -115,6 +115,8 @@ func _on_tree_destroyed() -> void:
 	is_stump = true
 	play(TREE_ANIMATIONS.STUMP)
 
+	print("树木被砍倒")
+
 	# 禁用碰撞体积
 	if collision_body:
 		collision_body.set_collision_layer_value(1, false)  # 禁用碰撞层
@@ -123,8 +125,8 @@ func _on_tree_destroyed() -> void:
 	# emit_signal("tree_chopped", global_position)
 
 	# 启动重生计时器
-	await get_tree().create_timer(TREE_CONFIG.respawn.time).timeout
-	_respawn_tree()
+	# await get_tree().create_timer(TREE_CONFIG.respawn.time).timeout
+	# _respawn_tree()
 
 func _respawn_tree() -> void:
 	# 检查重生位置是否有角色
@@ -190,11 +192,9 @@ func _on_body_entered(body: Node2D) -> void:
 		is_being_chopped = true
 		if body.has_method("set_nearest_tree"):
 			body.set_nearest_tree(self)
-			print("设置最近的树")  # 调试信息
 
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("workers"):
 		is_being_chopped = false
 		if body.has_method("set_nearest_tree"):
 			body.set_nearest_tree(null)
-			print("清除最近的树")  # 调试信息

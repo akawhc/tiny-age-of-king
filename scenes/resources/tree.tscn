@@ -27,9 +27,9 @@ region = Rect2(192, 192, 192, 192)
 atlas = ExtResource("1_oyyrv")
 region = Rect2(0, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_stump"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vd6dc"]
 atlas = ExtResource("1_oyyrv")
-region = Rect2(384, 192, 192, 192)
+region = Rect2(0, 384, 192, 192)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7rqmq"]
 animations = [{
@@ -63,7 +63,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_stump")
+"texture": SubResource("AtlasTexture_vd6dc")
 }],
 "loop": false,
 "name": &"stump",
@@ -74,7 +74,7 @@ animations = [{
 radius = 63.0317
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ldy0b"]
-radius = 18.2483
+radius = 12.0
 
 [node name="tree" type="AnimatedSprite2D"]
 position = Vector2(1, 2)
@@ -84,6 +84,7 @@ offset = Vector2(0, -50)
 script = ExtResource("2_n4k3p")
 
 [node name="DetectionArea" type="Area2D" parent="."]
+visible = false
 position = Vector2(5, 66)
 
 [node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea"]
@@ -94,5 +95,5 @@ shape = SubResource("CircleShape2D_txphl")
 position = Vector2(5, -60)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="CollisionBody"]
-position = Vector2(-5, 71)
+position = Vector2(-4, 74)
 shape = SubResource("CircleShape2D_ldy0b")
