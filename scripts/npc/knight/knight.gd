@@ -314,12 +314,12 @@ func update_animation(direction: Vector2) -> void:
 
 # 视野内自动索敌
 func _on_detection_area_body_entered(body: Node2D) -> void:
-	if body.is_in_group("goblin"):
+	if body.is_in_group("goblin") or body.is_in_group("goblin_buildings"):
 		enemies_in_range.append(body)
 		update_target()
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
-	if body.is_in_group("goblin"):
+	if body.is_in_group("goblin") or body.is_in_group("goblin_buildings"):
 		enemies_in_range.erase(body)
 		if body == target_enemy:
 			target_enemy = null
@@ -383,6 +383,8 @@ func perform_attack() -> void:
 
 	# 获取所有敌对生物目标
 	var potential_targets = get_tree().get_nodes_in_group("goblin")
+	# 添加哥布林建筑作为可能的目标
+	potential_targets.append_array(get_tree().get_nodes_in_group("goblin_buildings"))
 	# 添加草人作为可能的目标
 	potential_targets.append_array(get_tree().get_nodes_in_group("strawmen"))
 

@@ -18,7 +18,9 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="wood_house" type="StaticBody2D" groups=["buildings", "goblin_buildings"]]
+[node name="wood_house" type="StaticBody2D" groups=["goblin_buildings"]]
+z_index = 1
+y_sort_enabled = true
 script = ExtResource("1_y2e6l")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -88,13 +88,13 @@ func _process(delta: float) -> void:
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	# 检测进入范围的敌人
-	if body.is_in_group("goblin"):
+	if body.is_in_group("goblin") or body.is_in_group("goblin_buildings"):
 		enemies_in_range.append(body)
 		update_target()
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
 	# 敌人离开检测范围
-	if body.is_in_group("goblin"):
+	if body.is_in_group("goblin") or body.is_in_group("goblin_buildings"):
 		if enemies_in_range.has(body):
 			enemies_in_range.erase(body)
 		if body == target_enemy:

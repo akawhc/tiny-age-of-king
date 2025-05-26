@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=90 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lou7g"]
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://t1e8cpeyasoc" path="res://sprites/Tiny Swords/Deco/06.png" id="30_4x3qv"]
 [ext_resource type="PackedScene" uid="uid://chvan77gf468x" path="res://scenes/select_manager.tscn" id="30_qq1nu"]
 [ext_resource type="Texture2D" uid="uid://b7ob4h1rcl61j" path="res://sprites/Tiny Swords/Deco/07.png" id="31_a60kj"]
+[ext_resource type="PackedScene" uid="uid://0g32qp6mlxfh" path="res://scenes/goblin/torch.tscn" id="38_0vwk0"]
 [ext_resource type="PackedScene" uid="uid://ivpv71jis1qq" path="res://scenes/buildings/house.tscn" id="41_yme4c"]
 [ext_resource type="PackedScene" uid="uid://cgwtgc5v3d0mf" path="res://scenes/deco/strawman.tscn" id="44_hve2s"]
 [ext_resource type="PackedScene" uid="uid://dt58y5ip4b0jw" path="res://scenes/resources/sheep.tscn" id="46_rgp1h"]
@@ -1039,8 +1040,14 @@ position = Vector2(-1092.64, -427.715)
 [node name="House" parent="building" instance=ExtResource("41_yme4c")]
 position = Vector2(-461.451, -550.465)
 
+[node name="wood_house" parent="building" groups=["buildings"] instance=ExtResource("47_owgel")]
+position = Vector2(1331.67, -294.528)
+
+[node name="torch" parent="building" instance=ExtResource("38_0vwk0")]
+position = Vector2(1389.3, 120.99)
+
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
-position = Vector2(-532.672, 85.6555)
+position = Vector2(1199.34, -270.471)
 
 [node name="worker" parent="." instance=ExtResource("12_u31c3")]
 position = Vector2(-203.016, -82.2107)
@@ -1050,6 +1057,3 @@ position = Vector2(-534.832, -414.344)
 
 [node name="strawman" parent="." instance=ExtResource("44_hve2s")]
 position = Vector2(-1115.7, 319.708)
-
-[node name="wood_house" parent="." instance=ExtResource("47_owgel")]
-position = Vector2(1331.67, -294.528)

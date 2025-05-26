@@ -22,10 +22,14 @@ func _ready() -> void:
 	max_health = WOOD_HOUSE_CONFIG.health
 	current_health = max_health
 
+	# 先调用父类的_ready，这会将此对象添加到buildings组
+	super._ready()
+
+	# 从buildings组移除，只保留在goblin_buildings组中
+	remove_from_group("buildings")
+
 	# 添加到哥布林建筑组
 	add_to_group("goblin_buildings")
-
-	super._ready()
 
 	# 设置生成计时器
 	setup_spawn_timer()
@@ -109,11 +113,7 @@ func destroy() -> void:
 
 	print("哥布林木屋被摧毁")
 
-# 重写take_damage方法，哥布林不会攻击自己的建筑
-func take_damage(damage_amount: int, attacker = null) -> void:
-	# 如果攻击者是哥布林，不造成伤害
-	if attacker and attacker.is_in_group("goblin"):
-		return
-
+# 重写take_damage方法，兼容骑士的攻击逻辑
+func take_damage(damage_amount: int, _knockback_vector = null, _knockback_time = null) -> void:
 	# 否则调用父类方法正常受伤
 	super.take_damage(damage_amount)
