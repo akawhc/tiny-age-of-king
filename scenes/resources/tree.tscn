@@ -77,23 +77,24 @@ radius = 63.0317
 radius = 15.0333
 
 [node name="tree" type="AnimatedSprite2D"]
-position = Vector2(1, 2)
+y_sort_enabled = true
+position = Vector2(0, 53)
 sprite_frames = SubResource("SpriteFrames_7rqmq")
 animation = &"chop"
-offset = Vector2(0, -50)
+offset = Vector2(-4, -55)
 script = ExtResource("2_n4k3p")
 
 [node name="DetectionArea" type="Area2D" parent="."]
-visible = false
-position = Vector2(5, 66)
+position = Vector2(0, 147)
 
 [node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea"]
-position = Vector2(-1, -95)
+position = Vector2(-5, -183)
 shape = SubResource("CircleShape2D_txphl")
 
 [node name="CollisionBody" type="StaticBody2D" parent="."]
-position = Vector2(5, -60)
+position = Vector2(2, -11)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="CollisionBody"]
-position = Vector2(-4, 74)
+z_index = 2
+position = Vector2(-2, 20)
 shape = SubResource("CircleShape2D_ldy0b")

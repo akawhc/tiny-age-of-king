@@ -10,7 +10,7 @@ extends "res://scripts/units/selectable_unit.gd"
 const KNIGHT_CONFIG = {
 	"detection_radius": 150.0,  # 检测半径
 	"attack_range": 120.0,      # 攻击范围
-	"move_speed": 150.0,       # 移动速度
+	"move_speed": 200.0,       # 移动速度
 	"attack_cooldown": 1.0,    # 攻击冷却时间(秒)
 }
 

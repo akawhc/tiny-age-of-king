@@ -252,6 +252,7 @@ animations = [{
 radius = 20.0
 
 [node name="torch" type="CharacterBody2D"]
+y_sort_enabled = true
 script = ExtResource("1_y7j4h")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

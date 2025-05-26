@@ -500,6 +500,7 @@ radius = 14.6904
 radius = 207.068
 
 [node name="knight" type="CharacterBody2D"]
+y_sort_enabled = true
 position = Vector2(0, -10)
 script = ExtResource("1_chi2w")
 

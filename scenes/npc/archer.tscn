@@ -412,6 +412,7 @@ radius = 13.0384
 radius = 232.054
 
 [node name="archer" type="CharacterBody2D"]
+y_sort_enabled = true
 script = ExtResource("1_57uq7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

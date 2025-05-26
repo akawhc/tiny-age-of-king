@@ -17,6 +17,7 @@ signal zsort_switched(new_zsort)
 # 高地区域和低地区域引用
 @onready var high_zsort: Area2D = $high_zsort
 @onready var low_zsort: Area2D = $low_zsort
+@export var allowed_groups: Array[String] = ["soldiers", "goblin"]
 
 func _ready() -> void:
 	add_to_group("zsort_switches")
@@ -29,8 +30,23 @@ func _ready() -> void:
 
 # 当物体进入高地区域时
 func _on_high_zsort_body_entered(body: Node2D) -> void:
-	emit_signal("zsort_switched", ZSORT_ABOVE)
+	# 检查进入的物体是否在允许的组中
+	var is_allowed = false
+	for group in allowed_groups:
+		if body.is_in_group(group):
+			is_allowed = true
+			break
+
+	if is_allowed:
+		emit_signal("zsort_switched", ZSORT_ABOVE)
 
 # 当物体进入低地区域时
 func _on_low_zsort_body_entered(body: Node2D) -> void:
-	emit_signal("zsort_switched", ZSORT_DEFAULT)
+	var is_allowed = false
+	for group in allowed_groups:
+		if body.is_in_group(group):
+			is_allowed = true
+			break
+
+	if is_allowed:
+		emit_signal("zsort_switched", ZSORT_DEFAULT)
