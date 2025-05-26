@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=88 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lou7g"]
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
@@ -45,6 +45,7 @@
 [ext_resource type="Texture2D" uid="uid://b7ob4h1rcl61j" path="res://sprites/Tiny Swords/Deco/07.png" id="31_a60kj"]
 [ext_resource type="PackedScene" uid="uid://ivpv71jis1qq" path="res://scenes/buildings/house.tscn" id="41_yme4c"]
 [ext_resource type="PackedScene" uid="uid://cgwtgc5v3d0mf" path="res://scenes/deco/strawman.tscn" id="44_hve2s"]
+[ext_resource type="PackedScene" uid="uid://dt58y5ip4b0jw" path="res://scenes/resources/sheep.tscn" id="46_rgp1h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v8tdx"]
 texture = ExtResource("5_p7ubn")
@@ -1015,6 +1016,10 @@ position = Vector2(-1321.26, 188.187)
 [node name="gold_mine3" parent="resource/mines" instance=ExtResource("15_qtojv")]
 position = Vector2(1048.51, 198.045)
 
+[node name="sheeps" type="Node2D" parent="resource"]
+z_index = 1
+y_sort_enabled = true
+
 [node name="building" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -1035,3 +1040,12 @@ position = Vector2(-917.757, -119.42)
 
 [node name="strawman" parent="." instance=ExtResource("44_hve2s")]
 position = Vector2(-1115.7, 319.708)
+
+[node name="sheep" parent="." instance=ExtResource("46_rgp1h")]
+position = Vector2(-17.6744, -141.056)
+
+[node name="sheep2" parent="." instance=ExtResource("46_rgp1h")]
+position = Vector2(165.466, 6.02234)
+
+[node name="sheep3" parent="." instance=ExtResource("46_rgp1h")]
+position = Vector2(200.397, 172.617)

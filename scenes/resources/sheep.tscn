@@ -122,6 +122,7 @@ radius = 17.0
 radius = 29.0172
 
 [node name="sheep" type="CharacterBody2D" groups=["animals", "attackable"]]
+y_sort_enabled = true
 script = ExtResource("1_kvcw0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
