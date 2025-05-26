@@ -1046,7 +1046,7 @@ position = Vector2(-461.451, -550.465)
 position = Vector2(1342.18, -311.611)
 
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
-position = Vector2(-790.321, -172.088)
+position = Vector2(-787.146, -115.735)
 
 [node name="worker" parent="." instance=ExtResource("12_u31c3")]
 position = Vector2(-959.823, -172.187)

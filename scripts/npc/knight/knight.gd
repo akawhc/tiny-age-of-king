@@ -437,9 +437,6 @@ func get_attack_animation(combo_number: int) -> String:
 	return base_animation
 
 func perform_attack() -> void:
-	# 获取攻击范围内的敌人
-	var attack_direction = Vector2.RIGHT if not animated_sprite_2d.flip_h else Vector2.LEFT
-
 	# 根据攻击类型调整攻击范围和角度
 	var combo_key = "combo" + str(current_combo)
 	var is_heavy = ATTACK_CONFIG[combo_key]["type"] == "HEAVY"
@@ -454,9 +451,26 @@ func perform_attack() -> void:
 	# 添加草人作为可能的目标
 	potential_targets.append_array(get_tree().get_nodes_in_group("strawmen"))
 
+	# 首先找到攻击范围内最近的敌人作为主要目标
+	var primary_target = null
+	var closest_distance = INF
+
+	for target in potential_targets:
+		var distance = global_position.distance_to(target.global_position)
+		if distance <= attack_range and distance < closest_distance:
+			closest_distance = distance
+			primary_target = target
+
+	# 如果没有找到主要目标，则不进行攻击
+	if primary_target == null:
+		return
+
+	# 计算到主要目标的方向作为攻击基准线
+	var primary_direction = (primary_target.global_position - global_position).normalized()
+
 	var hits = []
 
-	# 检查每个目标是否在攻击范围和角度内
+	# 检查所有目标是否在攻击范围和角度内
 	for target in potential_targets:
 		var to_target = target.global_position - global_position
 		var distance = to_target.length()
@@ -465,8 +479,8 @@ func perform_attack() -> void:
 		if distance > attack_range:
 			continue
 
-		# 检查角度
-		var target_angle = attack_direction.angle_to(to_target.normalized())
+		# 检查角度 - 以到主要目标的方向为基准
+		var target_angle = primary_direction.angle_to(to_target.normalized())
 
 		if abs(target_angle) > attack_angle / 2:
 			continue
