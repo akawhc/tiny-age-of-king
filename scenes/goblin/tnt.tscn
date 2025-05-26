@@ -158,6 +158,7 @@ animations = [{
 radius = 24.0208
 
 [node name="tnt" type="CharacterBody2D"]
+z_index = 1
 y_sort_enabled = true
 script = ExtResource("1_yuexd")
 

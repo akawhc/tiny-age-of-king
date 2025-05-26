@@ -22,6 +22,8 @@ var initial_rotation: float = 0.0
 var total_rotation: float = 0.0  # 单位：度
 var has_landed: bool = false
 var rotation_direction: int = 1  # 旋转方向： 1 = 顺时针, -1 = 逆时针
+var max_distance: float = 600.0  # 箭矢最大飞行距离
+var travel_distance: float = 0.0 # 已飞行距离
 
 # 生命周期计时器
 var lifetime: float = 0.0
@@ -101,8 +103,20 @@ func _physics_process(delta: float) -> void:
 	if has_landed:
 		return
 
+	# 计算这一帧的移动距离
+	var move_amount = direction * speed * delta
+	var distance_this_frame = move_amount.length()
+
+	# 更新总飞行距离
+	travel_distance += distance_this_frame
+
+	# 检查是否超过最大飞行距离
+	if travel_distance >= max_distance:
+		queue_free()
+		return
+
 	# 移动箭矢
-	global_position += direction * speed * delta
+	global_position += move_amount
 
 # 更新箭矢旋转
 func update_rotation(delta: float) -> void:
@@ -147,11 +161,12 @@ func land_arrow() -> void:
 	print("箭矢落地")
 
 # 初始化箭矢
-func initialize(dir: Vector2, dmg: int, spd: float, src = null) -> void:
+func initialize(dir: Vector2, dmg: int, spd: float, src = null, max_dist: float = 600.0) -> void:
 	direction = dir.normalized()
 	damage = dmg
 	speed = spd
 	source = src
+	max_distance = max_dist
 
 	# 设置初始旋转
 	initial_rotation = direction.angle()

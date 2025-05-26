@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bojoy2f2why45"]
+[gd_scene load_steps=6 format=3 uid="uid://bojoy2f2why45"]
 
 [ext_resource type="Script" path="res://scripts/building/tower.gd" id="1_aowvf"]
 [ext_resource type="Texture2D" uid="uid://bmfsohngo5hea" path="res://sprites/Tiny Swords/Factions/Knights/Buildings/Tower/Tower_Blue.png" id="1_uyaqq"]
@@ -17,6 +17,9 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7xwsp"]
+radius = 282.044
 
 [node name="Tower" type="StaticBody2D" groups=["buildings", "towers"]]
 z_index = 1
@@ -44,3 +47,12 @@ offset_bottom = -192.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_d17mp")
 value = 100.0
 show_percentage = false
+
+[node name="AttackPosition" type="Marker2D" parent="."]
+position = Vector2(0, -120)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(1, -35)
+shape = SubResource("CircleShape2D_7xwsp")
