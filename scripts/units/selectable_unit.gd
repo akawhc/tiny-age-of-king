@@ -157,10 +157,7 @@ func move_to(pos: Vector2) -> void:
 
 func _draw() -> void:
 	if is_selected:
-		# 使用CharacterBody2D节点本身的位置（原点）作为基准，而不是碰撞形状的位置
 		var center = selection_indicator_offset
-
-		# 使用配置的半径，不再依赖碰撞形状
 		var radius = selection_indicator_radius
 
 		# 绘制椭圆形选择指示器

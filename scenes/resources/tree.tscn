@@ -77,6 +77,7 @@ radius = 63.0317
 radius = 15.0333
 
 [node name="tree" type="AnimatedSprite2D"]
+z_index = 1
 y_sort_enabled = true
 position = Vector2(0, 53)
 sprite_frames = SubResource("SpriteFrames_7rqmq")

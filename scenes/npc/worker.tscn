@@ -386,6 +386,7 @@ animations = [{
 radius = 12.1265
 
 [node name="worker" type="CharacterBody2D"]
+z_index = 1
 y_sort_enabled = true
 position = Vector2(0, -10)
 script = ExtResource("1_yvxqw")

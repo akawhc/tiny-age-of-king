@@ -8,8 +8,8 @@ extends Node2D
 # 定义z排序层宏
 class_name ZSortSwitch
 
-const ZSORT_DEFAULT = 1      # 默认层 (第1层)
-const ZSORT_ABOVE = 2        # 高地区域 (第2层)
+const ZSORT_DEFAULT = 0
+const ZSORT_ABOVE = 1
 
 # 发出的信号
 signal zsort_switched(new_zsort)

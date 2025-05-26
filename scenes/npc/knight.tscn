@@ -500,18 +500,17 @@ radius = 14.6904
 radius = 207.068
 
 [node name="knight" type="CharacterBody2D"]
+z_index = 1
 y_sort_enabled = true
 position = Vector2(0, -10)
 script = ExtResource("1_chi2w")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-y_sort_enabled = true
-position = Vector2(0, -23)
 sprite_frames = SubResource("SpriteFrames_e3q5e")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.470276, -2.9351)
+position = Vector2(1.26486, 18.2541)
 shape = SubResource("CircleShape2D_8okxs")
 one_way_collision_margin = 0.0
 

@@ -108,7 +108,7 @@ func _ready() -> void:
 	health = 300
 
 	# 设置骑士的选择指示器参数
-	selection_indicator_offset = Vector2(0, 10)  # 骑士指示器偏移
+	selection_indicator_offset = Vector2(0, 30)  # 骑士指示器偏移
 	selection_indicator_radius = 20  # 骑士专用指示器半径
 
 	# 初始化动画

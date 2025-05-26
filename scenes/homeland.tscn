@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=87 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lou7g"]
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://t1e8cpeyasoc" path="res://sprites/Tiny Swords/Deco/06.png" id="30_4x3qv"]
 [ext_resource type="PackedScene" uid="uid://chvan77gf468x" path="res://scenes/select_manager.tscn" id="30_qq1nu"]
 [ext_resource type="Texture2D" uid="uid://b7ob4h1rcl61j" path="res://sprites/Tiny Swords/Deco/07.png" id="31_a60kj"]
+[ext_resource type="PackedScene" uid="uid://ivpv71jis1qq" path="res://scenes/buildings/house.tscn" id="41_yme4c"]
 [ext_resource type="PackedScene" uid="uid://cgwtgc5v3d0mf" path="res://scenes/deco/strawman.tscn" id="44_hve2s"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v8tdx"]
@@ -1015,18 +1016,22 @@ position = Vector2(-1321.26, 188.187)
 position = Vector2(1048.51, 198.045)
 
 [node name="building" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="Castle" parent="building" instance=ExtResource("15_8llt0")]
 position = Vector2(-1092.64, -427.715)
+
+[node name="House" parent="building" instance=ExtResource("41_yme4c")]
+position = Vector2(-461.451, -550.465)
 
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
 position = Vector2(-684.891, -70.1308)
 
 [node name="worker" parent="." instance=ExtResource("12_u31c3")]
-position = Vector2(-987.359, -97.9977)
+position = Vector2(-1158.46, 135.012)
 
 [node name="archer" parent="." instance=ExtResource("13_uibej")]
-position = Vector2(-889.088, -60.0235)
+position = Vector2(-917.757, -119.42)
 
 [node name="strawman" parent="." instance=ExtResource("44_hve2s")]
 position = Vector2(-1115.7, 319.708)

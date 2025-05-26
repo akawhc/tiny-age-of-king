@@ -58,8 +58,6 @@ func _ready() -> void:
 		detection_area.body_entered.connect(_on_body_entered)
 		detection_area.body_exited.connect(_on_body_exited)
 
-	print("树木初始化完成")
-
 func take_damage(damage: int) -> void:
 	if is_stump or chop_cooldown:
 		return
