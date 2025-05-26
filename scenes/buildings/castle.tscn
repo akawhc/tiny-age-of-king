@@ -22,6 +22,7 @@ corner_radius_bottom_left = 2
 size = Vector2(395, 282)
 
 [node name="Castle" type="StaticBody2D" groups=["buildings", "castles"]]
+z_index = 1
 y_sort_enabled = true
 input_pickable = true
 script = ExtResource("2_asjgx")

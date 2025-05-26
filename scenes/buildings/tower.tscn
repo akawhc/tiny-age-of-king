@@ -19,6 +19,7 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [node name="Tower" type="StaticBody2D" groups=["buildings", "towers"]]
+z_index = 1
 y_sort_enabled = true
 input_pickable = true
 script = ExtResource("1_aowvf")

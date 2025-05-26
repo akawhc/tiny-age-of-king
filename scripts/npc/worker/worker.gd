@@ -164,23 +164,18 @@ func _on_animation_frame_changed() -> void:
 		build_manager.on_build_animation_frame_changed(current_frame)
 
 func _on_animation_finished() -> void:
-	print("动画完成: ", animated_sprite_2d.animation)
-
 	if is_chopping:
 		is_chopping = false
 		chop_manager.finish_animation()
 		animation_manager.set_animation_state(velocity, is_carrying_any_resource())
-		print("砍树动作完成，可以再次按空格键执行新的动作")
 	elif is_mining:
 		# 重置挖矿状态
 		is_mining = false
 		mining_manager.finish_animation()
 		animation_manager.set_animation_state(velocity, is_carrying_any_resource())
-		print("挖矿动作完成，可以再次按空格键执行新的动作")
 	elif is_building:
 		# 建造动画完成
 		build_manager.on_build_animation_finished()
-		print("建造动作完成，准备下一次建造")
 
 func start_chop() -> void:
 	if is_chopping or is_mining:

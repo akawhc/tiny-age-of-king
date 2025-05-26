@@ -169,7 +169,7 @@ func on_build_animation_frame_changed(frame: int) -> void:
 
 # 建造动画完成的处理
 func on_build_animation_finished() -> void:
-	print("建造动作完成，准备下一次建造")
+	pass
 
 # 播放建造特效
 func play_build_effect() -> void:
