@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://6l4nk0wjiqph"]
+
+[ext_resource type="Texture2D" uid="uid://chtpt551lg3ei" path="res://sprites/Tiny Swords/Factions/Goblins/Buildings/Wood_House/Goblin_House.png" id="1_mdynr"]
+[ext_resource type="Script" path="res://scripts/building/wood_house.gd" id="1_y2e6l"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5nxwq"]
+radius = 52.5993
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhx42"]
+bg_color = Color(0.847059, 0.235294, 0.235294, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="wood_house" type="StaticBody2D" groups=["buildings", "goblin_buildings"]]
+script = ExtResource("1_y2e6l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mdynr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2.12131, 14.1421)
+shape = SubResource("CircleShape2D_5nxwq")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+z_index = 10
+offset_left = -59.0
+offset_top = -120.0
+offset_right = 55.0
+offset_bottom = -110.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_dhx42")
+value = 100.0
+show_percentage = false
