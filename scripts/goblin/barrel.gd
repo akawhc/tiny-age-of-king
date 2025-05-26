@@ -23,7 +23,7 @@ func _ready() -> void:
 		"move_speed": 50.0,       # 移动速度
 		"health": 50,              # 生命值
 		"detection_radius": 80,   # 检测半径
-		"explosion_damage": 20,    # 爆炸伤害
+		"explosion_damage": 80,    # 爆炸伤害
 		"explosion_radius": 100,   # 爆炸伤害半径
 		"attack_interval": 1.0,    # 攻击检测间隔
 		"attack_distance": 100.0,   # 攻击距离
@@ -163,6 +163,7 @@ func explode_damage(group_name: String) -> void:
 					t.take_damage(actual_damage)
 
 func handle_death() -> void:
+	super.handle_death()
 	change_state(BarrelState.EXPLODING)
 
 func play_idle_animation() -> void:

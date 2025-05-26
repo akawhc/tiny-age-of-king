@@ -31,6 +31,8 @@ var attack_timer: float = 0.0
 var move_direction: Vector2 = Vector2.ZERO  # 移动方向
 var current_direction: Direction = Direction.DOWN  # 当前朝向
 
+signal goblin_destroyed()
+
 # 节点引用
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -217,6 +219,8 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO, idle_prob
 
 # 处理死亡
 func handle_death() -> void:
+	emit_signal("goblin_destroyed")
+	print("哥布林死亡")
 	change_state(BaseState.DEAD)
 
 # 播放待机动画

@@ -12,7 +12,7 @@ const KNIGHT_CONFIG = {
 	"attack_range": 120.0,      # 攻击范围
 	"move_speed": 200.0,       # 移动速度
 	"attack_cooldown": 1.0,    # 攻击冷却时间(秒)
-	"auto_attack_cooldown": 1.5, # 自动攻击的额外冷却时间(秒)
+	"auto_attack_cooldown": 0.8, # 自动攻击的额外冷却时间(秒) - 减少冷却时间
 }
 
 # 骑士状态
@@ -167,8 +167,8 @@ func _process(delta: float) -> void:
 			can_auto_attack = true
 			auto_attack_timer = 0.0
 
-			# 当自动攻击冷却结束时，如果仍在连击窗口状态，重置为Idle状态
-			if current_state == KnightState.COMBO_WINDOW:
+			# 当自动攻击冷却结束时，如果仍在连击窗口状态且没有目标，重置为Idle状态
+			if current_state == KnightState.COMBO_WINDOW and (!target_enemy or !is_instance_valid(target_enemy)):
 				reset_combo()
 
 	# 处理连击窗口计时
@@ -176,26 +176,47 @@ func _process(delta: float) -> void:
 		combo_timer += delta
 		var combo_key = get_combo_key()
 		if ATTACK_CONFIG.has(combo_key) and combo_timer >= ATTACK_CONFIG[combo_key]["combo_window"]:
+			# 连击窗口超时，强制回到idle状态
 			reset_combo()
 
 	# 自动攻击逻辑
 	# 只有在未被选中时才执行自动攻击
-	if auto_attack and !is_selected and target_enemy and can_attack and can_auto_attack and current_state != KnightState.ATTACKING:
+	if auto_attack and !is_selected and target_enemy and can_attack and can_auto_attack:
 		var distance = global_position.distance_to(target_enemy.global_position)
+
+		# 检查目标是否在攻击范围内
 		if distance <= KNIGHT_CONFIG.attack_range:
-			if current_state == KnightState.COMBO_WINDOW and auto_combo_enabled:
-				# 在连击窗口中，有概率继续连击
-				if randf() > 0.4:  # 60%的概率继续连击
-					continue_combo()
-					# 重置自动攻击冷却
+			# 根据当前状态决定攻击行为
+			match current_state:
+				KnightState.IDLE:
+					# 从idle状态开始新的攻击
+					start_combo()
 					can_auto_attack = false
 					auto_attack_timer = 0.0
-			else:
-				# 不在连击窗口，开始新的攻击
-				start_combo()
-				# 重置自动攻击冷却
-				can_auto_attack = false
-				auto_attack_timer = 0.0
+
+				KnightState.COMBO_WINDOW:
+					# 在连击窗口中，有概率继续连击
+					if auto_combo_enabled and randf() > 0.2:  # 80%的概率继续连击（提高概率）
+						continue_combo()
+						can_auto_attack = false
+						auto_attack_timer = 0.0
+					else:
+						# 不继续连击，回到idle状态
+						reset_combo()
+
+				KnightState.ATTACKING:
+					# 正在攻击中，不做任何操作，等待攻击完成
+					pass
+
+				_:
+					# 其他状态，强制回到idle
+					change_state(KnightState.IDLE)
+		else:
+			# 目标超出攻击范围，如果不在移动状态，回到idle
+			if current_state == KnightState.COMBO_WINDOW:
+				reset_combo()
+			elif current_state != KnightState.MOVING and current_state != KnightState.ATTACKING:
+				change_state(KnightState.IDLE)
 
 func _input(event: InputEvent) -> void:
 	# 只有被选中的单位才响应按键输入
@@ -323,12 +344,24 @@ func _on_animation_finished() -> void:
 		# 重置动画速度
 		animated_sprite_2d.speed_scale = 1.0
 
-		# 如果是自动攻击且冷却时间较长，直接回到idle状态
-		if !is_selected and !can_auto_attack and KNIGHT_CONFIG.auto_attack_cooldown > 1.5:
-			reset_combo()
-		else:
-			# 否则进入连击窗口
+		# 判断是否应该进入连击窗口还是直接回到idle
+		var should_enter_combo_window = false
+
+		# 如果是玩家选中的单位，允许进入连击窗口
+		if is_selected:
+			should_enter_combo_window = true
+		# 如果是自动攻击，且有目标在范围内，也进入连击窗口（移除can_auto_attack限制）
+		elif auto_attack and target_enemy and is_instance_valid(target_enemy):
+			var distance = global_position.distance_to(target_enemy.global_position)
+			if distance <= KNIGHT_CONFIG.attack_range:
+				should_enter_combo_window = true
+
+		if should_enter_combo_window:
+			# 进入连击窗口
 			change_state(KnightState.COMBO_WINDOW)
+		else:
+			# 直接回到idle状态
+			reset_combo()
 
 func play_idle_animation() -> void:
 	if current_state != KnightState.ATTACKING:

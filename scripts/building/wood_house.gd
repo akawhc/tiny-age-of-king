@@ -95,13 +95,14 @@ func spawn_goblin() -> void:
 
 	# 连接哥布林的销毁信号
 	if goblin_instance.has_signal("goblin_destroyed"):
-		goblin_instance.connect("goblin_destroyed", _on_goblin_destroyed)
+		goblin_instance.goblin_destroyed.connect(_on_goblin_destroyed)
 
 	print("哥布林木屋生成了一个 ", goblin_type, " 哥布林")
 
 # 哥布林被摧毁的回调
 func _on_goblin_destroyed() -> void:
 	active_goblins = max(0, active_goblins - 1)
+	print("current active goblins: ", active_goblins)
 
 # 重写摧毁方法，确保停止生成
 func destroy() -> void:

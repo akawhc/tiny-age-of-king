@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=4 uid="uid://28i7rf4w3fkc"]
+[gd_scene load_steps=92 format=4 uid="uid://28i7rf4w3fkc"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_lou7g"]
 [ext_resource type="PackedScene" uid="uid://6rwkugbcxppt" path="res://scenes/npc/knight.tscn" id="1_qhu8i"]
@@ -48,6 +48,8 @@
 [ext_resource type="PackedScene" uid="uid://cgwtgc5v3d0mf" path="res://scenes/deco/strawman.tscn" id="44_hve2s"]
 [ext_resource type="PackedScene" uid="uid://dt58y5ip4b0jw" path="res://scenes/resources/sheep.tscn" id="46_rgp1h"]
 [ext_resource type="PackedScene" uid="uid://6l4nk0wjiqph" path="res://scenes/buildings/wood_house.tscn" id="47_owgel"]
+[ext_resource type="PackedScene" uid="uid://cduh6w1v71qce" path="res://scenes/goblin/barrel.tscn" id="49_u8wbs"]
+[ext_resource type="PackedScene" uid="uid://cyxbscdor8jh1" path="res://scenes/goblin/tnt.tscn" id="49_v16ud"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v8tdx"]
 texture = ExtResource("5_p7ubn")
@@ -1041,19 +1043,25 @@ position = Vector2(-1092.64, -427.715)
 position = Vector2(-461.451, -550.465)
 
 [node name="wood_house" parent="building" groups=["buildings"] instance=ExtResource("47_owgel")]
-position = Vector2(-822.175, -138.148)
-
-[node name="torch" parent="building" instance=ExtResource("38_0vwk0")]
-position = Vector2(1389.3, 120.99)
+position = Vector2(1342.18, -311.611)
 
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
-position = Vector2(-970.274, -187.681)
+position = Vector2(-790.321, -172.088)
 
 [node name="worker" parent="." instance=ExtResource("12_u31c3")]
-position = Vector2(-203.016, -82.2107)
+position = Vector2(-959.823, -172.187)
 
 [node name="archer" parent="." instance=ExtResource("13_uibej")]
-position = Vector2(-534.832, -414.344)
+position = Vector2(-628.489, -456.41)
+
+[node name="torch" parent="." instance=ExtResource("38_0vwk0")]
+position = Vector2(-682.551, -178.862)
 
 [node name="strawman" parent="." instance=ExtResource("44_hve2s")]
 position = Vector2(-1115.7, 319.708)
+
+[node name="tnt" parent="." instance=ExtResource("49_v16ud")]
+position = Vector2(1156.73, 296.898)
+
+[node name="barrel" parent="." instance=ExtResource("49_u8wbs")]
+position = Vector2(1361.03, 330.507)
