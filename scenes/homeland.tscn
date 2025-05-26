@@ -1055,13 +1055,13 @@ position = Vector2(-959.823, -172.187)
 position = Vector2(-628.489, -456.41)
 
 [node name="torch" parent="." instance=ExtResource("38_0vwk0")]
-position = Vector2(-682.551, -178.862)
+position = Vector2(1339.96, -152.512)
 
 [node name="strawman" parent="." instance=ExtResource("44_hve2s")]
 position = Vector2(-1115.7, 319.708)
 
 [node name="tnt" parent="." instance=ExtResource("49_v16ud")]
-position = Vector2(1156.73, 296.898)
+position = Vector2(-633.544, -98.5235)
 
 [node name="barrel" parent="." instance=ExtResource("49_u8wbs")]
 position = Vector2(1361.03, 330.507)

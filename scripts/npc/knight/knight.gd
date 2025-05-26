@@ -109,7 +109,7 @@ func _ready() -> void:
 	add_to_group("knights")  # 添加到骑士组
 
 	# 设置骑士血量
-	health = 300
+	health = 500
 
 	# 设置骑士的选择指示器参数
 	selection_indicator_offset = Vector2(0, 30)  # 骑士指示器偏移

@@ -15,11 +15,13 @@ enum TntState {
 # TNT特有变量
 var throw_cooldown: float = 0.0
 var can_throw: bool = true
-var throw_cooldown_time: float = 3.0
+var throw_cooldown_time: float = 4.0  # 增加投掷冷却时间到4秒
 var desired_direction = Vector2.ZERO  # 期望的移动方向
 var turn_speed = 3.0                 # 转向速度
 var state_change_cooldown: float = 0.0
-const STATE_CHANGE_COOLDOWN_TIME: float = 0.5  # 状态切换冷却时间
+const STATE_CHANGE_COOLDOWN_TIME: float = 1.0  # 增加状态切换冷却时间到1秒
+var last_throw_time: float = 0.0     # 记录上次投掷时间
+var min_throw_interval: float = 3.0  # 最小投掷间隔
 
 # TNT炸弹场景
 @onready var bomb_scene = preload("res://scenes/projectiles/bomb.tscn")
@@ -37,12 +39,12 @@ func _ready() -> void:
 	# 配置参数
 	CONFIG = {
 		"move_speed": 90.0,       # 移动速度
-		"health": 40,             # 生命值
+		"health": 400,             # 生命值
 		"detection_radius": 200,  # 检测半径
 		"throw_range": 150,       # 投掷范围
-		"throw_damage": 40,       # 投掷伤害
+		"throw_damage": 5,       # 投掷伤害
 		"explosion_radius": 100,   # 爆炸伤害半径
-		"attack_interval": 1.0,   # 攻击检测间隔
+		"attack_interval": 2.0,   # 攻击检测间隔（增加到2秒）
 		"min_throw_range": 80,    # 最小投掷距离
 		"movement_x_random_range": 10.0,  # 移动随机范围
 		"movement_y_random_range": 10.0,  # 移动随机范围
@@ -106,9 +108,13 @@ func process_state(delta: float) -> void:
 			if target and state_change_cooldown <= 0:
 				var distance = global_position.distance_to(target.global_position)
 				if distance <= CONFIG.detection_radius:
+					# 检查是否可以投掷（包括时间间隔检查）
+					var game_time = Time.get_ticks_msec() / 1000.0
+					var can_throw_now = can_throw and (game_time - last_throw_time >= min_throw_interval)
+
 					# 如果在投掷范围内并且可以投掷，直接投掷
 					if distance <= CONFIG.throw_range and distance >= CONFIG.min_throw_range:
-						if can_throw:
+						if can_throw_now:
 							change_state(TntState.THROWING)
 							state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 					# 如果在检测范围内但不在理想投掷范围，开始移动调整位置
@@ -138,9 +144,14 @@ func process_state(delta: float) -> void:
 					)
 					_update_movement(delta, new_direction)
 				# 如果在理想投掷范围内且可以投掷，进行投掷
-				elif can_throw and state_change_cooldown <= 0:
-					change_state(TntState.THROWING)
-					state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
+				else:
+					# 检查是否可以投掷（包括时间间隔检查）
+					var game_time = Time.get_ticks_msec() / 1000.0
+					var can_throw_now = can_throw and (game_time - last_throw_time >= min_throw_interval)
+
+					if can_throw_now and state_change_cooldown <= 0:
+						change_state(TntState.THROWING)
+						state_change_cooldown = STATE_CHANGE_COOLDOWN_TIME
 			else:
 				# 没有目标时，停止移动并回到待机
 				await get_tree().create_timer(randf_range(1.0, 2.0)).timeout
@@ -182,7 +193,17 @@ func throw_tnt() -> void:
 	if !can_throw or !target:
 		return
 
+	# 检查是否满足最小投掷间隔
+	var current_time = Time.get_time_dict_from_system()
+	var current_timestamp = current_time.hour * 3600 + current_time.minute * 60 + current_time.second
+
+	# 使用游戏时间替代系统时间
+	var game_time = Time.get_ticks_msec() / 1000.0
+	if game_time - last_throw_time < min_throw_interval:
+		return
+
 	can_throw = false
+	last_throw_time = game_time
 	spawn_and_throw_tnt()
 
 func spawn_and_throw_tnt() -> void:
@@ -196,19 +217,24 @@ func spawn_and_throw_tnt() -> void:
 	# 计算投掷方向
 	var throw_direction = (target.global_position - global_position).normalized()
 
-	# 计算生成位置
+	# 计算生成位置 - 稍微调整生成高度
 	var spawn_offset = Vector2(
 		throw_direction.x * THROW_OFFSET_X,
-		THROW_OFFSET_Y
+		THROW_OFFSET_Y * 0.5  # 降低生成高度
 	)
 	var spawn_position = global_position + spawn_offset
+
+	# 计算距离，根据距离调整抛物线高度
+	var distance_to_target = global_position.distance_to(target.global_position)
+	var flight_height = min(60.0, distance_to_target * 0.3)  # 最大高度60，根据距离调整
 
 	# 初始化炸弹
 	bomb.initialize(
 		spawn_position,           # 初始位置
 		target.global_position,    # 目标位置
 		CONFIG.throw_damage,       # 伤害值
-		CONFIG.explosion_radius    # 爆炸半径
+		CONFIG.explosion_radius,   # 爆炸半径
+		flight_height             # 飞行高度
 	)
 
 func _on_animation_finished() -> void:

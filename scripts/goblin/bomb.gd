@@ -9,20 +9,22 @@ enum BombState {
 
 var current_state = BombState.FLYING
 var velocity = Vector2.ZERO
-var _gravity = 500
+var _gravity = 400  # 降低重力，使抛物线更平缓
 var damage = 20
 var explosion_radius = 200
 var target_position = Vector2.ZERO
-var flight_height = 200.0  # 抛物线最高点的高度
+var flight_height = 60.0  # 降低默认飞行高度
+var rotation_speed = 720.0  # 旋转速度（度/秒）
 
 func _ready():
 	animated_sprite.play("fire")
 
-func initialize(initial_position: Vector2, target_pos: Vector2, bomb_damage: float, bomb_explosion_radius: float):
+func initialize(initial_position: Vector2, target_pos: Vector2, bomb_damage: float, bomb_explosion_radius: float, custom_flight_height: float = 60.0):
 	position = initial_position
 	target_position = target_pos
 	damage = bomb_damage
 	explosion_radius = bomb_explosion_radius
+	flight_height = custom_flight_height
 	# 计算到达目标所需的初始速度
 	calculate_initial_velocity()
 
@@ -44,16 +46,24 @@ func _physics_process(delta):
 			handle_exploding_state()
 
 func handle_flying_state(delta):
+	# 更新速度和位置
 	velocity.y += _gravity * delta
 	position += velocity * delta
 
-	# 检查是否到达目标位置附近或超过目标
-	var reached_target = position.distance_to(target_position) < 10 or \
-						position.x > target_position.x if velocity.x > 0 else position.x < target_position.x
+	# 添加旋转效果
+	animated_sprite.rotation_degrees += rotation_speed * delta
+
+	# 检查是否到达目标位置附近或落地
+	var distance_to_target = position.distance_to(target_position)
+	var reached_target = distance_to_target < 15 or \
+						(velocity.x > 0 and position.x >= target_position.x) or \
+						(velocity.x < 0 and position.x <= target_position.x) or \
+						(velocity.y > 0 and position.y >= target_position.y)  # 添加落地检测
 
 	if reached_target:
 		current_state = BombState.EXPLODING
 		position = target_position  # 确保在目标位置爆炸
+		animated_sprite.rotation_degrees = 0  # 重置旋转
 		animated_sprite.play("explode")
 
 func handle_exploding_state():
