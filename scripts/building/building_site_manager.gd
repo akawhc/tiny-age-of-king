@@ -167,7 +167,6 @@ func contribute_to_building(site_id: String, amount: float) -> bool:
 
 	# 发送进度信号
 	emit_signal("building_site_progress", site_id, progress)
-	print("建筑工地 ", site_id, " 的进度: ", int(progress * 100), "%")
 
 	# 检查是否完成
 	if site.current_health >= site.max_health:
@@ -231,6 +230,15 @@ func complete_building_site(site_id: String) -> void:
 	var building_manager = BuildingManager.get_instance()
 	if building_manager:
 		building_manager.spawn_building(site.type, site.position)
+
+	# 如果是可以增加人口上限的建筑，在建筑完成时增加人口上限
+	var resource_manager = GlobalResourceManager.get_instance()
+	if resource_manager:
+		var building_population = resource_manager.BUILDING_POPULATION
+		if building_population.has(site.type):
+			var population_increase = building_population[site.type]
+			resource_manager.increase_max_population(population_increase)
+			print("建筑 " + site.type + " 完成建造，增加了 " + str(population_increase) + " 人口上限")
 
 	# 移除已完成的工地
 	active_building_sites.erase(site_id)

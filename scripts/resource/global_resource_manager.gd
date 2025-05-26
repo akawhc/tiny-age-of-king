@@ -101,12 +101,7 @@ func try_build(building_type: String) -> bool:
 		for resource_type in costs:
 			consume_resource(resource_type, costs[resource_type])
 
-		# 如果是可以增加人口上限的建筑，增加人口上限
-		if BUILDING_POPULATION.has(building_type):
-			var population_increase = BUILDING_POPULATION[building_type]
-			increase_max_population(population_increase)
-			print("建造了" + building_type + "，增加了" + str(population_increase) + "人口上限")
-
+		# 消耗资源后返回成功
 		return true
 	else:
 		return false
