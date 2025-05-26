@@ -9,6 +9,8 @@ extends Node2D
 const CameraController = preload("res://scripts/camera_controller.gd")
 # 预加载资源显示场景
 const ResourceDisplayScene = preload("res://scenes/ui/resource_display.tscn")
+# 预加载人口显示场景
+const PopulationDisplayScene = preload("res://scenes/ui/population_display.tscn")
 
 # 游戏配置
 const GAME_CONFIG = {
@@ -20,6 +22,7 @@ const GAME_CONFIG = {
 # 游戏状态
 var camera: Camera2D = null
 var resource_display = null
+var population_display = null
 
 func _ready() -> void:
 	print("游戏管理器初始化")
@@ -29,6 +32,9 @@ func _ready() -> void:
 
 	# 设置资源显示
 	_setup_resource_display()
+
+	# 设置人口显示
+	_setup_population_display()
 
 # 设置资源显示
 func _setup_resource_display() -> void:
@@ -42,6 +48,26 @@ func _setup_resource_display() -> void:
 	canvas_layer.add_child(resource_display)
 
 	print("资源显示初始化完成")
+
+# 设置人口显示
+func _setup_population_display() -> void:
+	# 创建人口显示实例
+	population_display = PopulationDisplayScene.instantiate()
+
+	# 确保人口显示控件大小和位置正确
+	population_display.size = get_viewport_rect().size
+
+	# 获取或创建 CanvasLayer
+	var canvas_layer = _get_or_create_ui_layer()
+
+	# 添加人口显示到 UI 层
+	canvas_layer.add_child(population_display)
+
+	# 确保位置更新
+	await get_tree().process_frame
+	population_display._update_scale()
+
+	print("人口显示初始化完成")
 
 # 获取或创建 UI 层
 func _get_or_create_ui_layer() -> CanvasLayer:

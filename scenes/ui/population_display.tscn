@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://dybnmy31aetv0"]
+
+[ext_resource type="Script" path="res://scripts/ui/population_display.gd" id="1_y24n8"]
+[ext_resource type="Texture2D" uid="uid://dg0defvxnfeud" path="res://sprites/Tiny Swords/Deco/18.png" id="2_ix6h8"]
+
+[node name="PopulationDisplay" type="Control"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+script = ExtResource("1_y24n8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.0
+offset_bottom = 64.0
+grow_horizontal = 0
+
+[node name="PopulationIcon" type="TextureRect" parent="Panel"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -48.0
+offset_right = -32.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("2_ix6h8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PopulationAmount" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -22.5
+offset_right = -10.0
+offset_bottom = 22.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "0/5"
+horizontal_alignment = 1
+vertical_alignment = 1

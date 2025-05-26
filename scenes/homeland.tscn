@@ -1020,6 +1020,15 @@ position = Vector2(1048.51, 198.045)
 z_index = 1
 y_sort_enabled = true
 
+[node name="sheep" parent="resource/sheeps" instance=ExtResource("46_rgp1h")]
+position = Vector2(-17.6744, -141.056)
+
+[node name="sheep2" parent="resource/sheeps" instance=ExtResource("46_rgp1h")]
+position = Vector2(165.466, 6.02234)
+
+[node name="sheep3" parent="resource/sheeps" instance=ExtResource("46_rgp1h")]
+position = Vector2(200.397, 172.617)
+
 [node name="building" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -1033,19 +1042,10 @@ position = Vector2(-461.451, -550.465)
 position = Vector2(-684.891, -70.1308)
 
 [node name="worker" parent="." instance=ExtResource("12_u31c3")]
-position = Vector2(-1158.46, 135.012)
+position = Vector2(-203.016, -82.2107)
 
 [node name="archer" parent="." instance=ExtResource("13_uibej")]
 position = Vector2(-917.757, -119.42)
 
 [node name="strawman" parent="." instance=ExtResource("44_hve2s")]
 position = Vector2(-1115.7, 319.708)
-
-[node name="sheep" parent="." instance=ExtResource("46_rgp1h")]
-position = Vector2(-17.6744, -141.056)
-
-[node name="sheep2" parent="." instance=ExtResource("46_rgp1h")]
-position = Vector2(165.466, 6.02234)
-
-[node name="sheep3" parent="." instance=ExtResource("46_rgp1h")]
-position = Vector2(200.397, 172.617)

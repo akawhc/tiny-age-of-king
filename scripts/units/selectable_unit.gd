@@ -134,7 +134,8 @@ func _physics_process(_delta: float) -> void:
 			# 如果发生碰撞，可以选择绕开障碍物或停止移动
 			# TODO：智能躲避物
 			if collision:
-				print(name, " 发生碰撞")
+				# print(name, " 发生碰撞")
+				pass
 
 			# 更新动画状态
 			update_animation(direction)
@@ -221,6 +222,10 @@ func handle_death() -> void:
 	# 从组中移除
 	remove_from_group("selectable_units")
 	if is_in_group("soldiers"):
+		# 减少当前人口
+		var resource_manager = GlobalResourceManager.get_instance()
+		resource_manager.decrease_current_population(1)
+
 		remove_from_group("soldiers")
 
 	# 获取单位类型

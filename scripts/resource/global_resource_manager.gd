@@ -11,7 +11,11 @@ static func get_instance() -> GlobalResourceManager:
 var resources = {
 	"wood": 1000,
 	"gold": 1000,
-	"meat": 1000
+	"meat": 1000,
+	"population": {
+		"current": 0,
+		"max": 5
+	}
 }
 
 # 建筑成本配置
@@ -28,6 +32,12 @@ const BUILDING_COSTS = {
 		"wood": 200,
 		"gold": 150
 	}
+}
+
+# 建筑人口加成
+const BUILDING_POPULATION = {
+	"House": 5,   # 每个房屋增加5人口上限
+	"Castle": 10  # 每个城堡增加10人口上限
 }
 
 # 单位成本配置
@@ -47,6 +57,7 @@ const UNIT_COSTS = {
 }
 
 # 信号
+signal population_changed(current, max)
 signal resources_changed(resource_type, amount)
 signal insufficient_resources(resource_type, required, current)
 
@@ -89,9 +100,47 @@ func try_build(building_type: String) -> bool:
 	if has_sufficient_resources(costs):
 		for resource_type in costs:
 			consume_resource(resource_type, costs[resource_type])
+
+		# 如果是可以增加人口上限的建筑，增加人口上限
+		if BUILDING_POPULATION.has(building_type):
+			var population_increase = BUILDING_POPULATION[building_type]
+			increase_max_population(population_increase)
+			print("建造了" + building_type + "，增加了" + str(population_increase) + "人口上限")
+
 		return true
 	else:
 		return false
+
+# 增加人口上限
+func increase_max_population(amount: int) -> void:
+	resources["population"]["max"] += amount
+	emit_signal("population_changed", resources["population"]["current"], resources["population"]["max"])
+	print("人口上限增加了 " + str(amount) + "，当前人口：" + get_population_string())
+
+# 增加当前人口
+func increase_current_population(amount: int) -> bool:
+	if resources["population"]["current"] + amount <= resources["population"]["max"]:
+		resources["population"]["current"] += amount
+		emit_signal("population_changed", resources["population"]["current"], resources["population"]["max"])
+		print("当前人口增加了 " + str(amount) + "，当前人口：" + get_population_string())
+		return true
+	else:
+		print("人口已达上限！当前人口：" + get_population_string())
+		return false
+
+# 减少当前人口
+func decrease_current_population(amount: int) -> void:
+	resources["population"]["current"] = max(0, resources["population"]["current"] - amount)
+	emit_signal("population_changed", resources["population"]["current"], resources["population"]["max"])
+	print("当前人口减少了 " + str(amount) + "，当前人口：" + get_population_string())
+
+# 获取人口字符串表示（当前/最大）
+func get_population_string() -> String:
+	return str(resources["population"]["current"]) + "/" + str(resources["population"]["max"])
+
+# 检查是否有足够的人口上限
+func has_sufficient_population(amount: int) -> bool:
+	return resources["population"]["current"] + amount <= resources["population"]["max"]
 
 # 尝试生产单位
 func try_produce_unit(unit_type: String) -> bool:
@@ -99,10 +148,17 @@ func try_produce_unit(unit_type: String) -> bool:
 		print("未知的单位类型：" + unit_type)
 		return false
 
+	# 检查人口上限
+	if not has_sufficient_population(1):  # 每个单位消耗1人口
+		print(unit_type + " 人口已达上限，无法训练！当前人口：" + get_population_string())
+		return false
+
 	var costs = UNIT_COSTS[unit_type]
 	if has_sufficient_resources(costs):
 		for resource_type in costs:
 			consume_resource(resource_type, costs[resource_type])
+		# 增加当前人口
+		increase_current_population(1)
 		print(unit_type + " 训练成功！")
 		return true
 	else:
