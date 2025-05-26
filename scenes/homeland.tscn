@@ -1041,13 +1041,13 @@ position = Vector2(-1092.64, -427.715)
 position = Vector2(-461.451, -550.465)
 
 [node name="wood_house" parent="building" groups=["buildings"] instance=ExtResource("47_owgel")]
-position = Vector2(1331.67, -294.528)
+position = Vector2(-822.175, -138.148)
 
 [node name="torch" parent="building" instance=ExtResource("38_0vwk0")]
 position = Vector2(1389.3, 120.99)
 
 [node name="knight" parent="." instance=ExtResource("1_qhu8i")]
-position = Vector2(1199.34, -270.471)
+position = Vector2(-970.274, -187.681)
 
 [node name="worker" parent="." instance=ExtResource("12_u31c3")]
 position = Vector2(-203.016, -82.2107)
