@@ -12,7 +12,7 @@ const ZSORT_DEFAULT = 0
 const ZSORT_ABOVE = 1
 
 # 发出的信号
-signal zsort_switched(new_zsort)
+signal zsort_switched(target_body, new_zsort)
 
 # 高地区域和低地区域引用
 @onready var high_zsort: Area2D = $high_zsort
@@ -38,7 +38,7 @@ func _on_high_zsort_body_entered(body: Node2D) -> void:
 			break
 
 	if is_allowed:
-		emit_signal("zsort_switched", ZSORT_ABOVE)
+		emit_signal("zsort_switched", body, ZSORT_ABOVE)
 
 # 当物体进入低地区域时
 func _on_low_zsort_body_entered(body: Node2D) -> void:
@@ -49,4 +49,4 @@ func _on_low_zsort_body_entered(body: Node2D) -> void:
 			break
 
 	if is_allowed:
-		emit_signal("zsort_switched", ZSORT_DEFAULT)
+		emit_signal("zsort_switched", body, ZSORT_DEFAULT)

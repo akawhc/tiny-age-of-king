@@ -60,9 +60,11 @@ func connect_to_zsort_switch(switch: ZSortSwitch) -> void:
 		switch.zsort_switched.connect(update_zsort)
 
 # 更新单位的Z排序值
-func update_zsort(new_zsort: int) -> void:
-	print(name, " 更新Zsort为 ", new_zsort)
-	z_index = new_zsort
+func update_zsort(target_body: Node2D, new_zsort: int) -> void:
+	# 只有当自己是目标物体时才更新z_index
+	if target_body == self:
+		print(name, " 更新Zsort为 ", new_zsort)
+		z_index = new_zsort
 
 # 连接到场景中的桥梁遮罩切换器
 func connect_to_bridge_mask_switches() -> void:
